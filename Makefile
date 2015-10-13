@@ -4,21 +4,35 @@
 
 ######## START CONFIG ########
 
-#Adjust these config parameters according to your project:
-XCODEPROJ = Example.xcodeproj
-SCHEME = Example
-CONFIGURATION = Debug
-APP_PLIST = Example/SupportingFiles/Info.plist
+# Adjust these config parameters according to your project:
 
-#Device
+# 1) The name of the Xcode Project file
+XCODEPROJ = Example.xcodeproj
+
+# 2) The scheme for building and testing the app
+SCHEME = Example
+
+# 3) The configuration to build and run tests
+CONFIGURATION = Debug
+
+# 4) The location of the Info.plist file
+APP_PLIST = $(SCHEME)/SupportingFiles/Info.plist
+
+# (optional)
+
+# Device
 DEVICE_HOST = platform='iOS Simulator',OS='9.0',name='iPhone 6'
 
-#SDK (build only)
+# SDK (build only)
 BUILD_SDK = iphonesimulator
 
-#Codesigning (archive only)
+# Codesigning (archive only)
 DEVELOPER_NAME = iPhone Developer: Christian Kaar (L2QDLEBB7A)
 PROVISONING_PROFILE = aaa_Wildcard_Dev.mobileprovision
+
+# Push notifications
+PUSH_DEVICE_TOKEN = 12345
+PUSH_CERTIFICATE_PEM = path/to/push_certificate.pem
 
 ######## END CONFIG ########
 
@@ -46,7 +60,12 @@ WARN_COLOR=\033[33;01m
 # MAKE COMMANDS #
 #################
 
-.PHONY: check_dirs_and_files check_build_dir check_log_dir check_build_logs check_test_logs all build archive clean test lint
+# List commands that have the same name as e.g. files, directories or other CLI commands
+.PHONY: build clean
+
+setup:
+	gem install xcpretty
+	gem install houston
 
 all: check_dirs_and_files clean lint test build archive
 
@@ -86,4 +105,13 @@ archive:
 lint:
 	swiftlint lint
 
+push: 
+	@if [ "$(gem list -i houston)" = "false" ]; then \
+		echo "Houston gem not installed, please run 'gem install houston' from your command line."; \
+	else \
+		apn push $(PUSH_DEVICE_TOKEN) -c $(PUSH_CERTIFICATE_PEM) -m "Test"; \
+	fi
+
+r:
+	./scripts/rswift
 
