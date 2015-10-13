@@ -16,7 +16,7 @@ SCHEME = Example
 CONFIGURATION = Debug
 
 # 4) The location of the Info.plist file
-APP_PLIST = $(SCHEME)/SupportingFiles/Info.plist
+APP_PLIST = $(SCHEME)/Info.plist
 
 # (optional)
 
@@ -100,7 +100,7 @@ build: check_dirs_and_files
 	set -o pipefail && xcodebuild -project $(XCODEPROJ) -scheme $(SCHEME) -configuration $(CONFIGURATION) -sdk $(BUILD_SDK) -destination $(DEVICE_HOST) -derivedDataPath $(BUILD_DIR)/xcodebuild build | tee $(LOG_DIR)/xcode_build_raw.log | xcpretty -c
 	@open $(FINAL_BUILD_DIR)
 
-archive:
+archive: build
 	/usr/bin/xcrun -sdk iphoneos PackageApplication -v "${FINAL_BUILD_DIR}/${SCHEME}.app" -o "${PWD}/${FINAL_BUILD_DIR}/${SCHEME}.ipa" --sign "${DEVELOPER_NAME}" --embed "${PROVISONING_PROFILE}"
 
 lint:
@@ -108,7 +108,3 @@ lint:
 
 push: 
 	apn push $(PUSH_DEVICE_TOKEN) -c $(PUSH_CERTIFICATE_PEM) -m "Test"
-
-r:
-	./scripts/rswift
-
