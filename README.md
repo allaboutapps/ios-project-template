@@ -2,6 +2,7 @@
 
 # ⚠️ TODO
 
+* Run `make setup` to install all needed dependencies
 * Update the `Makefile` with your project settings
 * Update the `.swiftlint.yml` file to include the project root folder 
 * Fill the README

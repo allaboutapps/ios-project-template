@@ -107,11 +107,7 @@ lint:
 	swiftlint lint
 
 push: 
-	@if [ "$(gem list -i houston)" = "false" ]; then \
-		echo "Houston gem not installed, please run 'gem install houston' from your command line."; \
-	else \
-		apn push $(PUSH_DEVICE_TOKEN) -c $(PUSH_CERTIFICATE_PEM) -m "Test"; \
-	fi
+	apn push $(PUSH_DEVICE_TOKEN) -c $(PUSH_CERTIFICATE_PEM) -m "Test"
 
 r:
 	./scripts/rswift
