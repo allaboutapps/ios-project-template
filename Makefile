@@ -66,6 +66,7 @@ WARN_COLOR=\033[33;01m
 setup:
 	gem install xcpretty
 	gem install houston
+	brew install swiftlint
 
 all: check_dirs_and_files clean lint test build archive
 
