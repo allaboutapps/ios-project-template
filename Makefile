@@ -63,12 +63,17 @@ WARN_COLOR=\033[33;01m
 # List commands that have the same name as e.g. files, directories or other CLI commands
 .PHONY: build clean
 
-setup:
+all: check_dirs_and_files clean lint test build archive
+
+gitinit:
+	rm dir_tree.png
+	rm -rf .git
+	git init
+
+setup: gitinit
 	gem install xcpretty
 	gem install houston
 	brew install swiftlint
-
-all: check_dirs_and_files clean lint test build archive
 
 ######## FILE & DIR CHEKS ########
 
