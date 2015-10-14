@@ -42,8 +42,7 @@
 	* Use `Assets` Catalog
 	* Don't migrate Launch Image
 7. Choose AppIcon instead of AppIcon-2 from drop down
-8. Navigate to Assets Catalog and remove AppIcon-2 (Xcode... 😫)
-
+8. Navigate to Assets Catalog and remove AppIcon-2 (Xcode... 😫)  
 
 ## Further setup
 * Run `make setup` to install all needed dependencies
