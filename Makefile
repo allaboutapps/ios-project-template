@@ -112,4 +112,4 @@ lint:
 	swiftlint lint
 
 push: 
-	apn push $(PUSH_DEVICE_TOKEN) -c $(PUSH_CERTIFICATE_PEM) -m "Test"
+	apn push $(PUSH_DEVICE_TOKEN) -c $(PUSH_CERTIFICATE_PEM) -m $(message)
