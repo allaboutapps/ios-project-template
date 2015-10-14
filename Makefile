@@ -16,7 +16,7 @@ SCHEME = Example
 CONFIGURATION = Debug
 
 # 4) The location of the Info.plist file
-APP_PLIST = $(SCHEME)/Info.plist
+APP_PLIST = MyProject/SupportingFiles/Info.plist
 
 # (optional)
 
