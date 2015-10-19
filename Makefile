@@ -113,3 +113,12 @@ lint:
 
 push: 
 	apn push $(PUSH_DEVICE_TOKEN) -c $(PUSH_CERTIFICATE_PEM) -m $(message)
+
+######## CARTHAGE ########
+
+carthage_fix:
+	rm -rf ~/Library/Caches/org.carthage.CarthageKit/
+	rm -rf Carthage
+
+carthage_update:
+	carthage update --platform iOS
