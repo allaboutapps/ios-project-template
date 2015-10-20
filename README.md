@@ -46,6 +46,7 @@
 
 ## Further setup
 * Run `make setup` to install all needed dependencies
+* Run `make gitinit` to setup a new git repo in the project root folder (**WARNING:** removes any existing git repo in the project root folder)
 * Update the `Makefile` with your project settings
 * Update the `.swiftlint.yml` file to include the project root folder 
 * Fill the README
