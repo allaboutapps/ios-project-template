@@ -40,7 +40,10 @@
 	* Use `Assets` Catalog
 	* Don't migrate Launch Image
 7. Choose AppIcon instead of AppIcon-2 from drop down
-8. Navigate to Assets Catalog and remove AppIcon-2 (Xcode... 😫)  
+8. Navigate to Assets Catalog and remove AppIcon-2 (Xcode... 😫)
+9. Navigate to Targets -> \<MyExampleProject> -> Build Settings
+	- Search for "Code Signing Resource Rules Path"
+	- Set the value to `$(SDKROOT)/ResourceRules.plist`
 
 
 
