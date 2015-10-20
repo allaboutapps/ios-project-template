@@ -70,7 +70,7 @@ gitinit:
 	rm -rf .git
 	git init
 
-setup: gitinit
+setup:
 	gem install xcpretty
 	gem install houston
 	brew install swiftlint
@@ -117,7 +117,7 @@ push:
 ######## CARTHAGE ########
 
 carthage_fix:
-	rm -rf ~/Library/Caches/org.carthage.CarthageKit/
+	rm -rf ~/Library/Caches/org.carthage.CarthageKit
 	rm -rf Carthage
 
 carthage_update:
