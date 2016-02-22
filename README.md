@@ -1,39 +1,26 @@
---------
+# iOS Project Template 📱
 
-# ⚠️ TODO
+## Setup
 
-## Directory setup
-1. `git clone ssh://git@git.allaboutapps.at:2222/aaaios/ios-project-template.git <my-example-project>`
-2. Open Xcode -> Create a new Xcode Project
+1. Open Xcode -> Create a new Xcode Project
 	* Name: `<MyExampleProject>`
-	* Single View  
-	[✔] Include Unit Tests
-	* Navigate into `<my-example-project>`
-	* **Create**
+	* Choose the "Single View Template"
+		* ✔ Include Unit Tests
+		* ✔ Include UI Tests
+	* Navigate into the `<my-example-project>` folder
+	* Click **Create**
 	* Close Xcode
-3. Open `my-example-project` (git-repo root) in Finder
-4. Drag
-	* `<MyExampleProject>/AppDelegate.swift` to `MyProject/Code`
-	* `<MyExampleProject>/Assets.xcassets` to `MyProject/Assets`
-	* `<MyExampleProject>/Base.lproj` to `MyProject/Code/Storyboards`
-	* `<MyExampleProject>/Info.plist` to `MyProject/SupportingFiles`
-	* `<MyExampleProject>/ViewController.swift` to `MyProject/Code/ViewControllers`
-	* `<MyExampleProject>.xcodeproj` to root
-	* `<MyExampleProject>Tests` to root
-5. Remove (the now empty) `<MyExampleProject>/<MyExampleProject>` and `<MyExampleProject>` directories
-6. Rename `MyProject` to `<MyExampleProject>`
+1. In your project root directory, create a folder structure that matches the folders in the `Example` folder and copy the `Example/Code` folder to your project. It contains some helpers to get you started.
+1. Move all existint project files into their respective folder (i.e. `Info.plist` into `SupportingFiles` and `ViewController.swift` into `ViewControllers`)
 
-**Your folder should look like this:**  
+## Bend Xcode to your will
 
-![Directory Tree](dir_tree.png)
-
-## Xcode Project setup
 1. Open the `<MyExampleProject>.xcodeproj` file
 2. Remove all red entries under \<MyExampleProject>
 3. Drag all directories under \<MyExampleProject> from Finder to Xcode under <MyExampleProject>
 	* [✔] Copy Items if needed
 	* [✔] Create groups
-4. Remove references to `.gitkeep` Files (in Xcode) in every sub-directory of \<MyExampleProject>
+4. Remove references to `.gitkeep` Files (in Xcode) in every sub-directory of \<MyExampleProject> that already contains a file
 5. Naviagte to the \<MyExampleProject> Target and click "Choose Info.plist File..." (at the top)
 	* Choose `<MyExampleProject>/SuportingFiles/Info.plist`
 6. In the App Icons section click "Use Asset Catalog" for App Icons Source
@@ -44,8 +31,6 @@
 9. Navigate to Targets -> \<MyExampleProject> -> Build Settings
 	- Search for "Code Signing Resource Rules Path"
 	- Set the value to `$(SDKROOT)/ResourceRules.plist`
-
-
 
 ## Further setup
 * Run `make setup` to install all needed dependencies
@@ -60,7 +45,11 @@
 
 # Project Title
 
-**Swift 2**
+---
+
+⚡️ Swift: x.x 📱 iOS x.x 🌎 [API Docs](http://linktoswaggerdocs)
+
+---
 
 Project description in 1-5 sentences.
 

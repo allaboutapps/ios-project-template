@@ -13,4 +13,7 @@ struct Config {
             return NSURL(string: "https://api.prod")!
         }
     }
+    
+    static let APIStubRequests = false
+    static let APIVerboseNetworkLogging = false
 }

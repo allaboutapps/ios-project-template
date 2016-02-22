@@ -2,7 +2,7 @@ github "ReactiveCocoa/ReactiveCocoa" ~> 4.0
 github "moya/Moya" ~> 6.0
 github "aloco/SimpleButton" ~> 2.0
 github "aschuch/StatefulViewController" ~> 1.0
-github "aschuch/Argonaut" ~> 1.0
+github "aschuch/Argonaut" "errors"
 github "thoughtbot/Argo" ~> 2.0
 github "thoughtbot/Curry" ~> 1.0
 github "Alamofire/AlamofireImage" ~> 2.0

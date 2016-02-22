@@ -1,8 +1,9 @@
 import Foundation
 import ReactiveMoya
+import Result
 
 /// Logs network activity (outgoing requests and incoming responses).
-public class MoyaLoggerPlugin<Target: MoyaTarget>: Plugin<Target> {
+public class MoyaLoggerPlugin: PluginType {
     private let dateFormatString = "HH:mm:ss"
     private let dateFormatter = NSDateFormatter()
     
@@ -13,12 +14,12 @@ public class MoyaLoggerPlugin<Target: MoyaTarget>: Plugin<Target> {
         self.verbose = verbose
     }
     
-    public override func willSendRequest(request: MoyaRequest, provider: MoyaProvider<Target>, target: Target) {
+    public func willSendRequest(request: RequestType, target: TargetType) {
         logNetworkRequest(request.request, target: target)
     }
     
-    public override func didReceiveResponse(data: NSData?, statusCode: Int?, response: NSURLResponse?, error: ErrorType?, provider: MoyaProvider<Target>, target: Target) {
-        logNetworkResponse(response, data: data, target: target)
+    public func didReceiveResponse(result: Result<Response, Error>, target: TargetType) {
+        logNetworkResponse(result, target: target)
     }
     
 }
@@ -31,7 +32,7 @@ private extension MoyaLoggerPlugin {
         return dateFormatter.stringFromDate(NSDate())
     }
     
-    func logNetworkRequest(request: NSURLRequest?, target: Target) {
+    func logNetworkRequest(request: NSURLRequest?, target: TargetType) {
         guard let request = request else {
             print("[%@] No Request", date)
             return
@@ -39,7 +40,7 @@ private extension MoyaLoggerPlugin {
         
         var output = [String]()
         
-        // [21.12.2015] ↗️ GET http://example.com/foo
+        // [10:13:54] ↗️ GET http://example.com/foo
         output.append(String(format: "[%@] ↗️ %@ %@", date, request.HTTPMethod ?? "", request.URL?.absoluteString ?? ""))
         let spacing = "              "
         if let headers = request.allHTTPHeaderFields?.map({ "\(spacing)   \($0.0): \($0.1)" }).joinWithSeparator("\n") {
@@ -53,23 +54,28 @@ private extension MoyaLoggerPlugin {
         print(output.joinWithSeparator("\n"))
     }
     
-    func logNetworkResponse(response: NSURLResponse?, data: NSData?, target: Target) {
-        guard let response = response as? NSHTTPURLResponse else {
-            print("[\(date)] 🔸 Received empty network response for <\(target)>.")
-            return
+    func logNetworkResponse(response: Result<Response, Error>, target: TargetType) {
+        switch response {
+        case let .Success(value):
+            guard let response = value.response as? NSHTTPURLResponse else {
+                print("[\(date)] 🔸 Received empty network response for <\(target)>.")
+                return
+            }
+            
+            var output = [String]()
+            
+            let range = 200...399
+            let success = range.contains(response.statusCode) ? "✅" : "❌"
+            output.append(String(format: "[%@] %@ %i %@", date, success, response.statusCode, response.URL?.absoluteString ?? ""))
+            
+            if let body = prettyJSON(value.data) where verbose == true {
+                output.append(body)
+            }
+            
+            print(output.joinWithSeparator("\n"))
+        case let .Failure(error):
+            print("[%@] ❌ %@", date, error)
         }
-        
-        var output = [String]()
-        
-        let range = 200...399
-        let success = range.contains(response.statusCode) ? "✅" : "❌"
-        output.append(String(format: "[%@] %@ %i %@", date, success, response.statusCode, response.URL?.absoluteString ?? ""))
-        
-        if let body = prettyJSON(data) where verbose == true {
-            output.append(body)
-        }
-        
-        print(output.joinWithSeparator("\n"))
     }
     
     private func prettyJSON(data: NSData?) -> String? {
