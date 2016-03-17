@@ -1,21 +1,43 @@
 disabled_rules: # rule identifiers to exclude from running
-  - colon
-  - control_statement
-  - file_length
-  - force_cast
-  - function_body_length
-  - leading_whitespace
-  - line_length
-  - nesting
-  - operator_whitespace
-  - return_arrow_whitespace
-  - todo
-  - trailing_newline
-  - trailing_whitespace
-  - type_body_length
-  - type_name
   - variable_name
-included: # paths to include during linting. `--path` is ignored if present. takes precendence over `excluded`.
-  - MyProject
-excluded: # paths to ignore during linting. overridden by `included`.
+  - valid_docs
+  - force_cast
+  - force_try
+  - todo
+  - function_parameter_count
+  - operator_whitespace
+  #- colon
+  #- comma
+  #- control_statement
+opt_in_rules: # some rules are only opt-in
+  #- empty_count
+  #- missing_docs
+  #- force_unwrapping
+  # Find all the available rules by running:
+  # swiftlint rules
+included: # paths to include during linting. `--path` is ignored if present.
+  - Jausensackerl
+excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
+
+# configurable rules can be customized from this configuration file
+variable_name:
+  min_length:
+    warning: 0
+    error: 0
+line_length:
+  warning: 200
+  error: 400
+type_name:
+  min_length:
+    warning: 3
+    error: 1
+  max_length:
+    warning: 50
+    error: 80
+type_body_length:
+  warning: 300
+  error: 400
+file_length:
+  warning: 500
+  error: 1200
