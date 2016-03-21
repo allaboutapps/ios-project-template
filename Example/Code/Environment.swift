@@ -14,4 +14,16 @@ enum Environment: String {
         let configurationString = NSBundle.mainBundle().infoDictionary!["_Configuration"] as! String
         return Environment(rawValue: configurationString)!
     }
+    
+    /// Returns the current App version, build number and environment
+    /// e.g. `1.0 (3) Release`
+    static var appInfo: String {
+        guard let infoDict = NSBundle.mainBundle().infoDictionary,
+            let version = infoDict["CFBundleShortVersionString"],
+            let build = infoDict["CFBundleVersion"] else {
+                return ""
+        }
+        
+        return "\(version) (\(build)) \(current().rawValue)"
+    }
 }
