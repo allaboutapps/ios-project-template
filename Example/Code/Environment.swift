@@ -12,7 +12,11 @@ enum Environment: String {
     /// Returns the current enviroment the app is currently running.
     static func current() -> Environment {
         let configurationString = NSBundle.mainBundle().infoDictionary!["_Configuration"] as! String
-        return Environment(rawValue: configurationString)!
+        guard let environment = Environment(rawValue: configurationString) else {
+            fatalError("!!! No valid Environment !!!")
+        }
+        
+        return environment
     }
     
     /// Returns the current App version, build number and environment
