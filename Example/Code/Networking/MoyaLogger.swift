@@ -34,7 +34,7 @@ private extension MoyaLoggerPlugin {
     
     func logNetworkRequest(request: NSURLRequest?, target: TargetType) {
         guard let request = request else {
-            print("[%@] No Request", date)
+            log.info("[%@] No Request", date)
             return
         }
         
@@ -51,14 +51,14 @@ private extension MoyaLoggerPlugin {
             output.append(String(format: "%@Request Body: \n%@", spacing, body))
         }
         
-        print(output.joinWithSeparator("\n"))
+        log.info(output.joinWithSeparator("\n"))
     }
     
     func logNetworkResponse(response: Result<Response, Error>, target: TargetType) {
         switch response {
         case let .Success(value):
             guard let response = value.response as? NSHTTPURLResponse else {
-                print("[\(date)] 🔸 Received empty network response for <\(target)>.")
+                log.info("[\(date)] 🔸 Received empty network response for <\(target)>.")
                 return
             }
             
@@ -72,9 +72,9 @@ private extension MoyaLoggerPlugin {
                 output.append(body)
             }
             
-            print(output.joinWithSeparator("\n"))
+            log.info(output.joinWithSeparator("\n"))
         case let .Failure(error):
-            print("[%@] ❌ %@", date, error)
+            log.error("[%@] ❌ %@", date, String(error))
         }
     }
     
@@ -83,7 +83,7 @@ private extension MoyaLoggerPlugin {
             let json = try? NSJSONSerialization.JSONObjectWithData(data, options: []),
             let prettyJson = try? NSJSONSerialization.dataWithJSONObject(json, options: [.PrettyPrinted]),
             let string = NSString(data: prettyJson, encoding: NSUTF8StringEncoding) {
-                return string as String
+            return string as String
         }
         return nil
     }

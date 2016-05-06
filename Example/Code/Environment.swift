@@ -27,3 +27,9 @@ enum Environment: String {
         return "\(version) (\(build)) \(current().rawValue)"
     }
 }
+
+extension Environment: Equatable {}
+
+func ==(lhs: Environment, rhs: Environment) -> Bool {
+    return lhs.rawValue == rhs.rawValue
+}

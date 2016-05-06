@@ -3,6 +3,7 @@ github "moya/Moya" ~> 6.0
 github "aloco/SimpleButton" ~> 2.0
 github "aschuch/StatefulViewController" ~> 1.0
 github "aschuch/Argonaut" ~> 2.0
-github "thoughtbot/Argo" ~> 2.0
-github "thoughtbot/Curry" ~> 1.0
+github "thoughtbot/Argo" ~> 3.0
 github "Alamofire/AlamofireImage" ~> 2.0
+github "SwiftyBeaver/SwiftyBeaver" ~> 0.5
+github "thoughtbot/Curry" ~> 2.0
