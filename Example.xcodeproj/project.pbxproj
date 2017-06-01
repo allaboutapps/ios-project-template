@@ -15,7 +15,6 @@
 		4DE97E161C7AFF1D00393489 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DE97DFC1C7AFF1D00393489 /* Main.storyboard */; };
 		4DE97E191C7AFF1D00393489 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE97E021C7AFF1D00393489 /* ViewController.swift */; };
 		4DE97E201C7B00F000393489 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE97E1F1C7B00F000393489 /* Environment.swift */; };
-		4DE97E231C7B038F00393489 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 4DE97E221C7B038F00393489 /* .gitkeep */; };
 		4DE97E291C7B04B200393489 /* Storyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE97E281C7B04B200393489 /* Storyboard.swift */; };
 		4DE97E2B1C7B069600393489 /* MoyaLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE97E2A1C7B069600393489 /* MoyaLogger.swift */; };
 		4DE97E431C7B223A00393489 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE97E421C7B223A00393489 /* API.swift */; };
@@ -35,7 +34,6 @@
 		BC6A83911EDEF75A00F16019 /* StatefulViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC6A83851EDEF75A00F16019 /* StatefulViewController.framework */; };
 		BC6A83931EDEF87D00F16019 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6A83921EDEF87D00F16019 /* APIError.swift */; };
 		BC6A839E1EDFF9EF00F16019 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6A839D1EDFF9EF00F16019 /* Strings.swift */; };
-		BC6A83A21EDFFB8900F16019 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = BC6A83A11EDFFB8900F16019 /* .gitkeep */; };
 		BC6A83A31EDFFC2C00F16019 /* DataSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC6A837B1EDEF75A00F16019 /* DataSource.framework */; };
 /* End PBXBuildFile section */
 
@@ -335,9 +333,7 @@
 				4DE97E151C7AFF1D00393489 /* LaunchScreen.storyboard in Resources */,
 				4DE97E161C7AFF1D00393489 /* Main.storyboard in Resources */,
 				4DE97E481C7B231D00393489 /* test.json in Resources */,
-				BC6A83A21EDFFB8900F16019 /* .gitkeep in Resources */,
 				4DE97E0B1C7AFF1D00393489 /* Assets.xcassets in Resources */,
-				4DE97E231C7B038F00393489 /* .gitkeep in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
