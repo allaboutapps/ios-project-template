@@ -16,10 +16,12 @@ public class MoyaLoggerPlugin: PluginType {
     /// If true, also logs response body data.
     public let verbose: Bool
     
-    public typealias CustomLogClosure = ((_ timeStamp: Date, _ message: String, _ formattedMessage: String) -> ())
+    public typealias CustomLogClosure = ((_ timeStamp: Date, _ hash: String?, _ message: String, _ formattedMessage: String) -> ())
     
     /// This closure can be used to customize logging. If not `nil`, this closure will be called each time
-    /// the logger wants to log a string. The time stamp will be the time the log event occured.
+    /// the logger wants to log a string.
+    /// The time stamp will be the time the log event occured.
+    /// The hash can be used to match calls and responses in the log.
     /// If `nil` the logger will just print out the formatted message.
     public var customLogClosure: CustomLogClosure?
     
@@ -50,7 +52,7 @@ private extension MoyaLoggerPlugin {
         var output = [String]()
         
         // [10:13:54] ↗️ GET http://example.com/foo
-        output.append(String(format: "(%i) ↗️ %@ %@", target.hashValue, request.httpMethod ?? "", request.url?.absoluteString ?? ""))
+        output.append(String(format: "↗️ %@ %@", request.httpMethod ?? "", request.url?.absoluteString ?? ""))
         
         let spacing = "              "
         if let headers = request.allHTTPHeaderFields?.map({ "\(spacing)   \($0.0): \($0.1)" }).joined(separator: "\n"), verbose == true {
@@ -61,7 +63,7 @@ private extension MoyaLoggerPlugin {
             output.append(String(format: "%@Request Body: \n%@", spacing, body))
         }
         
-        logOut(message: output.joined(separator: "\n"))
+        logOut(hash: target.hashHex, message: output.joined(separator: "\n"))
     }
     
     func logNetworkResponse(response: Result<Response, Moya.MoyaError>, target: TargetType) {
@@ -76,13 +78,13 @@ private extension MoyaLoggerPlugin {
             
             let range = 200...399
             let success = range.contains(response.statusCode) ? "✅" : "❌"
-            output.append(String(format: "(%i) %@ %i %@", target.hashValue, success, response.statusCode, response.url?.absoluteString ?? ""))
+            output.append(String(format: "%@ %i %@", success, response.statusCode, response.url?.absoluteString ?? ""))
             
             if let body = prettyJSON(data: value.data) ?? String(data: value.data, encoding: String.Encoding.utf8), verbose == true {
                 output.append(body)
             }
             
-            logOut(message: output.joined(separator: "\n"))
+            logOut(hash: target.hashHex, message: output.joined(separator: "\n"))
             
         case let .failure(error):
             switch error {
@@ -110,31 +112,38 @@ private extension MoyaLoggerPlugin {
         return nil
     }
     
-    private func logOut(message: String) {
+    private func logOut(hash: String? = nil, message: String) {
         let now = Date()
-        let formattedMessage = "[\(dateFormatter.string(from: now))] \(message)"
+        var formattedMessage = "[\(dateFormatter.string(from: now))] "
+        if let hash = hash {
+            formattedMessage += "(\(hash)) "
+        }
+        formattedMessage += "\(message)"
         
         if let customLogClosure = customLogClosure {
-            customLogClosure(now, message, formattedMessage)
+            customLogClosure(now, hash, message, formattedMessage)
         } else {
             print(formattedMessage)
         }
     }
-
+    
 }
 
 extension TargetType {
     
     var hashValue: Int {
-        var hash = method.hashValue + path.hashValue
-        if let jsonData = try? JSONSerialization.data(withJSONObject: parameters ?? [:], options: .prettyPrinted) {
+        var hashString = "\(method.hashValue)\(path.hashValue)"
+        if let jsonData = try? JSONSerialization.data(withJSONObject: parameters ?? [:], options: []) {
             if let string = String(data: jsonData, encoding: String.Encoding.utf8) {
-                let parameterHash = "\(string.hashValue)"
-                let subString = parameterHash.substring(to: parameterHash.index(parameterHash.startIndex, offsetBy: 8))
-                hash += Int(subString)!
+                hashString += "\(string.hashValue)"
             }
         }
-        return hash
+        return hashString.hashValue
+    }
+    
+    var hashHex: String {
+        let value = UInt(truncatingBitPattern: Int64(hashValue))
+        return String(value, radix: 16, uppercase: true)
     }
     
 }
