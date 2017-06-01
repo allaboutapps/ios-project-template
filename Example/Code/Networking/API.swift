@@ -1,52 +1,78 @@
 import Foundation
-import ReactiveMoya
+import Moya
 
 enum API {
-    case Test
-    // ... your other API endpoints
+    // Login
+    case postLogin(username: String, password: String)
+    case postRefreshToken(refreshToken: String)
 }
 
 extension API: TargetType {
     
-    var baseURL: NSURL {
-        return Config.APIBaseURL
+    var baseURL: URL {
+        return Config.API.BaseURL
     }
     
     var path: String {
         switch self {
-        case .Test:
-            return "/api/v1/test"
+        case .postLogin:            return "api/v1/auth/token"
+        case .postRefreshToken:     return "api/v1/auth/token"
         }
     }
     
-    var method: ReactiveMoya.Method {
+    var method: Moya.Method {
         switch self {
-        case .Test:
-            return .POST
-        default:
-            return .GET
+        case .postLogin:            return .post
+        case .postRefreshToken:     return .post
+        default:                    return .get
         }
     }
     
-    var parameters: [String: AnyObject]? {
+    var parameters: [String: Any]? {
         switch self {
-        case .Test:
-            return ["foo": "bar", "baz": 1]
+            
+        case let .postLogin(username, password):
+            return [
+                "grantType": "password",
+                "scope": "user",
+                "username": username,
+                "password": password
+            ]
+            
+        case let .postRefreshToken(refreshToken):
+            return [
+                "grantType": "refreshToken",
+                "scope": "user",
+                "refreshToken": refreshToken
+            ]
+            
         default:
             return nil
         }
     }
+
+    var parameterEncoding: ParameterEncoding {
+        return JSONEncoding.default
+    }
     
-    var sampleData: NSData {
+    var task: Moya.Task {
+        return .request
+    }
+    
+    var multipartBody: [MultipartFormData]? {
+        return nil
+    }
+
+    var sampleData: Data {
         switch self {
-        case .Test:
-            return stub("test")
+        default:
+            return Data()
         }
     }
     
     // Load stub data
-    private func stub(name: String) -> NSData {
-        let path = NSBundle(forClass: APIClient.self).pathForResource(name, ofType: "json")!
-        return NSData(contentsOfFile: path)!
+    fileprivate func stub(_ name: String) -> Data {
+        let path = Bundle(for: APIClient.self).path(forResource: name, ofType: "json")!
+        return (try! Data(contentsOf: URL(fileURLWithPath: path)))
     }
 }

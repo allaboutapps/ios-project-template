@@ -18,7 +18,7 @@ protocol StoryboardIdentifiable {
 extension UIViewController: StoryboardIdentifiable {}
 extension StoryboardIdentifiable where Self: UIViewController {
     static var storyboardIdentifier: String {
-        return String(self)
+        return String(describing: self)
     }
 }
 
@@ -28,7 +28,7 @@ extension StoryboardIdentifiable where Self: UIViewController {
 extension UIStoryboard {
     
     /// Instantiates a storyboard given its identifier.
-    convenience init(_ storyboard: Storyboard, bundle: NSBundle? = nil) {
+    convenience init(_ storyboard: Storyboard, bundle: Bundle? = nil) {
         self.init(name: storyboard.rawValue, bundle: bundle)
     }
     
@@ -36,8 +36,8 @@ extension UIStoryboard {
     /// ```
     /// let vc: SplashViewController = UIStoryboard(.Misc).instantiateViewController()
     /// ```
-    func instantiateViewController<T: UIViewController where T: StoryboardIdentifiable>() -> T {
-        guard let viewController = instantiateViewControllerWithIdentifier(T.storyboardIdentifier) as? T else {
+    func instantiateViewController<T: UIViewController>() -> T where T: StoryboardIdentifiable {
+        guard let viewController = self.instantiateViewController(withIdentifier: T.storyboardIdentifier) as? T else {
             fatalError("Couldn't instantiate view controller with identifier \(T.storyboardIdentifier) in storyboard \(self)")
         }
         

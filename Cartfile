@@ -1,10 +1,10 @@
-github "ReactiveCocoa/ReactiveCocoa" ~> 4.2
-github "moya/Moya" ~> 7.0
-github "Alamofire/AlamofireImage" ~> 2.4
-github "aloco/SimpleButton" ~> 2.1
-github "aschuch/StatefulViewController" ~> 1.0
-github "aschuch/Argonaut" ~> 2.0
-github "thoughtbot/Argo" ~> 3.0
-github "thoughtbot/Curry" ~> 2.3
-github "SwiftyBeaver/SwiftyBeaver" ~> 0.6
-github "mbuchetics/DataSource" ~> 1.2
+github "ReactiveCocoa/ReactiveCocoa" ~> 5.0
+github "moya/Moya" ~> 8.0
+github "aloco/SimpleButton" ~> 3.0
+github "lyft/Mapper" ~>6.0
+github "aschuch/ReactiveMapper" ~> 1.0
+
+github "mbuchetics/DataSource"
+github "aschuch/StatefulViewController"
+
+github "kishikawakatsumi/KeychainAccess" ~> 3.0

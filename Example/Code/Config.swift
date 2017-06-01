@@ -5,15 +5,42 @@ struct Config {
     
     /// MARK: API
     
-    static var APIBaseURL: NSURL {
-        switch Environment.current() {
-        case .Debug:
-            return NSURL(string: "https://api.debug")!
-        case .Release:
-            return NSURL(string: "https://api.prod")!
+    struct API {
+        
+        static var BaseURL: URL {
+            switch Environment.current() {
+            case .debug:
+                return URL(string: "https://api.debug")!
+            case .release:
+                return URL(string: "https://api.prod")!
+            }
+        }
+        
+        static let RandomStubRequests = false
+        static let StubRequests = false
+        static var TimeoutInterval: TimeInterval = 120.0
+        
+        static var NetworkLoggingEnabled: Bool {
+            switch Environment.current() {
+            case .debug:
+                return true
+            case .release:
+                return false
+            }
+        }
+        
+        static var VerboseNetworkLogging: Bool {
+            switch Environment.current() {
+            case .debug:
+                return true
+            case .release:
+                return false
+            }
         }
     }
     
-    static let APIStubRequests = false
-    static let APIVerboseNetworkLogging = false
+    struct Keychain {
+        static let Service = "at.allaboutapps.example"
+        static let CredentialsStorageKey = "Credentials"
+    }
 }

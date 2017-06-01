@@ -1,11 +1,12 @@
 import Foundation
-import ReactiveMoya
+import Moya
 import Result
 
 /// Logs network activity (outgoing requests and incoming responses).
 public class MoyaLoggerPlugin: PluginType {
-    private let dateFormatString = "HH:mm:ss"
-    private let dateFormatter = NSDateFormatter()
+    
+    fileprivate let dateFormatString = "HH:mm:ss"
+    fileprivate let dateFormatter = DateFormatter()
     
     /// If true, also logs response body data.
     public let verbose: Bool
@@ -14,12 +15,12 @@ public class MoyaLoggerPlugin: PluginType {
         self.verbose = verbose
     }
     
-    public func willSendRequest(request: RequestType, target: TargetType) {
-        logNetworkRequest(request.request, target: target)
+    public func willSend(_ request: RequestType, target: TargetType) {
+        logNetworkRequest(request: request.request, target: target)
     }
     
-    public func didReceiveResponse(result: Result<Response, Error>, target: TargetType) {
-        logNetworkResponse(result, target: target)
+    public func didReceive(_ result: Result<Response, Moya.MoyaError>, target: TargetType) {
+        logNetworkResponse(response: result, target: target)
     }
     
 }
@@ -28,37 +29,38 @@ private extension MoyaLoggerPlugin {
     
     private var date: String {
         dateFormatter.dateFormat = dateFormatString
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        return dateFormatter.stringFromDate(NSDate())
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        return dateFormatter.string(from: Date())
     }
     
-    func logNetworkRequest(request: NSURLRequest?, target: TargetType) {
+    func logNetworkRequest(request: URLRequest?, target: TargetType) {
         guard let request = request else {
-            log.info("[%@] No Request", date)
+            print("[%@] No Request", date)
             return
         }
         
         var output = [String]()
         
         // [10:13:54] ↗️ GET http://example.com/foo
-        output.append(String(format: "[%@] ↗️ %@ %@", date, request.HTTPMethod ?? "", request.URL?.absoluteString ?? ""))
+        output.append(String(format: "[%@] (%i) ↗️ %@ %@", date, target.hashValue, request.httpMethod ?? "", request.url?.absoluteString ?? ""))
+        
         let spacing = "              "
-        if let headers = request.allHTTPHeaderFields?.map({ "\(spacing)   \($0.0): \($0.1)" }).joinWithSeparator("\n") {
+        if let headers = request.allHTTPHeaderFields?.map({ "\(spacing)   \($0.0): \($0.1)" }).joined(separator: "\n"), verbose == true {
             output.append(String(format: "%@Headers: \n%@", spacing, headers))
         }
         
-        if let body = prettyJSON(request.HTTPBody) where verbose == true {
+        if let body = prettyJSON(data: request.httpBody), verbose == true {
             output.append(String(format: "%@Request Body: \n%@", spacing, body))
         }
         
-        log.info(output.joinWithSeparator("\n"))
+        print(output.joined(separator: "\n"))
     }
     
-    func logNetworkResponse(response: Result<Response, Error>, target: TargetType) {
+    func logNetworkResponse(response: Result<Response, Moya.MoyaError>, target: TargetType) {
         switch response {
-        case let .Success(value):
-            guard let response = value.response as? NSHTTPURLResponse else {
-                log.info("[\(date)] 🔸 Received empty network response for <\(target)>.")
+        case let .success(value):
+            guard let response = value.response as? HTTPURLResponse else {
+                print("[\(date)] 🔸 Received empty network response for <\(target)>.")
                 return
             }
             
@@ -66,25 +68,53 @@ private extension MoyaLoggerPlugin {
             
             let range = 200...399
             let success = range.contains(response.statusCode) ? "✅" : "❌"
-            output.append(String(format: "[%@] %@ %i %@", date, success, response.statusCode, response.URL?.absoluteString ?? ""))
+            output.append(String(format: "[%@] (%i) %@ %i %@", date, target.hashValue, success, response.statusCode, response.url?.absoluteString ?? ""))
             
-            if let body = prettyJSON(value.data) where verbose == true {
+            if let body = prettyJSON(data: value.data) ?? String(data: value.data, encoding: String.Encoding.utf8), verbose == true {
                 output.append(body)
             }
             
-            log.info(output.joinWithSeparator("\n"))
-        case let .Failure(error):
-            log.error("[%@] ❌ %@", date, String(error))
+            print(output.joined(separator: "\n"))
+        case let .failure(error):
+            switch error {
+            case let .underlying(e):
+                let e = e as NSError
+                if e.code == -999 {
+                    print("[\(date)] 🔸 Request Cancelled \(e.userInfo["NSErrorFailingURLStringKey"]!)")
+                    return
+                }
+                fallthrough
+            default:
+                print("[\(date)] ❌ \(error)")
+            }
+            
         }
     }
     
-    private func prettyJSON(data: NSData?) -> String? {
+    private func prettyJSON(data: Data?) -> String? {
         if let data = data,
-            let json = try? NSJSONSerialization.JSONObjectWithData(data, options: []),
-            let prettyJson = try? NSJSONSerialization.dataWithJSONObject(json, options: [.PrettyPrinted]),
-            let string = NSString(data: prettyJson, encoding: NSUTF8StringEncoding) {
+            let json = try? JSONSerialization.jsonObject(with: data, options: []),
+            let prettyJson = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted]),
+            let string = NSString(data: prettyJson, encoding: String.Encoding.utf8.rawValue) {
             return string as String
         }
         return nil
     }
+    
+}
+
+extension TargetType {
+    
+    var hashValue: Int {
+        var hash = method.hashValue + path.hashValue
+        if let jsonData = try? JSONSerialization.data(withJSONObject: parameters ?? [:], options: .prettyPrinted) {
+            if let string = String(data: jsonData, encoding: String.Encoding.utf8) {
+                let parameterHash = "\(string.hashValue)"
+                let subString = parameterHash.substring(to: parameterHash.index(parameterHash.startIndex, offsetBy: 8))
+                hash += Int(subString)!
+            }
+        }
+        return hash
+    }
+    
 }
