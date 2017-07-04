@@ -1,43 +1,39 @@
-disabled_rules: # rule identifiers to exclude from running
-  - variable_name
-  - valid_docs
-  - force_cast
-  - force_try
-  - todo
-  - function_parameter_count
-  - operator_whitespace
-  #- colon
-  #- comma
-  #- control_statement
-opt_in_rules: # some rules are only opt-in
-  #- empty_count
-  #- missing_docs
-  #- force_unwrapping
-  # Find all the available rules by running:
-  # swiftlint rules
-included: # paths to include during linting. `--path` is ignored if present.
-  - Example
-excluded: # paths to ignore during linting. Takes precedence over `included`.
-  - Carthage
+# Find all the available rules by running:
+# swiftlint rules
+#
+
+# rule identifiers to exclude from running
+disabled_rules:
+    - valid_docs
+    - force_try
+    - todo
+    - trailing_whitespace
+    - type_name
+    - large_tuple
+    - redundant_optional_initialization
+    #- operator_whitespace
+    #- vertical_whitespace
+    #- variable_name
+    #- function_parameter_count
+    #- cyclomatic_complexity
+    #- type_body_length
+    #- operator_whitespace
+    #- colon
+    #- comma
+    #- control_statement
+    #- force_cast
+
+# paths to ignore during linting. Takes precedence over `included`.
+excluded:
+    - Carthage
 
 # configurable rules can be customized from this configuration file
-variable_name:
-  min_length:
-    warning: 0
-    error: 0
 line_length:
-  warning: 200
-  error: 400
-type_name:
-  min_length:
-    warning: 3
-    error: 1
-  max_length:
-    warning: 50
-    error: 80
+    warning: 260
+    error: 400
 type_body_length:
-  warning: 300
-  error: 400
-file_length:
-  warning: 500
-  error: 1200
+    warning: 300
+    error: 500
+function_body_length:
+    warning: 80
+    error: 120

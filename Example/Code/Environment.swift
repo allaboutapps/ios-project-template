@@ -11,8 +11,10 @@ enum Environment: String {
     
     /// Returns the current enviroment the app is currently running.
     static func current() -> Environment {
-        let configurationString = Bundle.main.infoDictionary!["_Configuration"] as! String
-        guard let environment = Environment(rawValue: configurationString) else {
+        guard
+            let configurationString = Bundle.main.infoDictionary!["_Configuration"] as? String,
+            let environment = Environment(rawValue: configurationString)
+        else {
             fatalError("!!! No valid Environment !!!")
         }
         
@@ -34,6 +36,6 @@ enum Environment: String {
 
 extension Environment: Equatable {}
 
-func ==(lhs: Environment, rhs: Environment) -> Bool {
+func == (lhs: Environment, rhs: Environment) -> Bool {
     return lhs.rawValue == rhs.rawValue
 }

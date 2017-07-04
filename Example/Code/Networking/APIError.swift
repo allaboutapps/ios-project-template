@@ -18,7 +18,6 @@ enum APIError: Swift.Error {
     // Error Messages
     case invalidCredentials
     
-    
     var localizedError: LocalizedError {
         switch self {
         case let .moya(error, target):
@@ -77,7 +76,7 @@ enum APIError: Swift.Error {
             
         default:
             if target.method == .get {
-                return String(format: Strings.Network.errorLoadingFailed,"\(statusCode)")
+                return String(format: Strings.Network.errorLoadingFailed, "\(statusCode)")
             }
             return String(format: Strings.Network.errorPostingFailed, "\(statusCode)")
         }

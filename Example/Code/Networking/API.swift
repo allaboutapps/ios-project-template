@@ -24,7 +24,7 @@ extension API: TargetType {
         switch self {
         case .postLogin:            return .post
         case .postRefreshToken:     return .post
-        default:                    return .get
+        //default:                  return .get
         }
     }
     
@@ -46,8 +46,8 @@ extension API: TargetType {
                 "refreshToken": refreshToken
             ]
             
-        default:
-            return nil
+        //default:
+        //    return nil
         }
     }
 

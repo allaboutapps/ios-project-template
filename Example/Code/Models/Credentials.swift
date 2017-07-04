@@ -71,9 +71,9 @@ class Credentials: NSObject, NSCoding, Mappable {
 extension Credentials: Encodeable {
     func encode() -> [String : Any] {
         return [
-            "accessToken":  accessToken,
+            "accessToken": accessToken,
             "refreshToken": refreshToken,
-            "expiresIn":   expiresIn
+            "expiresIn": expiresIn
         ]
     }
 }

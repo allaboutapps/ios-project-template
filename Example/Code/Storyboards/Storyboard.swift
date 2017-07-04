@@ -3,11 +3,10 @@
 import UIKit
 
 enum Storyboard: String {
-    case LaunchScreen
-    case Main
+    case launchScreen = "LaunchScreen"
+    case main = "Main"
     /// ... your storyboard names
 }
-
 
 // MARK: StoryboardIdentifiable
 
@@ -21,7 +20,6 @@ extension StoryboardIdentifiable where Self: UIViewController {
         return String(describing: self)
     }
 }
-
 
 // MARK: UIStoryboard
 

@@ -16,7 +16,7 @@ public class MoyaLoggerPlugin: PluginType {
     /// If true, also logs response body data.
     public let verbose: Bool
     
-    public typealias CustomLogClosure = ((_ timeStamp: Date, _ hash: String?, _ message: String, _ formattedMessage: String) -> ())
+    public typealias CustomLogClosure = ((_ timeStamp: Date, _ hash: String?, _ message: String, _ formattedMessage: String) -> Void)
     
     /// This closure can be used to customize logging. If not `nil`, this closure will be called each time
     /// the logger wants to log a string.
@@ -24,7 +24,6 @@ public class MoyaLoggerPlugin: PluginType {
     /// The hash can be used to match calls and responses in the log.
     /// If `nil` the logger will just print out the formatted message.
     public var customLogClosure: CustomLogClosure?
-    
     
     public init(verbose: Bool = false) {
         self.verbose = verbose
@@ -37,8 +36,6 @@ public class MoyaLoggerPlugin: PluginType {
     public func didReceive(_ result: Result<Response, Moya.MoyaError>, target: TargetType) {
         logNetworkResponse(response: result, target: target)
     }
-    
-    
 }
 
 private extension MoyaLoggerPlugin {
@@ -126,7 +123,6 @@ private extension MoyaLoggerPlugin {
             print(formattedMessage)
         }
     }
-    
 }
 
 extension TargetType {
@@ -145,5 +141,4 @@ extension TargetType {
         let value = UInt(truncatingBitPattern: Int64(hashValue))
         return String(value, radix: 16, uppercase: true)
     }
-    
 }
