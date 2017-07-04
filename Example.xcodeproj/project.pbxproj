@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		39B96DA31F0B769900B8F3DF /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 39B96DA21F0B769900B8F3DF /* .swiftlint.yml */; };
+		39B96DA61F0B7A1B00B8F3DF /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 39B96DA51F0B7A1B00B8F3DF /* .swiftlint.yml */; };
+		39B96DA81F0B7A2300B8F3DF /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 39B96DA71F0B7A2300B8F3DF /* .gitignore */; };
+		4C58CC4B1F0B727000724E7E /* Diff.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C58CC4A1F0B727000724E7E /* Diff.framework */; };
 		4DE97E0B1C7AFF1D00393489 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4DE97DEA1C7AFF1D00393489 /* Assets.xcassets */; };
 		4DE97E0D1C7AFF1D00393489 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE97DED1C7AFF1D00393489 /* AppDelegate.swift */; };
 		4DE97E0E1C7AFF1D00393489 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE97DEE1C7AFF1D00393489 /* Appearance.swift */; };
@@ -39,7 +41,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		39B96DA21F0B769900B8F3DF /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
+		39B96DA51F0B7A1B00B8F3DF /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
+		39B96DA71F0B7A2300B8F3DF /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		4C58CC4A1F0B727000724E7E /* Diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Diff.framework; path = Carthage/Build/iOS/Diff.framework; sourceTree = "<group>"; };
 		4DE97DB71C7AFE3800393489 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DE97DEA1C7AFF1D00393489 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4DE97DED1C7AFF1D00393489 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,6 +93,7 @@
 				BC6A838A1EDEF75A00F16019 /* Moya.framework in Frameworks */,
 				BC6A838D1EDEF75A00F16019 /* ReactiveMoya.framework in Frameworks */,
 				BC6A83891EDEF75A00F16019 /* Mapper.framework in Frameworks */,
+				4C58CC4B1F0B727000724E7E /* Diff.framework in Frameworks */,
 				BC6A83911EDEF75A00F16019 /* StatefulViewController.framework in Frameworks */,
 				BC6A838E1EDEF75A00F16019 /* ReactiveSwift.framework in Frameworks */,
 				BC6A83861EDEF75A00F16019 /* Alamofire.framework in Frameworks */,
@@ -104,7 +109,8 @@
 		4DE97DAE1C7AFE3800393489 = {
 			isa = PBXGroup;
 			children = (
-				39B96DA21F0B769900B8F3DF /* .swiftlint.yml */,
+				39B96DA71F0B7A2300B8F3DF /* .gitignore */,
+				39B96DA51F0B7A1B00B8F3DF /* .swiftlint.yml */,
 				4DE97E1E1C7AFF5100393489 /* Cartfile */,
 				4DE97DB91C7AFE3800393489 /* Example */,
 				4DE97E401C7B0E2C00393489 /* Carthage */,
@@ -248,6 +254,7 @@
 		4DE97E401C7B0E2C00393489 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
+				4C58CC4A1F0B727000724E7E /* Diff.framework */,
 				BC6A837A1EDEF75A00F16019 /* Alamofire.framework */,
 				BC6A837B1EDEF75A00F16019 /* DataSource.framework */,
 				BC6A837C1EDEF75A00F16019 /* KeychainAccess.framework */,
@@ -283,7 +290,6 @@
 				4DE97DB41C7AFE3800393489 /* Frameworks */,
 				4DE97DB51C7AFE3800393489 /* Resources */,
 				4DE97E411C7B0E4D00393489 /* Carthage */,
-				39B96DA41F0B76F000B8F3DF /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -334,10 +340,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39B96DA31F0B769900B8F3DF /* .swiftlint.yml in Resources */,
+				39B96DA61F0B7A1B00B8F3DF /* .swiftlint.yml in Resources */,
 				4DE97E151C7AFF1D00393489 /* LaunchScreen.storyboard in Resources */,
 				4DE97E161C7AFF1D00393489 /* Main.storyboard in Resources */,
 				4DE97E481C7B231D00393489 /* test.json in Resources */,
+				39B96DA81F0B7A2300B8F3DF /* .gitignore in Resources */,
 				4DE97E0B1C7AFF1D00393489 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,20 +352,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		39B96DA41F0B76F000B8F3DF /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
-		};
 		4DE97E411C7B0E4D00393489 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -377,6 +370,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SimpleButton.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/StatefulViewController.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Diff.framework",
 			);
 			name = Carthage;
 			outputPaths = (
