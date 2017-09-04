@@ -16,7 +16,7 @@ public class MoyaLoggerPlugin: PluginType {
     /// If true, also logs response body data.
     public let verbose: Bool
     
-    public typealias CustomLogClosure = ((_ timeStamp: Date, _ hash: String?, _ message: String, _ formattedMessage: String) -> Void)
+    public typealias CustomLogClosure = ((_ timeStamp: Date, _ hash: String?, _ message: String, _ formattedMessage: String) -> ())
     
     /// This closure can be used to customize logging. If not `nil`, this closure will be called each time
     /// the logger wants to log a string.
@@ -24,6 +24,7 @@ public class MoyaLoggerPlugin: PluginType {
     /// The hash can be used to match calls and responses in the log.
     /// If `nil` the logger will just print out the formatted message.
     public var customLogClosure: CustomLogClosure?
+    
     
     public init(verbose: Bool = false) {
         self.verbose = verbose
@@ -36,6 +37,8 @@ public class MoyaLoggerPlugin: PluginType {
     public func didReceive(_ result: Result<Response, Moya.MoyaError>, target: TargetType) {
         logNetworkResponse(response: result, target: target)
     }
+    
+    
 }
 
 private extension MoyaLoggerPlugin {
@@ -66,7 +69,7 @@ private extension MoyaLoggerPlugin {
     func logNetworkResponse(response: Result<Response, Moya.MoyaError>, target: TargetType) {
         switch response {
         case let .success(value):
-            guard let response = value.response as? HTTPURLResponse else {
+            guard let response = value.response else {
                 logOut(message: "🔸 Received empty network response for <\(target)>.")
                 return
             }
@@ -86,7 +89,7 @@ private extension MoyaLoggerPlugin {
         case let .failure(error):
             switch error {
             case let .underlying(e):
-                let e = e as NSError
+                let e = e.0 as NSError
                 if e.code == -999 {
                     logOut(message: "🔸 Request Cancelled \(e.userInfo["NSErrorFailingURLStringKey"]!)")
                     return
@@ -123,14 +126,16 @@ private extension MoyaLoggerPlugin {
             print(formattedMessage)
         }
     }
+    
 }
 
 extension TargetType {
     
     var hashValue: Int {
         var hashString = "\(method.hashValue)\(path.hashValue)"
-        if let jsonData = try? JSONSerialization.data(withJSONObject: parameters ?? [:], options: []) {
-            if let string = String(data: jsonData, encoding: String.Encoding.utf8) {
+        if case let .requestParameters(parameters) = task {
+            if let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: []),
+                let string = String(data: jsonData, encoding: String.Encoding.utf8) {
                 hashString += "\(string.hashValue)"
             }
         }
@@ -138,7 +143,9 @@ extension TargetType {
     }
     
     var hashHex: String {
-        let value = UInt(truncatingBitPattern: Int64(hashValue))
+        let value = UInt(truncatingIfNeeded: hashValue)
         return String(value, radix: 16, uppercase: true)
     }
+    
 }
+

@@ -8,6 +8,10 @@ enum API {
 }
 
 extension API: TargetType {
+    var headers: [String : String]? {
+        return nil
+    }
+    
     
     var baseURL: URL {
         return Config.API.BaseURL
@@ -28,39 +32,41 @@ extension API: TargetType {
         }
     }
     
-    var parameters: [String: Any]? {
+    var task: Moya.Task {
         switch self {
             
         case let .postLogin(username, password):
-            return [
+            let parameters = [
                 "grantType": "password",
                 "scope": "user",
                 "username": username,
                 "password": password
             ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             
         case let .postRefreshToken(refreshToken):
-            return [
+            let parameters = [
                 "grantType": "refreshToken",
                 "scope": "user",
                 "refreshToken": refreshToken
             ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             
-        //default:
-        //    return nil
+            //default:
+            //    return .requestPlain
         }
-    }
-
-    var parameterEncoding: ParameterEncoding {
-        return JSONEncoding.default
-    }
-    
-    var task: Moya.Task {
-        return .request
     }
     
     var multipartBody: [MultipartFormData]? {
         return nil
+    }
+
+    var shouldStub: Bool {
+        switch self {
+            
+        default:
+            return Config.API.StubRequests
+        }
     }
 
     var sampleData: Data {

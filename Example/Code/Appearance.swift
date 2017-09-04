@@ -8,7 +8,7 @@ struct Appearance {
     static func setup() {
         UINavigationBar.appearance().barTintColor = .red
         UINavigationBar.appearance().tintColor = .white
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
     }
     
 }

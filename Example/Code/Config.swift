@@ -3,16 +3,17 @@ import Foundation
 /// Global set of configuration values for this application.
 struct Config {
     
-    /// MARK: API
+    static let keyPrefix = "com.hagleitner"
+    
+    // MARK: API
     
     struct API {
-        
         static var BaseURL: URL {
             switch Environment.current() {
             case .debug:
-                return URL(string: "https://api.debug")!
+                return URL(string: "https://hagleitner-dev-public.allaboutapps.at")!
             case .release:
-                return URL(string: "https://api.prod")!
+                return URL(string: "https://hagleitner-dev-public.allaboutapps.at")!
             }
         }
         
@@ -37,10 +38,23 @@ struct Config {
                 return false
             }
         }
+        
     }
     
-    struct Keychain {
-        static let Service = "at.allaboutapps.example"
-        static let CredentialsStorageKey = "Credentials"
+    
+    
+    // MARK: User Defaults
+    
+    struct UserDefaultsKey {
+        static let lastUpdate = Config.keyPrefix + ".lastUpdate"
     }
+    
+    // MARK: Keychain
+    
+    struct Keychain {
+        static let credentialStorageKey = "CredentialsStorage"
+        static let credentialsKey = "credentials"
+    }
+    
 }
+

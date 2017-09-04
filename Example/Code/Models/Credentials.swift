@@ -1,24 +1,25 @@
 import Foundation
 import KeychainAccess
-import ReactiveMapper
-import Mapper
 import ReactiveSwift
 import Result
 
-class Credentials: NSObject, NSCoding, Mappable {
+class Credentials: NSObject, NSCoding, Codable {
     
-    fileprivate static let keychain = Keychain(service: Config.Keychain.Service)
-    fileprivate static let credentialStorageKey = Config.Keychain.CredentialsStorageKey
+    // MARK: Static
+    
+    fileprivate static let keychain = Keychain(service: Config.keyPrefix)
+    fileprivate static let credentialStorageKey = Config.Keychain.credentialStorageKey
     fileprivate static var cachedCredentials: Credentials?
     
     fileprivate static var currentCredentialsChangedSignalObserver = Signal<(), NoError>.pipe()
     static var currentCredentialsChangedSignal: Signal<(), NoError> {
-        return currentCredentialsChangedSignalObserver.0
+        return currentCredentialsChangedSignalObserver.output
     }
     
     static var currentCredentials: Credentials? {
         get {
-            if let credentialsData = keychain[data: credentialStorageKey], let credentials = NSKeyedUnarchiver.unarchiveObject(with: credentialsData) as? Credentials, cachedCredentials == nil {
+            if let credentialsData = keychain[data: credentialStorageKey],
+                let credentials = NSKeyedUnarchiver.unarchiveObject(with: credentialsData) as? Credentials, cachedCredentials == nil {
                 cachedCredentials = credentials
                 return credentials
             } else {
@@ -33,13 +34,18 @@ class Credentials: NSObject, NSCoding, Mappable {
                 cachedCredentials = nil
                 _ = try? keychain.remove(credentialStorageKey)
             }
-            currentCredentialsChangedSignalObserver.1.send(value: ())
+            currentCredentialsChangedSignalObserver.input.send(value: ())
         }
     }
+    
+    
+    // MARK: Variables
     
     let accessToken: String
     let refreshToken: String
     let expiresIn: TimeInterval
+    
+    // MARK: Initializers
     
     init(accessToken: String, refreshToken: String?, expiresIn: TimeInterval?) {
         self.refreshToken = refreshToken ?? ""
@@ -49,31 +55,18 @@ class Credentials: NSObject, NSCoding, Mappable {
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        if let credentialData: NSDictionary = aDecoder.decodeObject(forKey: "credentials") as? NSDictionary, let decodedCredentials: Credentials = Credentials.from(credentialData) {
-            self.init(accessToken: decodedCredentials.accessToken, refreshToken: decodedCredentials.refreshToken, expiresIn: decodedCredentials.expiresIn)
-        } else {
-            return nil
-        }
+        guard let data = aDecoder.decodeObject(forKey: Config.Keychain.credentialsKey) as? Data else { return nil }
+        guard let decoded = try? Decoders.standardJSON.decode(Credentials.self, from: data) else { return nil }
+        self.init(accessToken: decoded.accessToken, refreshToken: decoded.refreshToken, expiresIn: decoded.expiresIn)
     }
     
-    required init(map: Mapper) throws {
-        self.accessToken = try map.from("accessToken")
-        self.refreshToken = map.optionalFrom("refreshToken") ?? ""
-        self.expiresIn = try map.from("expiresIn")
-    }
     
-    func encode(with coder: NSCoder) {
-        coder.encode(encode(), forKey: "credentials")
+    // MARK: Encoding
+    
+    func encode(with aCoder: NSCoder) {
+        let data = try? JSONEncoder().encode(self)
+        aCoder.encode(data, forKey: Config.Keychain.credentialsKey)
     }
     
 }
 
-extension Credentials: Encodeable {
-    func encode() -> [String : Any] {
-        return [
-            "accessToken": accessToken,
-            "refreshToken": refreshToken,
-            "expiresIn": expiresIn
-        ]
-    }
-}

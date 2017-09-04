@@ -34,7 +34,7 @@ extension UIStoryboard {
     /// ```
     /// let vc: SplashViewController = UIStoryboard(.Misc).instantiateViewController()
     /// ```
-    func instantiateViewController<T: UIViewController>() -> T where T: StoryboardIdentifiable {
+    func instantiateViewController<T: UIViewController>() -> T {
         guard let viewController = self.instantiateViewController(withIdentifier: T.storyboardIdentifier) as? T else {
             fatalError("Couldn't instantiate view controller with identifier \(T.storyboardIdentifier) in storyboard \(self)")
         }

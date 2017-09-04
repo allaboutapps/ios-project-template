@@ -4,8 +4,8 @@ import ReactiveSwift
 import Result
 import Moya
 import ReactiveMoya
-import Mapper
-import ReactiveMapper
+import ReactiveCodable
+
 
 final class APIClient {
     
@@ -24,19 +24,14 @@ final class APIClient {
         var endpoint = Endpoint<API>(url: url,
                                      sampleResponseClosure: { .networkResponse(200, target.sampleData) },
                                      method: target.method,
-                                     parameters: target.parameters,
-                                     parameterEncoding: target.parameterEncoding)
-        
-        // Add authentication
-        if let credentials = Credentials.currentCredentials?.accessToken {
-            endpoint = endpoint.adding(newHTTPHeaderFields: ["Authorization": "Bearer \(credentials)"])
-        }
+                                     task: target.task,
+                                     httpHeaderFields: target.headers)
         
         return endpoint
     }
     
     private static let stubClosure = { (target: API) -> StubBehavior in
-        if Config.API.StubRequests {
+        if target.shouldStub {
             return .delayed(seconds: 1.0)
         }
         return .never
@@ -61,6 +56,7 @@ final class APIClient {
             .mapError { APIError.moya($0, target) }
     }
     
+    
     /**
      creates a new request
      
@@ -84,9 +80,10 @@ final class APIClient {
         // attaches the initial request to the current running token refresh request
         let attachRequestToCurrentRefresh: (Signal<Moya.Response, MoyaError>) -> SignalProducer<Moya.Response, MoyaError> = { refreshSignal in
             print("token refresh running -- attach new request to current token refresh request")
-            return SignalProducer { (observer, _) in
+            return SignalProducer { observer, disposable in
                 refreshSignal.observe(observer)
-                }.flatMap(.latest) { _ -> SignalProducer<Moya.Response, MoyaError> in
+                }
+                .flatMap(.latest) { _ -> SignalProducer<Moya.Response, MoyaError> in
                     return initialRequest
             }
         }
@@ -98,6 +95,14 @@ final class APIClient {
             // if not, start the new request but
             // catch 401 to initiate a new accessToken refresh, but only if a refreshToken is available and no token refresh request is running
         else {
+//            // Check if we need to get access token first
+//            if let credentials = Credentials.currentCredentials,
+//                credentials.accessToken == "" {
+//                return refreshAccessTokenWithRefreshToken(credentials.refreshToken).flatMap (.latest) { _ in
+//                    return initialRequest
+//                }
+//            }
+            
             return initialRequest.flatMapError { error in
                 switch error {
                 case .statusCode(let response):
@@ -124,6 +129,7 @@ final class APIClient {
         }
     }
     
+    
     /**
      refresh accessToken with refreshToken and save new Credentials
      
@@ -131,11 +137,11 @@ final class APIClient {
      
      - returns: SignalProducer, representing the task
      */
-    fileprivate static func refreshAccessTokenWithRefreshToken(_ refreshToken: String) -> SignalProducer<(), MoyaError> {
+    static func refreshAccessTokenWithRefreshToken(_ refreshToken: String) -> SignalProducer<(), MoyaError> {
         
-        let refeshRequest = SignalProducer<Response, MoyaError> { observer, disposable in
+        let refreshRequest = SignalProducer<Response, MoyaError> { observer, disposable in
             
-            disposable.add {
+            disposable.observeEnded {
                 currentTokenRefresh = nil
             }
             
@@ -144,21 +150,51 @@ final class APIClient {
                 .filterSuccessfulStatusAndRedirectCodes()
                 .startWithSignal { (signal, innerDisposable) in
                     self.currentTokenRefresh = signal
-                    disposable.add(innerDisposable)
+                    disposable.observeEnded {
+                        innerDisposable.dispose()
+                    }
                     signal.observe(observer)
             }
         }
         
-        return refeshRequest
-            .mapJSON()
-            .mapToType(Credentials.self)
-            .on { credentials in
+        let logout = {
+            Credentials.currentCredentials = nil
+//            User.setCurrentUser(nil)
+        }
+        
+        return refreshRequest
+            .mapData()
+            .mapToType(Credentials.self, decoder: Decoders.standardJSON)
+            .on(value: { credentials in
                 Credentials.currentCredentials = credentials
-            }
+            })
+            .on(failed: { error in
+                // Check if we need to ignore network errors, else log out
+                if let osError = APIClient.unwrapUnderlyingError(error: error) {
+                    if osError.domain != NSURLErrorDomain {
+                        logout()
+                    }
+                } else {
+                    logout()
+                }
+            })
             .map { _ -> Void in
                 return
             }
-            .mapError { MoyaError.underlying($0) }
+            .mapError {
+                return MoyaError.underlying($0, nil)
+                
+        }
+    }
+    
+    private static func unwrapUnderlyingError(error: ReactiveCodableError) -> NSError? {
+        if case let .underlying(underlyingMoyaError) = error,
+            let underlyingMoyaErrorTyped = underlyingMoyaError as? MoyaError,
+            case let .underlying(underlyingErrorTuple) = underlyingMoyaErrorTyped {
+            return underlyingErrorTuple.0 as NSError
+        } else {
+            return nil
+        }
     }
     
 }
@@ -168,23 +204,16 @@ final class APIClient {
 extension SignalProducerProtocol where Value == Moya.Response, Error == APIError {
     
     /// Parses the response to an object of the given `type`
-    func parseAPIResponseType<T: Mappable>(_ type: T.Type, rootKeys: [String]? = nil) -> SignalProducer<T, APIError> {
-        return mapJSON()
-            .mapToType(type, rootKeys: rootKeys)
+    func parseAPIResponseType<T: Decodable>(_ type: T.Type) -> SignalProducer<T, APIError> {
+        return mapData()
+            .mapToType(type, decoder: Decoders.standardJSON)
             .mapError(unboxAPIError)
     }
     
-    /// Parses the response to an array of the given `type`
-    func parseAPIResponseTypeArray<T: Mappable>(_ type: T.Type, rootKeys: [String]? = nil) -> SignalProducer<[T], APIError> {
-        return mapJSON()
-            .mapToTypeArray(type, rootKeys: rootKeys)
-            .mapError(unboxAPIError)
-    }
-    
-    private func unboxAPIError(error: ReactiveMapperError) -> APIError {
+    private func unboxAPIError(error: ReactiveCodableError) -> APIError {
         switch error {
         case let .underlying(e) where e is APIError:
-            return e as! APIError //swiftlint:disable:this force_cast
+            return e as! APIError
         default:
             return APIError.parser(error)
         }
@@ -192,11 +221,11 @@ extension SignalProducerProtocol where Value == Moya.Response, Error == APIError
     
 }
 
-extension SignalProducerProtocol where Value == Response, Error == APIError {
-    /// Maps data received from the signal into a JSON object. If the conversion fails, the signal errors.
-    func mapJSON(failsOnEmptyData: Bool = false) -> SignalProducer<Any, APIError> {
-        return producer.flatMap(.latest) { response -> SignalProducer<Any, APIError> in
-            return unwrapThrowable { try response.mapJSON(failsOnEmptyData: failsOnEmptyData) }
+extension SignalProducerProtocol where Value == Response {
+    
+    func mapData() -> SignalProducer<Data, Error> {
+        return producer.map { response in
+            return response.data
         }
     }
 }
@@ -214,3 +243,4 @@ private func unwrapThrowable<T>(throwable: () throws -> T) -> SignalProducer<T, 
         }
     }
 }
+
