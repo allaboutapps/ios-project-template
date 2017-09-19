@@ -9,7 +9,7 @@ enum APIError: Swift.Error {
     /// Moya error
     case moya(MoyaError, API)
     
-    /// Argonaut Parser Error
+    /// JSON Parser Error
     case parser(ReactiveCodableError)
     
     /// Underlying
@@ -19,7 +19,6 @@ enum APIError: Swift.Error {
     case invalidCredentials
     
     case other
-    
     
     var localizedError: LocalizedError {
         switch self {
@@ -91,7 +90,7 @@ enum APIError: Swift.Error {
             
         default:
             if target.method == .get {
-                return String(format: Strings.Network.errorLoadingFailed,"\(statusCode)")
+                return String(format: Strings.Network.errorLoadingFailed, "\(statusCode)")
             }
             return String(format: Strings.Network.errorPostingFailed, "\(statusCode)")
         }
@@ -99,4 +98,3 @@ enum APIError: Swift.Error {
     
     private static var defaultLocalizedError: LocalizedError = Strings.Network.errorGeneric
 }
-

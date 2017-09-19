@@ -6,7 +6,6 @@ import Moya
 import ReactiveMoya
 import ReactiveCodable
 
-
 final class APIClient {
     
     fileprivate static var currentTokenRefresh: Signal<Moya.Response, MoyaError>?
@@ -56,7 +55,6 @@ final class APIClient {
             .mapError { APIError.moya($0, target) }
     }
     
-    
     /**
      creates a new request
      
@@ -80,11 +78,11 @@ final class APIClient {
         // attaches the initial request to the current running token refresh request
         let attachRequestToCurrentRefresh: (Signal<Moya.Response, MoyaError>) -> SignalProducer<Moya.Response, MoyaError> = { refreshSignal in
             print("token refresh running -- attach new request to current token refresh request")
-            return SignalProducer { observer, disposable in
+            return SignalProducer { observer, _ in
                 refreshSignal.observe(observer)
-                }
-                .flatMap(.latest) { _ -> SignalProducer<Moya.Response, MoyaError> in
-                    return initialRequest
+            }
+            .flatMap(.latest) { _ -> SignalProducer<Moya.Response, MoyaError> in
+                return initialRequest
             }
         }
         
@@ -128,7 +126,6 @@ final class APIClient {
             }
         }
     }
-    
     
     /**
      refresh accessToken with refreshToken and save new Credentials
@@ -243,4 +240,3 @@ private func unwrapThrowable<T>(throwable: () throws -> T) -> SignalProducer<T, 
         }
     }
 }
-

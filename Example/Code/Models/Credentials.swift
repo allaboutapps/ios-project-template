@@ -38,7 +38,6 @@ class Credentials: NSObject, NSCoding, Codable {
         }
     }
     
-    
     // MARK: Variables
     
     let accessToken: String
@@ -60,13 +59,10 @@ class Credentials: NSObject, NSCoding, Codable {
         self.init(accessToken: decoded.accessToken, refreshToken: decoded.refreshToken, expiresIn: decoded.expiresIn)
     }
     
-    
     // MARK: Encoding
     
     func encode(with aCoder: NSCoder) {
         let data = try? JSONEncoder().encode(self)
         aCoder.encode(data, forKey: Config.Keychain.credentialsKey)
     }
-    
 }
-

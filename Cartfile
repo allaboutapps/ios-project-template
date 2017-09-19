@@ -3,10 +3,5 @@ github "moya/Moya" ~> 9.0
 github "aloco/SimpleButton" ~> 3.0
 github "gunterhager/ReactiveCodable" ~> 1.0
 github "Alamofire/AlamofireImage" ~> 3.1
-
-github "mbuchetics/DataSource" ~> 4.0
-
+github "mbuchetics/DataSource" ~> 5.0
 github "kishikawakatsumi/KeychainAccess" ~> 3.0
-
-#github "pkluz/PKHUD" ~> 4.0
-

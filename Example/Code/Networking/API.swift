@@ -12,7 +12,6 @@ extension API: TargetType {
         return nil
     }
     
-    
     var baseURL: URL {
         return Config.API.BaseURL
     }

@@ -1,11 +1,3 @@
-//
-//  Formatters.swift
-//  SmartSpender
-//
-//  Created by Gunter Hager on 04/09/2017.
-//  Copyright © 2017 Hagleitner. All rights reserved.
-//
-
 import Foundation
 
 struct Formatters {

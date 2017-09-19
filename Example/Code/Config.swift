@@ -38,10 +38,7 @@ struct Config {
                 return false
             }
         }
-        
     }
-    
-    
     
     // MARK: User Defaults
     
@@ -55,6 +52,4 @@ struct Config {
         static let credentialStorageKey = "CredentialsStorage"
         static let credentialsKey = "credentials"
     }
-    
 }
-
