@@ -12,6 +12,7 @@ disabled_rules:
     - large_tuple
     - redundant_optional_initialization
     - force_cast
+    - superfluous_disable_command
     #- operator_whitespace
     #- vertical_whitespace
     #- variable_name
