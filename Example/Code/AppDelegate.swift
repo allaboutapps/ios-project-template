@@ -1,5 +1,9 @@
 import UIKit
 
+struct Foo: Decodable {
+    let foo: String
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -7,6 +11,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Appearance.setup()
+        
+        APIClient.request(.postLogin(username: "Max", password: "Test"))
+            .parseAPIResponseType(Foo.self)
+            .startWithResult { (result) in
+                if let error = result.error {
+                    print("error: \(error.localizedDescription)")
+                } else if let foo = result.value {
+                    print("value: \(foo)")
+                }
+        }
+
         return true
     }
 

@@ -128,12 +128,16 @@ extension TargetType {
     
     var hashValue: Int {
         var hashString = "\(method.hashValue)\(path.hashValue)"
-        if case let .requestParameters(parameters) = task {
-            if let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: []),
-                let string = String(data: jsonData, encoding: String.Encoding.utf8) {
+        
+        switch task {
+        case .requestParameters(let parameters, let encoding) where encoding is JSONEncoding:
+            if let data = try? JSONSerialization.data(withJSONObject: parameters), let string = String(data: data, encoding: String.Encoding.utf8) {
                 hashString += "\(string.hashValue)"
             }
+        default:
+            break
         }
+        
         return hashString.hashValue
     }
     

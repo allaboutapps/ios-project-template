@@ -25,8 +25,9 @@ extension API: TargetType {
     
     var method: Moya.Method {
         switch self {
-        case .postLogin:            return .post
-        case .postRefreshToken:     return .post
+        case .postLogin,
+             .postRefreshToken:
+            return .post
         //default:                  return .get
         }
     }
@@ -35,12 +36,14 @@ extension API: TargetType {
         switch self {
             
         case let .postLogin(username, password):
+
             let parameters = [
                 "grantType": "password",
                 "scope": "user",
                 "username": username,
                 "password": password
             ]
+
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             
         case let .postRefreshToken(refreshToken):
@@ -62,6 +65,8 @@ extension API: TargetType {
 
     var shouldStub: Bool {
         switch self {
+        case .postLogin:
+            return true
             
         default:
             return Config.API.StubRequests
@@ -70,6 +75,8 @@ extension API: TargetType {
 
     var sampleData: Data {
         switch self {
+        case .postLogin:
+            return stub("test")
         default:
             return Data()
         }

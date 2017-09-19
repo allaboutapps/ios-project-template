@@ -54,7 +54,7 @@ final class APIClient {
             .filterSuccessfulStatusAndRedirectCodes()
             .mapError { APIError.moya($0, target) }
     }
-    
+
     /**
      creates a new request
      
