@@ -28,7 +28,8 @@ extension API: TargetType {
         case .postLogin,
              .postRefreshToken:
             return .post
-        //default:                  return .get
+        //default:
+        //    return .get
         }
     }
     
@@ -43,7 +44,7 @@ extension API: TargetType {
                 "username": username,
                 "password": password
             ]
-
+            
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             
         case let .postRefreshToken(refreshToken):
@@ -58,16 +59,9 @@ extension API: TargetType {
             //    return .requestPlain
         }
     }
-    
-    var multipartBody: [MultipartFormData]? {
-        return nil
-    }
 
     var shouldStub: Bool {
         switch self {
-        case .postLogin:
-            return true
-            
         default:
             return Config.API.StubRequests
         }

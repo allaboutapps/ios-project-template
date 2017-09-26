@@ -1,4 +1,6 @@
 import UIKit
+import ReactiveSwift
+import Result
 
 struct Foo: Decodable {
     let foo: String
@@ -12,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Appearance.setup()
         
-        APIClient.request(.postLogin(username: "Max", password: "Test"))
+        APIClient.request(.postLogin(username: "max", password: "test"))
             .parseAPIResponseType(Foo.self)
             .startWithResult { (result) in
                 if let error = result.error {
