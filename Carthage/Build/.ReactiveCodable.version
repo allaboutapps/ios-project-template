@@ -1,0 +1,9 @@
+{
+  "commitish" : "1.0.3",
+  "iOS" : [
+    {
+      "hash" : "a373cf9ccc6ba46f85694d5e4168f0ddbdc3790f417cbb65a2a277bff9d921bc",
+      "name" : "ReactiveCodable"
+    }
+  ]
+}

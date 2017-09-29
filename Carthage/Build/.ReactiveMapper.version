@@ -1,0 +1,9 @@
+{
+  "commitish" : "1.1",
+  "iOS" : [
+    {
+      "hash" : "6939f90a0c1c2ca61ca30733c23452ce4b86cc9fa9151f9828cc814c12f32a07",
+      "name" : "ReactiveMapper"
+    }
+  ]
+}

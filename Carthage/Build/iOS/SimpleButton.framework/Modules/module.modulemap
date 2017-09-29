@@ -1,0 +1,11 @@
+framework module SimpleButton {
+  umbrella header "SimpleButton.h"
+
+  export *
+  module * { export * }
+}
+
+module SimpleButton.Swift {
+    header "SimpleButton-Swift.h"
+    requires objc
+}

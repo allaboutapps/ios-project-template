@@ -1,0 +1,9 @@
+{
+  "commitish" : "3.0.1",
+  "iOS" : [
+    {
+      "hash" : "6a7779463ea27c51a183d1931f7d020741226086d303038a57cf630461b76ded",
+      "name" : "StatefulViewController"
+    }
+  ]
+}

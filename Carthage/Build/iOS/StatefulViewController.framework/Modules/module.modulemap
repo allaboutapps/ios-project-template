@@ -1,0 +1,10 @@
+framework module StatefulViewController {
+  umbrella header "StatefulViewController.h"
+
+  export *
+  module * { export * }
+}
+
+module StatefulViewController.Swift {
+    header "StatefulViewController-Swift.h"
+}

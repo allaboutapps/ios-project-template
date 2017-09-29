@@ -1,0 +1,11 @@
+framework module ReactiveCodable {
+  umbrella header "ReactiveCodable.h"
+
+  export *
+  module * { export * }
+}
+
+module ReactiveCodable.Swift {
+    header "ReactiveCodable-Swift.h"
+    requires objc
+}
