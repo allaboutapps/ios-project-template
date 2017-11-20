@@ -33,7 +33,7 @@
 	- Set the value to `$(SDKROOT)/ResourceRules.plist`
 
 ## Further setup
-* Run `make setup` to install all needed dependencies
+* Run `carthage update --platform ios` to install/update all needed dependencies
 * Run `make gitinit` to setup a new git repo in the project root folder (**WARNING:** removes any existing git repo in the project root folder)
 * Update the `Makefile` with your project settings
 * Update the `.swiftlint.yml` file to include the project root folder 
@@ -62,17 +62,3 @@ TODO
 ## Documentation
 
 Where do I find API docs, wireframes, etc.?
-
-## Features
-
-| Used | Property |
-|------|----------|
-| ✔    | Unit Tests
-|      | Push Notifications 
-| ✔    | Realm
-
-## Tests
-
-* Run `make test` to run tests locally.
-* Run `make lint` to lint the project.
-* Run `make push` to test push notifications.

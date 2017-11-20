@@ -72,7 +72,6 @@ gitinit:
 
 setup:
 	gem install xcpretty
-	gem install houston
 	brew install swiftlint
 
 ######## FILE & DIR CHEKS ########
