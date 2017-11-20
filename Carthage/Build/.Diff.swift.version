@@ -2,8 +2,8 @@
   "commitish" : "0.5.3",
   "iOS" : [
     {
-      "hash" : "74bdc9d37155f2a724728f359537255fe356bfd6387a7fa17caa3220c2decd43",
-      "name" : "Diff"
+      "name" : "Diff",
+      "hash" : "da67034ef0abbb09c714a2da5a71beded6a2974c0504d8ac31ed0947d8a3a302"
     }
   ]
 }

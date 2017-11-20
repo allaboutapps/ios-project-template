@@ -1,6 +1,5 @@
 import Foundation
 import Moya
-import ReactiveCodable
 
 typealias LocalizedError = String //(title: String, message: String)
 
@@ -8,9 +7,6 @@ enum APIError: Swift.Error {
     
     /// Moya error
     case moya(MoyaError, API)
-    
-    /// JSON Parser Error
-    case parser(ReactiveCodableError)
     
     /// Underlying
     case underlying(Swift.Error)
@@ -24,7 +20,7 @@ enum APIError: Swift.Error {
         switch self {
         case let .moya(error, target):
             return localizedNetworkError(error: error, target: target)
-        case .parser, .underlying:
+        case .underlying:
             return APIError.defaultLocalizedError
         default:
             return APIError.defaultLocalizedError
@@ -63,8 +59,9 @@ enum APIError: Swift.Error {
             let nsError = error.0 as NSError
             if nsError.code == -1009 || nsError.code == -1005 {
                 return Strings.Network.errorNoConnection
+            } else {
+                return APIError.defaultLocalizedError
             }
-            fallthrough
         default:
             return APIError.defaultLocalizedError
         }

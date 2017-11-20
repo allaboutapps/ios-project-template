@@ -8,7 +8,7 @@ enum API {
 }
 
 extension API: TargetType {
-    var headers: [String : String]? {
+    var headers: [String: String]? {
         return nil
     }
     
@@ -37,7 +37,6 @@ extension API: TargetType {
         switch self {
             
         case let .postLogin(username, password):
-
             let parameters = [
                 "grantType": "password",
                 "scope": "user",
@@ -55,8 +54,8 @@ extension API: TargetType {
             ]
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             
-            //default:
-            //    return .requestPlain
+        //default:
+        //    return .requestPlain
         }
     }
 

@@ -1,13 +1,9 @@
 {
-  "commitish" : "5.0.1",
+  "commitish" : "5.0.4",
   "iOS" : [
     {
-      "hash" : "a83d56b3da62b00229c93078e12f0c6f00c64997e459e94362c3db59ade1a4e3",
-      "name" : "DataSource"
-    },
-    {
-      "hash" : "a83d56b3da62b00229c93078e12f0c6f00c64997e459e94362c3db59ade1a4e3",
-      "name" : "DataSource"
+      "name" : "DataSource",
+      "hash" : "c7549bdad310ebec1c22182fcf238109716e3ae91f208e59796bc26f157e978a"
     }
   ]
 }

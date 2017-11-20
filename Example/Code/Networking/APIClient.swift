@@ -4,7 +4,6 @@ import ReactiveSwift
 import Result
 import Moya
 import ReactiveMoya
-import ReactiveCodable
 
 final class APIClient {
     
@@ -36,14 +35,14 @@ final class APIClient {
         return .never
     }
     
-    private static var provider: ReactiveSwiftMoyaProvider<API> = {
+    private static var provider: MoyaProvider<API> = {
         let plugins: [PluginType] = {
             guard Config.API.NetworkLoggingEnabled else { return [] }
             let loggerPlugin = MoyaLoggerPlugin(verbose: Config.API.NetworkLoggingEnabled)
             return [loggerPlugin]
         }()
         
-        return ReactiveSwiftMoyaProvider(endpointClosure: endpointClosure, stubClosure: stubClosure, plugins: plugins)
+        return MoyaProvider(endpointClosure: endpointClosure, stubClosure: stubClosure, plugins: plugins)
     }()
     
     // MARK: Request
@@ -52,6 +51,14 @@ final class APIClient {
     static func request(_ target: API) -> SignalProducer<Moya.Response, APIError> {
         return request(target, authenticated: true)
             .filterSuccessfulStatusAndRedirectCodes()
+            .mapError { APIError.moya($0, target) }
+    }
+    
+    /// Performs the request on the given `target` and maps the respsonse to the specific type (using Decodable).
+    static func request<T: Decodable>(_ target: API, type: T.Type, keyPath: String? = nil, decoder: JSONDecoder = Decoders.standardJSON) -> SignalProducer<T, APIError> {
+        return request(target, authenticated: true)
+            .filterSuccessfulStatusAndRedirectCodes()
+            .map(type, atKeyPath: keyPath, using: decoder)
             .mapError { APIError.moya($0, target) }
     }
 
@@ -67,6 +74,7 @@ final class APIClient {
         
         // setup initial request
         let initialRequest: SignalProducer<Moya.Response, MoyaError> = provider
+            .reactive
             .request(target)
             .filterSuccessfulStatusAndRedirectCodes()
         
@@ -93,13 +101,13 @@ final class APIClient {
             // if not, start the new request but
             // catch 401 to initiate a new accessToken refresh, but only if a refreshToken is available and no token refresh request is running
         else {
-//            // Check if we need to get access token first
-//            if let credentials = Credentials.currentCredentials,
-//                credentials.accessToken == "" {
-//                return refreshAccessTokenWithRefreshToken(credentials.refreshToken).flatMap (.latest) { _ in
-//                    return initialRequest
-//                }
-//            }
+            // Check if we need to get access token first
+            if let credentials = Credentials.currentCredentials,
+                credentials.accessToken == "" {
+                return refreshAccessTokenWithRefreshToken(credentials.refreshToken).flatMap (.latest) { _ in
+                    return initialRequest
+                }
+            }
             
             return initialRequest.flatMapError { error in
                 switch error {
@@ -135,7 +143,6 @@ final class APIClient {
      - returns: SignalProducer, representing the task
      */
     static func refreshAccessTokenWithRefreshToken(_ refreshToken: String) -> SignalProducer<(), MoyaError> {
-        
         let refreshRequest = SignalProducer<Response, MoyaError> { observer, disposable in
             
             disposable.observeEnded {
@@ -143,6 +150,7 @@ final class APIClient {
             }
             
             APIClient.provider
+                .reactive
                 .request(API.postRefreshToken(refreshToken: refreshToken))
                 .filterSuccessfulStatusAndRedirectCodes()
                 .startWithSignal { (signal, innerDisposable) in
@@ -160,8 +168,7 @@ final class APIClient {
         }
         
         return refreshRequest
-            .mapData()
-            .mapToType(Credentials.self, decoder: Decoders.standardJSON)
+            .map(Credentials.self, using: Decoders.standardJSON)
             .on(value: { credentials in
                 Credentials.currentCredentials = credentials
             })
@@ -183,60 +190,20 @@ final class APIClient {
                 
         }
     }
-    
-    private static func unwrapUnderlyingError(error: ReactiveCodableError) -> NSError? {
-        if case let .underlying(underlyingMoyaError) = error,
-            let underlyingMoyaErrorTyped = underlyingMoyaError as? MoyaError,
-            case let .underlying(underlyingErrorTuple) = underlyingMoyaErrorTyped {
-            return underlyingErrorTuple.0 as NSError
-        } else {
+
+    private static func unwrapUnderlyingError(error: MoyaError) -> NSError? {
+        switch error {
+        case let .objectMapping(error, _):
+            return error as NSError
+        case let .encodableMapping(error):
+            return error as NSError
+        case let .underlying(error, _):
+            return error as NSError
+        case let .parameterEncoding(error):
+            return error as NSError
+        default:
             return nil
         }
     }
     
-}
-
-// MARK: API Response Parsing
-
-extension SignalProducerProtocol where Value == Moya.Response, Error == APIError {
-    
-    /// Parses the response to an object of the given `type`
-    func parseAPIResponseType<T: Decodable>(_ type: T.Type) -> SignalProducer<T, APIError> {
-        return mapData()
-            .mapToType(type, decoder: Decoders.standardJSON)
-            .mapError(unboxAPIError)
-    }
-    
-    private func unboxAPIError(error: ReactiveCodableError) -> APIError {
-        switch error {
-        case let .underlying(e) where e is APIError:
-            return e as! APIError
-        default:
-            return APIError.parser(error)
-        }
-    }
-    
-}
-
-extension SignalProducerProtocol where Value == Response {
-    
-    func mapData() -> SignalProducer<Data, Error> {
-        return producer.map { response in
-            return response.data
-        }
-    }
-}
-
-/// Maps throwable to SignalProducer.
-private func unwrapThrowable<T>(throwable: () throws -> T) -> SignalProducer<T, APIError> {
-    do {
-        return SignalProducer(value: try throwable())
-    } catch {
-        if let error = error as? APIError {
-            return SignalProducer(error: error)
-        } else {
-            // The cast above should never fail, but just in case.
-            return SignalProducer(error: APIError.underlying(error as NSError))
-        }
-    }
 }

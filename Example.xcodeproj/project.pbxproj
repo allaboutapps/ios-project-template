@@ -33,7 +33,6 @@
 		BCA896F31F5D8A630099B3D1 /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA896E41F5D8A5D0099B3D1 /* KeychainAccess.framework */; };
 		BCA896F41F5D8A630099B3D1 /* Moya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA896E51F5D8A5D0099B3D1 /* Moya.framework */; };
 		BCA896F51F5D8A630099B3D1 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA896E61F5D8A5D0099B3D1 /* ReactiveCocoa.framework */; };
-		BCA896F61F5D8A630099B3D1 /* ReactiveCodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA896E71F5D8A5D0099B3D1 /* ReactiveCodable.framework */; };
 		BCA896F71F5D8A630099B3D1 /* ReactiveMoya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA896E81F5D8A5D0099B3D1 /* ReactiveMoya.framework */; };
 		BCA896F81F5D8A630099B3D1 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA896EA1F5D8A5D0099B3D1 /* ReactiveSwift.framework */; };
 		BCA896F91F5D8A630099B3D1 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA896E91F5D8A5D0099B3D1 /* Result.framework */; };
@@ -72,7 +71,6 @@
 		BCA896E41F5D8A5D0099B3D1 /* KeychainAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KeychainAccess.framework; path = Carthage/Build/iOS/KeychainAccess.framework; sourceTree = "<group>"; };
 		BCA896E51F5D8A5D0099B3D1 /* Moya.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Moya.framework; path = Carthage/Build/iOS/Moya.framework; sourceTree = "<group>"; };
 		BCA896E61F5D8A5D0099B3D1 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
-		BCA896E71F5D8A5D0099B3D1 /* ReactiveCodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCodable.framework; path = Carthage/Build/iOS/ReactiveCodable.framework; sourceTree = "<group>"; };
 		BCA896E81F5D8A5D0099B3D1 /* ReactiveMoya.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveMoya.framework; path = Carthage/Build/iOS/ReactiveMoya.framework; sourceTree = "<group>"; };
 		BCA896E91F5D8A5D0099B3D1 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		BCA896EA1F5D8A5D0099B3D1 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
@@ -89,7 +87,6 @@
 				BCA896EF1F5D8A630099B3D1 /* Alamofire.framework in Frameworks */,
 				BCA896F91F5D8A630099B3D1 /* Result.framework in Frameworks */,
 				BCA896F11F5D8A630099B3D1 /* DataSource.framework in Frameworks */,
-				BCA896F61F5D8A630099B3D1 /* ReactiveCodable.framework in Frameworks */,
 				BCA896FA1F5D8A630099B3D1 /* SimpleButton.framework in Frameworks */,
 				BCA896F21F5D8A630099B3D1 /* Diff.framework in Frameworks */,
 				BCA896F71F5D8A630099B3D1 /* ReactiveMoya.framework in Frameworks */,
@@ -258,7 +255,6 @@
 				BCA896E41F5D8A5D0099B3D1 /* KeychainAccess.framework */,
 				BCA896E51F5D8A5D0099B3D1 /* Moya.framework */,
 				BCA896E61F5D8A5D0099B3D1 /* ReactiveCocoa.framework */,
-				BCA896E71F5D8A5D0099B3D1 /* ReactiveCodable.framework */,
 				BCA896E81F5D8A5D0099B3D1 /* ReactiveMoya.framework */,
 				BCA896EA1F5D8A5D0099B3D1 /* ReactiveSwift.framework */,
 				BCA896E91F5D8A5D0099B3D1 /* Result.framework */,
@@ -374,7 +370,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/KeychainAccess.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Moya.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ReactiveCocoa.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/ReactiveCodable.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ReactiveMoya.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ReactiveSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",

@@ -4,11 +4,11 @@ struct Decoders {
     
     static let standardJSON: JSONDecoder = {
         let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .custom(Decoders.decodePuckDate)
+        decoder.dateDecodingStrategy = .custom(Decoders.decodeDate)
         return decoder
     }()
     
-    static func decodePuckDate(decoder: Decoder) throws -> Date {
+    static func decodeDate(decoder: Decoder) throws -> Date {
         let container = try decoder.singleValueContainer()
         let raw = try container.decode(String.self)
         

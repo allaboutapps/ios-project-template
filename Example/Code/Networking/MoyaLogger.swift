@@ -42,7 +42,7 @@ private extension MoyaLoggerPlugin {
     
     func logNetworkRequest(request: URLRequest?, target: TargetType) {
         guard let request = request else {
-            logOut(message: "No Request")
+            printMessage("No Request")
             return
         }
         
@@ -60,41 +60,56 @@ private extension MoyaLoggerPlugin {
             output.append(String(format: "%@Request Body: \n%@", spacing, body))
         }
         
-        logOut(hash: target.hashHex, message: output.joined(separator: "\n"))
+        printMessage(output.joined(separator: "\n"), hash: target.hashHex)
     }
     
     func logNetworkResponse(response: Result<Response, Moya.MoyaError>, target: TargetType) {
         switch response {
         case let .success(value):
             guard let response = value.response else {
-                logOut(message: "🔸 Received empty network response for <\(target)>.")
+                let icon = iconString("🔸", target)
+                printMessage("\(icon) Received empty network response for <\(target)>.")
                 return
             }
             
             var output = [String]()
             
             let range = 200...399
-            let success = range.contains(response.statusCode) ? "✅" : "❌"
-            output.append(String(format: "%@ %i %@", success, response.statusCode, response.url?.absoluteString ?? ""))
+            let icon = iconString(range.contains(response.statusCode) ? "✅" : "❌", target)
+            
+            output.append(String(format: "%@ %i %@", icon, response.statusCode, response.url?.absoluteString ?? ""))
             
             if let body = prettyJSON(data: value.data) ?? String(data: value.data, encoding: String.Encoding.utf8), verbose == true {
                 output.append(body)
             }
             
-            logOut(hash: target.hashHex, message: output.joined(separator: "\n"))
+            printMessage(output.joined(separator: "\n"), hash: target.hashHex)
             
         case let .failure(error):
             switch error {
             case let .underlying(e):
                 let e = e.0 as NSError
                 if e.code == -999 {
-                    logOut(message: "🔸 Request Cancelled \(e.userInfo["NSErrorFailingURLStringKey"]!)")
+                    let icon = iconString("🔸", target)
+                    printMessage("\(icon) Request Cancelled \(e.userInfo["NSErrorFailingURLStringKey"]!)")
                     return
                 }
-                fallthrough
             default:
-                logOut(message: "❌ \(error)")
-            } 
+                break
+            }
+            
+            let icon = iconString("❌", target)
+            printMessage("\(icon) \(error)")
+        }
+    }
+    
+    private func iconString(_ icon: String, _ target: TargetType) -> String {
+        let stubbed = (target as? API)?.shouldStub ?? false
+        
+        if stubbed {
+            return "\(icon) [STUB]"
+        } else {
+            return icon
         }
     }
     
@@ -108,7 +123,7 @@ private extension MoyaLoggerPlugin {
         return nil
     }
     
-    private func logOut(hash: String? = nil, message: String) {
+    private func printMessage(_ message: String, hash: String? = nil) {
         let now = Date()
         var formattedMessage = "[\(dateFormatter.string(from: now))] "
         if let hash = hash {

@@ -24,8 +24,8 @@ end
 
 def targets
   return [
-    # :macos, # Note: we're experiencing macOS build problems on circle, commenting out.
-    # :tvos, # Note: tvos simulator is currently not in the newest Xcode9b6 on CircleCI.
+    :macos,
+    :tvos,
     :ios
   ]
 end
@@ -57,13 +57,13 @@ end
 def device_names
   return {
     ios: "iPhone 6s",
-    tvos: "Apple TV 1080p"
+    tvos: "Apple TV 4K (at 1080p)"
   }
 end
 
 def device_os
   return {
-    ios: "11.0",
+    ios: "11.0.1",
     tvos: "11.0"
   }
 end
@@ -82,17 +82,15 @@ def xcodebuild(tasks, platform, xcprety_args: '')
   safe_sh "set -o pipefail && xcodebuild -project '#{moya_project}' -scheme '#{scheme}' -configuration '#{configuration}' -sdk #{sdk} -destination '#{destination}' #{tasks} | bundle exec xcpretty -c #{xcprety_args}"
 end
 
-def xcodebuild_demo(tasks, xcprety_args: '')
+def xcodebuild_example(tasks, xcprety_args: '')
   platform = :ios
   sdk = sdks[platform]
   destination = devices[platform]
-  demo_workspace = 'Demo.xcworkspace'
-  demo_scheme = 'Demo'
+  demo_project = 'Moya.xcodeproj'
+  demo_scheme = 'Basic'
 
-  Dir.chdir('Demo') do
-    open_simulator_and_sleep(platform)
-    safe_sh "set -o pipefail && xcodebuild -workspace '#{demo_workspace}' -scheme '#{demo_scheme}' -configuration '#{configuration}' -sdk #{sdk} -destination '#{destination}' #{tasks} | bundle exec xcpretty -c #{xcprety_args}"
-  end
+  open_simulator_and_sleep(platform)
+  safe_sh "set -o pipefail && xcodebuild -project '#{demo_project}' -scheme '#{demo_scheme}' -configuration '#{configuration}' -sdk #{sdk} -destination '#{destination}' #{tasks} | bundle exec xcpretty -c #{xcprety_args}"
 end
 
 desc 'Build Moya.'
@@ -101,8 +99,8 @@ task :build do
 end
 
 desc 'Build the Demo app.'
-task :build_demo do
-  xcodebuild_demo 'build'
+task :build_example do
+  xcodebuild_example 'build'
 end
 
 desc 'Clean build directory.'
@@ -157,6 +155,7 @@ end
 desc 'Release a version, specified as an argument.'
 task :release, :version do |task, args|
   version = args[:version]
+  release_date = Time.now.strftime("%Y-%m-%d")
   # Needs a X.Y.Z-text format.
   abort "You must specify a version in semver format." if version.nil? || version.scan(/\d+\.\d+\.\d+(-\w+\.\d+)?/).length == 0
 
@@ -166,16 +165,10 @@ task :release, :version do |task, args|
   contents.gsub!(/s\.version\s*=\s"\d+\.\d+\.\d+(-\w+\.\d)?"/, "s.version      = \"#{version}\"")
   File.open(filename, 'w') { |file| file.puts contents }
 
-  puts "Updating Demo project."
-  Dir.chdir('Demo') do
-    ENV['COCOAPODS_DISABLE_DETERMINISTIC_UUIDS'] = 'true'
-    sh "bundle exec pod update Moya --verbose"
-  end
-
   puts "Updating changelog."
   changelog_filename = "CHANGELOG.md"
   changelog = File.read(changelog_filename)
-  changelog.gsub!(/# Next/, "# Next\n\n# #{version}")
+  changelog.gsub!(/# Next/, "# Next\n\n# [#{version}] - #{release_date}")
   File.open(changelog_filename, 'w') { |file| file.puts changelog }
 
   puts "Committing, tagging, and pushing."
