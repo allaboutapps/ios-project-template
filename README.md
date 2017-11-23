@@ -11,7 +11,7 @@
 	* Click **Create**
 	* Close Xcode
 1. In your project root directory, create a folder structure that matches the folders in the `Example` folder and copy the `Example/Code` folder to your project. It contains some helpers to get you started.
-1. Move all existint project files into their respective folder (i.e. `Info.plist` into `SupportingFiles` and `ViewController.swift` into `ViewControllers`)
+1. Move all existing project files into their respective folder (i.e. `Info.plist` into `SupportingFiles` and `ViewController.swift` into `ViewControllers`)
 
 ## Bend Xcode to your will
 
