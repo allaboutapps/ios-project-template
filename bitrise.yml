@@ -54,7 +54,7 @@ workflows:
         inputs:
         - build_version_offset: ''
         - build_version: "$GIT_CLONE_COMMIT_COUNT"
-        - plist_path: "$BITRISE_SOURCE_DIR/Example/SupportingFiles/Info.plist"
+        - plist_path: "$AAA_INFO_PLIST_PATH"
     - ios-auto-provision:
         inputs:
         - team_id: "$AAA_DEV_TEAM_ID"
@@ -74,6 +74,7 @@ app:
   - opts:
       is_expand: false
     BITRISE_SCHEME: Example
+  - AAA_INFO_PLIST_PATH: $BITRISE_SOURCE_DIR/Example/SupportingFiles/Info.plist
   - AAA_APP_BUNDLE_ID: at.allaboutapps.example
   - AAA_ITUNES_TEAM: aaa - all about apps Gmbh
   - AAA_DEV_TEAM_ID: M8F9QH57A6
