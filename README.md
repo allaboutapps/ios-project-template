@@ -62,3 +62,7 @@ TODO
 ## Documentation
 
 Where do I find API docs, wireframes, etc.?
+
+## Bitrise
+
+Is Bitrise CI setup?
