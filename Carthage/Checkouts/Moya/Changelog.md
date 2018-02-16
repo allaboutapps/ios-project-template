@@ -1,6 +1,37 @@
 # Next
 
+# [11.0.0] - 2018-02-07
+
+# [11.0.0-beta.2] - 2018-01-27
+## Changed
+- **Breaking Change** Removed generic from `Endpoint`. See #1524 for discussion. [#1529](https://github.com/Moya/Moya/pull/1529) by @[zhongwuzw](https://github.com/zhongwuzw).
+
+# [11.0.0-beta.1] - 2018-01-10
+### Added
+- **Breaking Change** Added a `.requestCustomJSONEncodable` case to `Task`. [#1443](https://github.com/Moya/Moya/pull/1443) by [@evgeny-sureev](https://github.com/evgeny-sureev).
+- **Breaking Change** Added `failsOnEmptyData` boolean support for the `Decodable` map functions. [#1508](https://github.com/Moya/Moya/pull/1508) by [@jeroenbb94](https://github.com/Jeroenbb94).
+
+### Changed
+- **Breaking Change** Updated minimum version of `ReactiveSwift` to 3.0.
+[#1470](https://github.com/Moya/Moya/pull/1470) by [@larryonoff](https://github.com/larryonoff).
+- **Breaking Change** Changed the `validate` property of `TargetType` to use new `ValidationType` enum representing valid status codes. [#1505](https://github.com/Moya/Moya/pull/1505) by [@SD10](https://github.com/sd10), [@amaurydavid](https://github.com/amaurydavid). 
+
+# [10.0.2] - 2018-01-26
+### Fixed
+- Fixed a bug where modifying `.uploadMultipart`, `.uploadCompositeMultipart`, `.uploadFile`, `.downloadDestination`, and `.downloadParameters` tasks through an `endpointClosure` has no effect on the final request.
+[#1550](https://github.com/Moya/Moya/pull/1550) by [@SD10](https://github.com/sd10), [@sunshinejr](https://github.com/sunshinejr).
+- Fixed a bug where `URLEncoding.httpBody` wasn't allowed as `bodyEncoding` in `Task.requestCompositeParameters()`. [#1557](https://github.com/Moya/Moya/pull/1557) by [@sunshinejr](https://github.com/sunshinejr).
+
+# [10.0.1] - 2017-11-23
+### Fixed
+- Fixed a bug that `Decodable` mapping to object other than Array and Dictionary in a key path cause crash. [#1405](https://github.com/Moya/Moya/pull/1405) by [@ufosky](https://github.com/ufosky).
+- Fixed a bug with missing Content-Type header when using `.requestJSONEncodable` [#1410](https://github.com/Moya/Moya/pull/1410) by [@Vict0rS](https://github.com/Vict0rS).
+- Fixed linker settings, enabling RxMoya and ReactiveMoya to be used in app extensions [#1417](https://github.com/Moya/Moya/pull/1417) by [@spookyvision](https://github.com/spookyvision/).
+- Fixed carthage OS X not targeting 10.10 [#1444](https://github.com/Moya/Moya/pull/1444) by [@lucas34](https://github.com/lucas34).
+
 # [10.0.0] - 2017-10-21
+### Fixed
+- Fixed a bug that `Decodable` mapping won't decode nested JSON array in a key path [#1382](https://github.com/Moya/Moya/pull/1382) by [@devxoul](https://github.com/devxoul).
 
 # [10.0.0-beta.1] - 2017-10-08
 ### Added

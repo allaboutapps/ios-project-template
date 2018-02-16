@@ -3,7 +3,7 @@ import Moya
 import RxSwift
 import Nimble
 
-class ObservableMoyaSpec: QuickSpec {
+final class ObservableMoyaSpec: QuickSpec {
     override func spec() {
         describe("status codes filtering") {
             it("filters out unrequested status codes") {
@@ -309,38 +309,205 @@ class ObservableMoyaSpec: QuickSpec {
                 expect(receivedObjects?.count) == 3
                 expect(receivedObjects?.map { $0.title }) == ["Hello, Moya!", "Hello, Moya!", "Hello, Moya!"]
             }
+            it("maps empty data to a decodable object with optional properties") {
+                let observable = Response(statusCode: 200, data: Data()).asObservable()
 
-            it("maps data representing a json at a key path to a decodable object") {
-                let json: [String: Any] = ["issue": json] // nested json
-                guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                    preconditionFailure("Failed creating Data from JSON dictionary")
-                }
-                let observable = Response(statusCode: 200, data: data).asObservable()
-
-                var receivedObject: Issue?
-                _ = observable.map(Issue.self, atKeyPath: "issue", using: decoder).subscribe(onNext: { object in
-                    receivedObject = object
+                var receivedObjects: OptionalIssue?
+                _ = observable.map(OptionalIssue.self, using: decoder, failsOnEmptyData: false).subscribe(onNext: { object in
+                    receivedObjects = object
                 })
-                expect(receivedObject).notTo(beNil())
-                expect(receivedObject?.title) == "Hello, Moya!"
-                expect(receivedObject?.createdAt) == formatter.date(from: "1995-01-14T12:34:56")!
+                expect(receivedObjects).notTo(beNil())
+                expect(receivedObjects?.title).to(beNil())
+                expect(receivedObjects?.createdAt).to(beNil())
             }
 
-            it("maps data representing a json array at a key path to a decodable object (#1311)") {
-                let json: [String: Any] = ["issues": [json]] // nested json array
-                guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                    preconditionFailure("Failed creating Data from JSON dictionary")
-                }
-                let observable = Response(statusCode: 200, data: data).asObservable()
+            it("maps empty data to a decodable array with optional properties") {
+                let observable = Response(statusCode: 200, data: Data()).asObservable()
 
-                var receivedObjects: [Issue]?
-                _ = observable.map([Issue].self, atKeyPath: "issues", using: decoder).subscribe(onNext: { object in
+                var receivedObjects: [OptionalIssue]?
+                _ = observable.map([OptionalIssue].self, using: decoder, failsOnEmptyData: false).subscribe(onNext: { object in
                     receivedObjects = object
                 })
                 expect(receivedObjects).notTo(beNil())
                 expect(receivedObjects?.count) == 1
-                expect(receivedObjects?.first?.title) == "Hello, Moya!"
-                expect(receivedObjects?.first?.createdAt) == formatter.date(from: "1995-01-14T12:34:56")!
+                expect(receivedObjects?.first?.title).to(beNil())
+                expect(receivedObjects?.first?.createdAt).to(beNil())
+            }
+
+            context("when using key path mapping") {
+                it("maps data representing a json to a decodable object") {
+                    let json: [String: Any] = ["issue": json] // nested json
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var receivedObject: Issue?
+                    _ = observable.map(Issue.self, atKeyPath: "issue", using: decoder).subscribe(onNext: { object in
+                        receivedObject = object
+                    })
+                    expect(receivedObject).notTo(beNil())
+                    expect(receivedObject?.title) == "Hello, Moya!"
+                    expect(receivedObject?.createdAt) == formatter.date(from: "1995-01-14T12:34:56")!
+                }
+
+                it("maps data representing a json array to a decodable object (#1311)") {
+                    let json: [String: Any] = ["issues": [json]] // nested json array
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var receivedObjects: [Issue]?
+                    _ = observable.map([Issue].self, atKeyPath: "issues", using: decoder).subscribe(onNext: { object in
+                        receivedObjects = object
+                    })
+                    expect(receivedObjects).notTo(beNil())
+                    expect(receivedObjects?.count) == 1
+                    expect(receivedObjects?.first?.title) == "Hello, Moya!"
+                    expect(receivedObjects?.first?.createdAt) == formatter.date(from: "1995-01-14T12:34:56")!
+                }
+
+                it("maps empty data to a decodable object with optional properties") {
+                    let observable = Response(statusCode: 200, data: Data()).asObservable()
+
+                    var receivedObjects: OptionalIssue?
+                    _ = observable.map(OptionalIssue.self, atKeyPath: "issue", using: decoder, failsOnEmptyData: false).subscribe(onNext: { object in
+                        receivedObjects = object
+                    })
+                    expect(receivedObjects).notTo(beNil())
+                    expect(receivedObjects?.title).to(beNil())
+                    expect(receivedObjects?.createdAt).to(beNil())
+                }
+
+                it("maps empty data to a decodable array with optional properties") {
+                    let observable = Response(statusCode: 200, data: Data()).asObservable()
+
+                    var receivedObjects: [OptionalIssue]?
+                    _ = observable.map([OptionalIssue].self, atKeyPath: "issue", using: decoder, failsOnEmptyData: false).subscribe(onNext: { object in
+                        receivedObjects = object
+                    })
+                    expect(receivedObjects).notTo(beNil())
+                    expect(receivedObjects?.count) == 1
+                    expect(receivedObjects?.first?.title).to(beNil())
+                    expect(receivedObjects?.first?.createdAt).to(beNil())
+                }
+
+                it("map Int data to an Int value") {
+                    let json: [String: Any] = ["count": 1]
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var count: Int?
+                    _ = observable.map(Int.self, atKeyPath: "count", using: decoder).subscribe(onNext: { value in
+                        count = value
+                    })
+                    expect(count).notTo(beNil())
+                    expect(count) == 1
+                }
+
+                it("map Bool data to a Bool value") {
+                    let json: [String: Any] = ["isNew": true]
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var isNew: Bool?
+                    _ = observable.map(Bool.self, atKeyPath: "isNew", using: decoder).subscribe(onNext: { value in
+                        isNew = value
+                    })
+                    expect(isNew).notTo(beNil())
+                    expect(isNew) == true
+                }
+
+                it("map String data to a String value") {
+                    let json: [String: Any] = ["description": "Something interesting"]
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var description: String?
+                    _ = observable.map(String.self, atKeyPath: "description", using: decoder).subscribe(onNext: { value in
+                        description = value
+                    })
+                    expect(description).notTo(beNil())
+                    expect(description) == "Something interesting"
+                }
+
+                it("map String data to a URL value") {
+                    let json: [String: Any] = ["url": "http://www.example.com/test"]
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var url: URL?
+                    _ = observable.map(URL.self, atKeyPath: "url", using: decoder).subscribe(onNext: { value in
+                        url = value
+                    })
+                    expect(url).notTo(beNil())
+                    expect(url) == URL(string: "http://www.example.com/test")
+                }
+
+                it("shouldn't map Int data to a Bool value") {
+                    let json: [String: Any] = ["isNew": 1]
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var isNew: Bool?
+                    _ = observable.map(Bool.self, atKeyPath: "isNew", using: decoder).subscribe(onNext: { value in
+                        isNew = value
+                    })
+                    expect(isNew).to(beNil())
+                }
+
+                it("shouldn't map String data to an Int value") {
+                    let json: [String: Any] = ["test": "123"]
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var test: Int?
+                    _ = observable.map(Int.self, atKeyPath: "test", using: decoder).subscribe(onNext: { value in
+                        test = value
+                    })
+                    expect(test).to(beNil())
+                }
+
+                it("shouldn't map Array<String> data to an String value") {
+                    let json: [String: Any] = ["test": ["123", "456"]]
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var test: String?
+                    _ = observable.map(String.self, atKeyPath: "test", using: decoder).subscribe(onNext: { value in
+                        test = value
+                    })
+                    expect(test).to(beNil())
+                }
+
+                it("shouldn't map String data to an Array<String> value") {
+                    let json: [String: Any] = ["test": "123"]
+                    guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        preconditionFailure("Failed creating Data from JSON dictionary")
+                    }
+                    let observable = Response(statusCode: 200, data: data).asObservable()
+
+                    var test: [String]?
+                    _ = observable.map([String].self, atKeyPath: "test", using: decoder).subscribe(onNext: { value in
+                        test = value
+                    })
+                    expect(test).to(beNil())
+                }
             }
 
             it("ignores invalid data") {

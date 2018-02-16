@@ -1,6 +1,56 @@
 # master
 *Please put new entries at the top.
 
+# 7.1.0
+# 7.1.0-rc.2
+1. Fix an issue preventing ReactiveCocoa from being built with the Swift 3.2 language mode. (#3556)
+
+# 7.1.0-rc.1
+1. Requires ReactiveSwift 3.1.0 Release Candidate 1. (#3555)
+
+1. Added reactive extension for AppKit's NSTextView. (#3549, kudos to @Palleas)
+
+# 7.0.1
+1. Added `tintColor` binding target to `UIView`. (#3542, kudos to @iv-mexx)
+
+1. Fixed `DynamicProperty` for optional properties. (#3548, kudos to @iv-mexx)
+
+1. Made `makeBindingTarget` available on Reactive extensions on all objects, not just `NSObject`. (#3545, kudos to @Burgestrand)
+
+# 7.0.0
+1. Update ReactiveSwift to 3.0.
+
+1. Added `placeholder` binding target to `UITextField`. (#3536)
+
+# 7.0.0-rc.1
+1. UISearchBar has gained more reactive bindings and signals. (#3531, kudos to @andersio)
+
+   **Signals:** Search Button Clicked, Bookmark Button Clicked, Results List Clicked, Selected Scope Button Index
+
+   **Binding Target:** Selected Scope Button Indices.
+
+# 7.0.0-alpha.2
+1. Requires ReactiveSwift 3.0.0 alpha 1.
+
+1. ReactiveCocoa is now compatible with the Swift 4.0 language mode, in addition to the Swift 3.2 compatibility mode. (#3526, kudos to @andersio)
+
+# 7.0.0-alpha.1
+1. MapKit reactive bindings have been moved to a new **ReactiveMapKit** framework. (#3524)
+
+   Sources that use the MapKit bindings are now required to import ReactiveMapKit.
+
+   For all Xcode project users (including Carthage), targets need to be configured to link against ReactiveMapKit. For CocoaPods users, the framework is offered as a standalone podspec, so the Podfile needs to be updated with a new entry. 
+
+# 6.1.0-alpha.2
+# 6.1.0-alpha.1
+1. Added `cancelButtonClicked` signal to `UISearchBar`.
+1. Subscripting `reactive` with a key path now yields a corresponding `BindingTarget` under Swift 3.2+. (#3489, kudos to @andersio)
+
+   Example:
+   ```swift
+   label.reactive[\.text] <~ viewModel.title
+   ```
+
 # 6.0.2
 1. Disabled code coverage data to allow app submissions with Xcode 9.0 (see https://github.com/Carthage/Carthage/issues/2056, kudos to @NachoSoto)
 
@@ -352,6 +402,7 @@ public final class MyController {
 	</tr>
 	</tbody>
 </table>
+
 # 4.0
 
 If you’re new to the Swift API and migrating from RAC 2, start with the [3.0 changes](#30). This section only covers the differences between `3.0` and `4.0`.

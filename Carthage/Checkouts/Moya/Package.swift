@@ -6,48 +6,42 @@ let package = Package(
     products: [
         .library(name: "Moya", targets: ["Moya"]),
         .library(name: "ReactiveMoya", targets: ["ReactiveMoya"]),
-        .library(name: "RxMoya", targets: ["RxMoya"]),
+        .library(name: "RxMoya", targets: ["RxMoya"])
     ],
     dependencies: [
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "4.1.0")),
         .package(url: "https://github.com/antitypical/Result.git", .upToNextMajor(from: "3.0.0")),
-        .package(url: "https://github.com/ReactiveCocoa/ReactiveSwift.git", .upToNextMajor(from: "2.0.0")),
-        .package(url: "https://github.com/ReactiveX/RxSwift.git", .upToNextMajor(from: "4.0.0")),
+        .package(url: "https://github.com/ReactiveCocoa/ReactiveSwift.git", .upToNextMajor(from: "3.0.0")),
+        .package(url: "https://github.com/ReactiveX/RxSwift.git", .upToNextMajor(from: "4.0.0"))
     ],
     targets: [
-        .target(
+         .target(
             name: "Moya",
             dependencies: [
                 "Alamofire",
-                "Result",
-            ],
+                "Result"],
             exclude: [
                 "Tests",
                 "Sources/Supporting Files",
-                "Examples",
-        ]),
+                "Examples"]),
         .target(
             name: "ReactiveMoya",
             dependencies: [
                 "Moya",
-                "ReactiveSwift",
-            ],
+                "ReactiveSwift"],
             exclude: [
                 "Tests",
                 "Sources/Supporting Files",
-                "Examples",
-        ]),
+                "Examples"]),
         .target(
             name: "RxMoya",
             dependencies: [
                 "Moya",
-                "RxSwift",
-            ],
+                "RxSwift"],
             exclude: [
                 "Tests",
                 "Sources/Supporting Files",
-                "Examples",
-        ]),
+                "Examples"])
     ],
     swiftLanguageVersions: [3, 4]
 )

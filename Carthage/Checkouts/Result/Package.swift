@@ -5,6 +5,6 @@ let package = Package(
     targets: [
         Target(
             name: "Result"
-        ),
+        )
     ]
 )

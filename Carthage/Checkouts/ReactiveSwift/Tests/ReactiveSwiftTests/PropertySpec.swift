@@ -275,27 +275,34 @@ class PropertySpec: QuickSpec {
 					queue = DispatchQueue.global(priority: .high)
 				}
 
-				let group = DispatchGroup()
+				let setup = DispatchGroup()
+				let workers = DispatchGroup()
 
-				DispatchQueue.concurrentPerform(iterations: 500) { _ in
-					let source = MutableProperty(1)
-					var target = Optional(MutableProperty(1))
+				queue.async(group: setup) {
+					for _ in 0 ..< 1000 {
+						let source = MutableProperty(1)
+						var target = Optional(MutableProperty(1))
 
-					target! <~ source
+						target! <~ source
 
-					queue.async(group: group, flags: .barrier) {}
+						// Ensure everything before this iteration has been
+						// completed.
+						queue.async(group: workers, flags: .barrier) {}
 
-					queue.async(group: group) {
-						source.value = 2
-					}
+						queue.async(group: workers) {
+							source.value = 2
+						}
 
-					queue.async(group: group) {
-						target = nil
+						queue.async(group: workers) {
+							target = nil
+						}
 					}
 				}
 
 				waitUntil { done in
-					group.notify(queue: queue, execute: done)
+					setup.notify(queue: queue) {
+						workers.notify(queue: .main, execute: done)
+					}
 				}
 			}
 		}
@@ -733,7 +740,6 @@ class PropertySpec: QuickSpec {
 					expect(mappedProperty.value) == 3
 				}
 
-#if swift(>=3.2)
 				it("should work with key paths") {
 					let property = MutableProperty("foo")
 					let mappedProperty = property.map(\.count)
@@ -742,7 +748,6 @@ class PropertySpec: QuickSpec {
 					property.value = "foobar"
 					expect(mappedProperty.value) == 6
 				}
-#endif
 			}
 
 			describe("combineLatest") {
@@ -1629,6 +1634,10 @@ class PropertySpec: QuickSpec {
 					var isDisposed = false
 
 					var outerObserver: Signal<String, NoError>.Observer!
+
+					// Mitigate the "was written to, but never read" warning.
+					_ = outerObserver
+
 					var signal: Signal<String, NoError>? = {
 						let (signal, observer) = Signal<String, NoError>.pipe()
 						outerObserver = observer

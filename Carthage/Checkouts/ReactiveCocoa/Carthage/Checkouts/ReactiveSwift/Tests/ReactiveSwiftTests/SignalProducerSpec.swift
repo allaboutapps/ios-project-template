@@ -66,7 +66,7 @@ class SignalProducerSpec: QuickSpec {
 				var observer: Signal<(), NoError>.Observer!
 
 				let producer = SignalProducer<(), NoError> { incomingObserver, lifetime in
-					lifetime.observeEnded(addedDisposable.dispose)
+					lifetime += addedDisposable
 					observer = incomingObserver
 				}
 
@@ -82,7 +82,7 @@ class SignalProducerSpec: QuickSpec {
 				var observer: Signal<(), TestError>.Observer!
 
 				let producer = SignalProducer<(), TestError> { incomingObserver, lifetime in
-					lifetime.observeEnded(addedDisposable.dispose)
+					lifetime += addedDisposable
 					observer = incomingObserver
 				}
 
@@ -98,7 +98,7 @@ class SignalProducerSpec: QuickSpec {
 				var observer: Signal<(), NoError>.Observer!
 
 				let producer = SignalProducer<(), NoError> { incomingObserver, lifetime in
-					lifetime.observeEnded(addedDisposable.dispose)
+					lifetime += addedDisposable
 					observer = incomingObserver
 				}
 
@@ -113,7 +113,7 @@ class SignalProducerSpec: QuickSpec {
 				let addedDisposable = AnyDisposable()
 
 				let producer = SignalProducer<(), TestError> { _, lifetime in
-					lifetime.observeEnded(addedDisposable.dispose)
+					lifetime += addedDisposable
 					return
 				}
 
@@ -124,25 +124,82 @@ class SignalProducerSpec: QuickSpec {
 				expect(addedDisposable.isDisposed) == true
 			}
 
-			it("should deliver the interrupted event with respect to the applied asynchronous operators") {
+			it("should deliver the interrupted event with respect to the asynchronous operator applied to an alive upstream with a signal product") {
 				let scheduler = TestScheduler()
-				var signalInterrupted = false
-				var observerInterrupted = false
+				var isInterrupted = false
 
 				let (signal, _) = Signal<Int, NoError>.pipe()
 
-				SignalProducer(signal)
+				let disposable = SignalProducer(signal)
 					.observe(on: scheduler)
-					.on(interrupted: { signalInterrupted = true })
-					.startWithInterrupted { observerInterrupted = true }
-					.dispose()
+					.startWithSignal { signal, disposable -> Disposable in
+						signal.observeInterrupted {
+							isInterrupted = true
+						}
+						return disposable
+					}
 
-				expect(signalInterrupted) == false
-				expect(observerInterrupted) == false
+				disposable.dispose()
+				expect(isInterrupted) == false
 
 				scheduler.run()
-				expect(signalInterrupted) == true
-				expect(observerInterrupted) == true
+				expect(isInterrupted) == true
+			}
+
+			it("should deliver the interrupted event with respect to the asynchronous operator applied to a terminated upstream with a signal product") {
+				let scheduler = TestScheduler()
+				var isInterrupted = false
+
+				let disposable: Disposable = SignalProducer<Int, NoError>.empty
+					.observe(on: scheduler)
+					.startWithSignal { signal, disposable in
+						signal.observeInterrupted {
+							isInterrupted = true
+						}
+						return disposable
+					}
+
+				disposable.dispose()
+				expect(isInterrupted) == false
+
+				scheduler.run()
+				expect(isInterrupted) == true
+			}
+
+			it("should deliver the interrupted event with respect to the asynchronous operator applied to an alive upstream with a direct observation") {
+				let scheduler = TestScheduler()
+				var isInterrupted = false
+
+				let (signal, _) = Signal<Int, NoError>.pipe()
+
+				let disposable = SignalProducer(signal)
+					.observe(on: scheduler)
+					.startWithInterrupted {
+						isInterrupted = true
+					}
+
+				disposable.dispose()
+				expect(isInterrupted) == false
+
+				scheduler.run()
+				expect(isInterrupted) == true
+			}
+
+			it("should deliver the interrupted event with respect to the asynchronous operator applied to a terminated upstream with a direct observation") {
+				let scheduler = TestScheduler()
+				var isInterrupted = false
+
+				let disposable = SignalProducer<Int, NoError>.empty
+					.observe(on: scheduler)
+					.startWithInterrupted {
+						isInterrupted = true
+					}
+
+				disposable.dispose()
+				expect(isInterrupted) == false
+
+				scheduler.run()
+				expect(isInterrupted) == true
 			}
 		}
 
@@ -453,7 +510,7 @@ class SignalProducerSpec: QuickSpec {
 				var disposable: Disposable!
 
 				let producer = SignalProducer<Int, NoError> { _, lifetime in
-					lifetime.observeEnded(addedDisposable.dispose)
+					lifetime += addedDisposable
 					return
 				}
 
@@ -549,7 +606,7 @@ class SignalProducerSpec: QuickSpec {
 				var observer: Signal<Int, TestError>.Observer!
 
 				let producer = SignalProducer<Int, TestError> { incomingObserver, lifetime in
-					lifetime.observeEnded(addedDisposable.dispose)
+					lifetime += addedDisposable
 					observer = incomingObserver
 				}
 
@@ -565,7 +622,7 @@ class SignalProducerSpec: QuickSpec {
 				var observer: Signal<Int, TestError>.Observer!
 
 				let producer = SignalProducer<Int, TestError> { incomingObserver, lifetime in
-					lifetime.observeEnded(addedDisposable.dispose)
+					lifetime += addedDisposable
 					observer = incomingObserver
 				}
 
@@ -580,7 +637,7 @@ class SignalProducerSpec: QuickSpec {
 				let addedDisposable = AnyDisposable()
 
 				let producer = SignalProducer<Int, TestError> { _, lifetime in
-					lifetime.observeEnded(addedDisposable.dispose)
+					lifetime += addedDisposable
 				}
 
 				var started = false
@@ -593,6 +650,35 @@ class SignalProducerSpec: QuickSpec {
 				expect(started) == true
 				expect(disposed) == true
 				expect(addedDisposable.isDisposed) == true
+			}
+
+			it("should return whatever value is returned by the setup closure") {
+				let producer = SignalProducer<Never, NoError>.empty
+				expect(producer.startWithSignal { _, _ in "Hello" }) == "Hello"
+			}
+
+			it("should dispose of the upstream when the downstream producer terminates") {
+				var iterationCount = 0
+
+				let loop = SignalProducer<Int, NoError> { observer, lifetime in
+					for i in 0 ..< 100 where !lifetime.hasEnded {
+						observer.send(value: i)
+						iterationCount += 1
+					}
+					observer.sendCompleted()
+				}
+
+				var results: [Int] = []
+
+				waitUntil { done in
+					loop
+						.lift { $0.take(first: 5) }
+						.on(disposed: done)
+						.startWithValues { results.append($0) }
+				}
+
+				expect(iterationCount) == 5
+				expect(results) == [0, 1, 2, 3, 4]
 			}
 		}
 
@@ -1724,7 +1810,7 @@ class SignalProducerSpec: QuickSpec {
 						innerDisposable = AnyDisposable()
 						isInnerInterrupted = false
 						isInnerDisposed = false
-						let innerProducer = SignalProducer<Int, NoError> { $1.observeEnded(innerDisposable.dispose) }
+						let innerProducer = SignalProducer<Int, NoError> { $1 += innerDisposable }
 							.on(interrupted: { isInnerInterrupted = true }, disposed: { isInnerDisposed = true })
 
 						interrupted = false

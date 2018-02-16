@@ -1,12 +1,75 @@
 # master
 *Please add new entries at the top.*
 
+# 3.1.0
+1. Fixed `schedule(after:interval:leeway:)` being cancelled when the returned `Disposable` is not retained. (#584, kudos to @jjoelson)
+
+# 3.1.0-rc.1
+1. Fixed a scenario of downstream interruptions being dropped. (#577, kudos to @andersio)
+
+   Manual interruption of time shifted producers, including `delay`, `observe(on:)`, `throttle`, `debounce` and `lazyMap`, should discard outstanding events at best effort ASAP.
+
+   But in ReactiveSwift 2.0 to 3.0, the manual interruption is ignored if the upstream producer has terminated. For example:
+
+   ```swift
+   // Completed upstream + `delay`.
+   SignalProducer.empty
+       .delay(10.0, on: QueueScheduler.main)
+       .startWithCompleted { print("Value should have been discarded!") }
+       .dispose()
+
+   // Console(t+10): Value should have been discarded!
+   ```
+
+   The expected behavior has now been restored.
+
+   Please note that, since ReactiveSwift 2.0, while the interruption is handled immediately, the `interrupted` event delivery is not synchronous — it generally respects the closest asynchronous operator applied, and delivers on that scheduler.
+
+1. `SignalProducer.concat` now has an overload that accepts an error. (#564, kudos to @nmccann)
+
+1. Fix some documentation errors (#560, kudos to @ikesyo)
+
+# 3.0.0
+1. Code Coverage is reenabled. (#553)
+   For Carthage users, version 0.26.0 and later is required for building App Store compatible binaries.
+
+# 3.0.0-rc.1
+1. Fixed integer overflow for `DispatchTimeInterval` in FoundationExtensions.swift (#506)
+
+# 3.0.0-alpha.1
+1. `Signal` now uses `Lifetime` for resource management. (#404, kudos to @andersio)
+
+   The `Signal` initialzer now accepts a generator closure that is passed with the input `Observer` and the `Lifetime` as its arguments. The original variant accepting a single-argument generator closure is now obselete. This is a source breaking change.
+   
+   ```swift
+   // New: Add `Disposable`s to the `Lifetime`.
+   let candies = Signal<U, E> { (observer: Signal<U, E>.Observer, lifetime: Lifetime) in
+      lifetime += trickOrTreat.observe(observer)
+   }
+   
+   // Obsolete: Returning a `Disposable`.
+   let candies = Signal { (observer: Signal<U, E>.Observer) -> Disposable? in
+      return trickOrTreat.observe(observer)
+   }
+   ```
+
+1. `SignalProducer.startWithSignal` now returns the value of the setup closure. (#533, kudos to @Burgestrand)
+
+# 2.1.0-alpha.2
+1. Disabled code coverage data to allow app submissions with Xcode 9.0 (see https://github.com/Carthage/Carthage/issues/2056, kudos to @NachoSoto)
+
+# 2.1.0-alpha.1
+1. `Signal.Observer.action` has been deprecated. Use `Signal.Observer.send` instead. (#515)
+
+1. Workaround an unexpected EGAGIN error being returned by pthread in 32-bit ARM debug builds. (#508)
+
+1. The `SignalProducer` internals have undergone a significant refactoring, which bootstraps the effort to reduce the overhead of constant producers and producer compositions. (#487, kudos to @andersio)
+
 # 2.0.1
 1. Addressed the exceptionally high build time. (#495)
 
 1. New method ``retry(upTo:interval:on:)``. This delays retrying on failure by `interval` until hitting the `upTo` limitation.
 
-# 2.0.0
 # 2.0.0-rc.3
 1. `Lifetime.+=` which ties a `Disposable` to a `Lifetime`, is now part of the public API and is no longer deprecated.
 

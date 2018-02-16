@@ -15,14 +15,14 @@ final class APIClient {
 
     // MARK: Moya Configuration
 
-    private static let endpointClosure = { (target: API) -> Endpoint<API> in
+    private static let endpointClosure = { (target: API) -> Endpoint in
         let url = target.baseURL.appendingPathComponent(target.path).absoluteString
 
-        var endpoint = Endpoint<API>(url: url,
-                                     sampleResponseClosure: { .networkResponse(200, target.sampleData) },
-                                     method: target.method,
-                                     task: target.task,
-                                     httpHeaderFields: target.headers)
+        var endpoint = Endpoint(url: url,
+                                sampleResponseClosure: { .networkResponse(200, target.sampleData) },
+                                method: target.method,
+                                task: target.task,
+                                httpHeaderFields: target.headers)
 
         return endpoint
     }

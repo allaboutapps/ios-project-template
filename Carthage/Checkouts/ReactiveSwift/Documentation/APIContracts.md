@@ -306,10 +306,8 @@ automatically created and passed back.
 
 Disposing of this object will
 [interrupt](#interruption-cancels-outstanding-work-and-usually-propagates-immediately)
-the produced `Signal`, thereby canceling outstanding work and sending an
-`interrupted` [event][Events] to all [observers][], and will also dispose of
-everything added to the [`CompositeDisposable`][CompositeDisposable] in
-[SignalProducer.init].
+the produced `Signal`, thereby sending an
+`interrupted` [event][Events] to all [observers][]. Anything associated with the `Lifetime` of the produced `Signal` is disposed of afterwards.
 
 Note that disposing of one produced `Signal` will not affect other signals created
 by the same `SignalProducer`.
@@ -504,16 +502,16 @@ For example:
 ```swift
 producer.start { event in
     switch event {
-    case let .Next(value):
-        print("Next event: \(value)")
+    case let .value(value):
+        print("Value event: \(value)")
 
-    case let .Failed(error):
+    case let .failed(error):
         print("Failed event: \(error)")
 
-    case .Completed:
+    case .completed:
         print("Completed event")
 
-    case .Interrupted:
+    case .interrupted:
         print("Interrupted event")
     }
 }

@@ -19,7 +19,7 @@ Endpoints 到实际的网络请求。
 第一个可能类似如下:
 
 ```swift
-let endpointClosure = { (target: MyTarget) -> Endpoint<MyTarget> in
+let endpointClosure = { (target: MyTarget) -> Endpoint in
     let url = URL(target: target).absoluteString
     return Endpoint(url: url, sampleResponseClosure: {.networkResponse(200, target.sampleData)}, method: target.method, task: target.task)
 }
@@ -40,7 +40,7 @@ let endpointClosure = { (target: MyTarget) -> Endpoint<MyTarget> in
 比如, 我们可能希望将应用程序名称设置到HTTP头字段中，从而用于服务器端分析。
 
 ```swift
-let endpointClosure = { (target: MyTarget) -> Endpoint<MyTarget> in
+let endpointClosure = { (target: MyTarget) -> Endpoint in
     let defaultEndpoint = MoyaProvider.defaultEndpointMapping(for: target)
     return defaultEndpoint.adding(newHTTPHeaderFields: ["APP_NAME": "MY_AWESOME_APP"])
 }
@@ -53,7 +53,7 @@ let provider = MoyaProvider<GitHub>(endpointClosure: endpointClosure)
 `endpointClosure` 。
 
 ```swift
-let endpointClosure = { (target: MyTarget) -> Endpoint<MyTarget> in
+let endpointClosure = { (target: MyTarget) -> Endpoint in
     let defaultEndpoint = MoyaProvider.defaultEndpointMapping(for: target)
 
     // Sign all non-authenticating requests
@@ -96,12 +96,15 @@ Sample responses 有下面的这些值:
 //不修改请求，而是简单地将其记录下来。
 
 ```swift
-let requestClosure = { (endpoint: Endpoint<GitHub>, done: MoyaProvider.RequestResultClosure) in
-    var request = endpoint.urlRequest
+let requestClosure = { (endpoint: Endpoint, done: MoyaProvider.RequestResultClosure) in
+    do {
+        var request = try endpoint.urlRequest()
+        // Modify the request however you like.
+        done(.success(request))
+    } catch {
+        done(.failure(MoyaError.underlying(error)))
+    }
 
-    // Modify the request however you like.
-
-    done(.success(request))
 }
 let provider = MoyaProvider<GitHub>(requestClosure: requestClosure)
 ```
@@ -112,10 +115,14 @@ let provider = MoyaProvider<GitHub>(requestClosure: requestClosure)
 `URLRequest` 有很多你可以自定义的属性。比方，你想禁用所有请求的cookie:
 
 ```swift
-{ (endpoint: Endpoint<ArtsyAPI>, done: MoyaProvider.RequestResultClosure) in
-    var request: URLRequest = endpoint.urlRequest
-    request.httpShouldHandleCookies = false
-    done(.success(request))
+{ (endpoint: Endpoint, done: MoyaProvider.RequestResultClosure) in
+    do {
+        var request: URLRequest = try endpoint.urlRequest()
+        request.httpShouldHandleCookies = false
+        done(.success(request))
+    } catch {
+        done(.failure(MoyaError.underlying(error)))
+    }
 }
 ```
 

@@ -26,7 +26,9 @@ Remember, *where* you put your target and the provider, are completely up
 to you. You can check out [Artsy's implementation](https://github.com/artsy/eidolon/blob/master/Kiosk/App/Networking/ArtsyAPI.swift)
 for an example.
 
-But don't forget to keep a reference for it in property. If it gets deallocated you'll see `-999 "canceled"` error on response.
+Always remember to retain your providers, as they will get deallocated if you fail to do so. Deallocation will return a `-999 "canceled"` error on response.
+
+The same reminder applies also to Moya Reactive implementations, but you will not receive any response because the whole Observable will be disposed, releasing any subscription that you may have configured.
 
 ## Advanced Usage
 
@@ -39,7 +41,7 @@ endpoints closure, which is responsible for mapping a value of your enum to a
 concrete `Endpoint` instance. Let's take a look at what one might look like.
 
 ```swift
-let endpointClosure = { (target: MyTarget) -> Endpoint<MyTarget> in
+let endpointClosure = { (target: MyTarget) -> Endpoint in
     let url = URL(target: target).absoluteString
     return Endpoint(url: url, sampleResponseClosure: {.networkResponse(200, target.sampleData)}, method: target.method, task: target.task, httpHeaderFields: target.headers)
 }
