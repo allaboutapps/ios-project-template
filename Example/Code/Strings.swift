@@ -4,7 +4,6 @@ import Foundation
 
 // swiftlint:disable line_length
 public struct Strings {
-    
     public struct Network {
         static let errorGeneric = Strings.localized("network_error_generic", value: "Ein Fehler ist aufgetreten.")
         static let errorLoadingFailed = Strings.localized("network_error_loading_failed", value: "Daten konnten nicht geladen werden. (Code %1$@)")
@@ -15,8 +14,8 @@ public struct Strings {
 
     // settings this closure allows you to use a custom localization provider, such as OneSky over-the-air
     // by default, NSLocalizedString will load the strings from the main bundle's Localizable.strings file
-    public static var customLocalizationClosure: ((String, String?, Bundle, String, String) -> String)? = nil
-    
+    public static var customLocalizationClosure: ((String, String?, Bundle, String, String) -> String)?
+
     public static func localized(_ key: String, tableName: String? = nil, bundle: Bundle = Bundle.main, value: String, comment: String = "") -> String {
         if let closure = Strings.customLocalizationClosure {
             return closure(key, tableName, bundle, value, comment)

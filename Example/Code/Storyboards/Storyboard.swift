@@ -24,12 +24,11 @@ extension StoryboardIdentifiable where Self: UIViewController {
 // MARK: UIStoryboard
 
 extension UIStoryboard {
-    
     /// Instantiates a storyboard given its identifier.
     convenience init(_ storyboard: Storyboard, bundle: Bundle? = nil) {
         self.init(name: storyboard.rawValue, bundle: bundle)
     }
-    
+
     /// Instantiates a typed view controller:
     /// ```
     /// let vc: SplashViewController = UIStoryboard(.Misc).instantiateViewController()
@@ -38,7 +37,7 @@ extension UIStoryboard {
         guard let viewController = self.instantiateViewController(withIdentifier: T.storyboardIdentifier) as? T else {
             fatalError("Couldn't instantiate view controller with identifier \(T.storyboardIdentifier) in storyboard \(self)")
         }
-        
+
         return viewController
     }
 }

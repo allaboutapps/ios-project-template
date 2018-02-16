@@ -9,7 +9,7 @@ let package = Package(
     name: "ReactiveSwift",
     dependencies: {
         var deps: [Package.Dependency] = [
-            .Package(url: "https://github.com/antitypical/Result.git", versions: Version(3, 2, 1)..<Version(3, .max, .max)),
+            .Package(url: "https://github.com/antitypical/Result.git", versions: Version(3, 2, 1) ..< Version(3, .max, .max)),
         ]
         if isSwiftPackagerManagerTest {
             deps += [

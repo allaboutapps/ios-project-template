@@ -15,33 +15,39 @@ let package = Package(
         .package(url: "https://github.com/ReactiveX/RxSwift.git", .upToNextMajor(from: "4.0.0")),
     ],
     targets: [
-         .target(
+        .target(
             name: "Moya",
             dependencies: [
                 "Alamofire",
-                "Result"],
+                "Result",
+            ],
             exclude: [
                 "Tests",
                 "Sources/Supporting Files",
-                "Examples"]),
+                "Examples",
+        ]),
         .target(
             name: "ReactiveMoya",
             dependencies: [
                 "Moya",
-                "ReactiveSwift"],
+                "ReactiveSwift",
+            ],
             exclude: [
                 "Tests",
                 "Sources/Supporting Files",
-                "Examples"]),
+                "Examples",
+        ]),
         .target(
             name: "RxMoya",
             dependencies: [
                 "Moya",
-                "RxSwift"],
+                "RxSwift",
+            ],
             exclude: [
                 "Tests",
                 "Sources/Supporting Files",
-                "Examples"])                
+                "Examples",
+        ]),
     ],
     swiftLanguageVersions: [3, 4]
 )

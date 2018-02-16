@@ -6,9 +6,9 @@ import Foundation
 ///
 /// Make sure to add the "_Configuration" key with a value of "$(CONFIGURATION)" to your Info.plist file.
 enum Environment: String {
-    case debug      = "Debug"
-    case release    = "Release"
-    
+    case debug = "Debug"
+    case release = "Release"
+
     /// Returns the current enviroment the app is currently running.
     static func current() -> Environment {
         guard
@@ -17,19 +17,19 @@ enum Environment: String {
         else {
             fatalError("!!! No valid Environment !!!")
         }
-        
+
         return environment
     }
-    
+
     /// Returns the current App version, build number and environment
     /// e.g. `1.0 (3) Release`
     static var appInfo: String {
         guard let infoDict = Bundle.main.infoDictionary,
             let version = infoDict["CFBundleShortVersionString"],
             let build = infoDict["CFBundleVersion"] else {
-                return ""
+            return ""
         }
-        
+
         return "\(version) (\(build)) \(current().rawValue)"
     }
 }

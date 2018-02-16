@@ -11,31 +11,30 @@ extension API: TargetType {
     var headers: [String: String]? {
         return nil
     }
-    
+
     var baseURL: URL {
         return Config.API.BaseURL
     }
-    
+
     var path: String {
         switch self {
-        case .postLogin:            return "api/v1/auth/token"
-        case .postRefreshToken:     return "api/v1/auth/token"
+        case .postLogin: return "api/v1/auth/token"
+        case .postRefreshToken: return "api/v1/auth/token"
         }
     }
-    
+
     var method: Moya.Method {
         switch self {
         case .postLogin,
              .postRefreshToken:
             return .post
-        //default:
-        //    return .get
+            // default:
+            //    return .get
         }
     }
-    
+
     var task: Moya.Task {
         switch self {
-            
         case let .postLogin(username, password):
             let parameters = [
                 "grantType": "password",
@@ -43,9 +42,9 @@ extension API: TargetType {
                 "username": username,
                 "password": password
             ]
-            
+
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
-            
+
         case let .postRefreshToken(refreshToken):
             let parameters = [
                 "grantType": "refreshToken",
@@ -53,9 +52,9 @@ extension API: TargetType {
                 "refreshToken": refreshToken
             ]
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
-            
-        //default:
-        //    return .requestPlain
+
+            // default:
+            //    return .requestPlain
         }
     }
 
@@ -74,7 +73,7 @@ extension API: TargetType {
             return Data()
         }
     }
-    
+
     // Load stub data
     fileprivate func stub(_ name: String) -> Data {
         let path = Bundle(for: APIClient.self).path(forResource: name, ofType: "json")!
