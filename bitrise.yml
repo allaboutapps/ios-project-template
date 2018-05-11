@@ -16,6 +16,7 @@ workflows:
     - ios-auto-provision:
         inputs:
         - team_id: "$AAA_DEV_TEAM_ID"
+        - generate_profiles: 'yes'
     - xcode-archive:
         inputs:
         - project_path: "$BITRISE_PROJECT_PATH"
@@ -31,6 +32,7 @@ workflows:
     - ios-auto-provision:
         inputs:
         - team_id: "$AAA_DEV_TEAM_ID"
+        - generate_profiles: 'yes'
         - distribution_type: app-store
     - xcode-archive:
         inputs:
