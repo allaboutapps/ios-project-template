@@ -3,7 +3,7 @@ import KeychainAccess
 import ReactiveSwift
 import Result
 
-class Credentials: NSObject, NSCoding, Codable {
+public class Credentials: NSObject, NSCoding, Codable {
 
     // MARK: Static
 
@@ -53,7 +53,7 @@ class Credentials: NSObject, NSCoding, Codable {
         super.init()
     }
 
-    required convenience init?(coder aDecoder: NSCoder) {
+    public required convenience init?(coder aDecoder: NSCoder) {
         guard let data = aDecoder.decodeObject(forKey: Config.Keychain.credentialsKey) as? Data else { return nil }
         guard let decoded = try? Decoders.standardJSON.decode(Credentials.self, from: data) else { return nil }
         self.init(accessToken: decoded.accessToken, refreshToken: decoded.refreshToken, expiresIn: decoded.expiresIn)
@@ -61,7 +61,7 @@ class Credentials: NSObject, NSCoding, Codable {
 
     // MARK: Encoding
 
-    func encode(with aCoder: NSCoder) {
+    public func encode(with aCoder: NSCoder) {
         let data = try? JSONEncoder().encode(self)
         aCoder.encode(data, forKey: Config.Keychain.credentialsKey)
     }

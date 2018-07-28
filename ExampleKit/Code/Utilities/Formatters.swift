@@ -1,7 +1,7 @@
 import Foundation
 
-struct Formatters {
-    static let isoDateFormatter: DateFormatter = {
+public struct Formatters {
+    public static let isoDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
@@ -9,21 +9,21 @@ struct Formatters {
         return formatter
     }()
 
-    static let calendarSectionDateFormatter: DateFormatter = {
+    public static let calendarSectionDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.autoupdatingCurrent
         formatter.setLocalizedDateFormatFromTemplate("EE d MMM")
         return formatter
     }()
 
-    static let calendarSectionDateWithYearFormatter: DateFormatter = {
+    public static let calendarSectionDateWithYearFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.autoupdatingCurrent
         formatter.setLocalizedDateFormatFromTemplate("EE d MMM yyyy")
         return formatter
     }()
 
-    static let postDateFormatter: DateFormatter = {
+    public static let postDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.autoupdatingCurrent
         formatter.dateStyle = .medium
@@ -31,7 +31,7 @@ struct Formatters {
         return formatter
     }()
 
-    static let defaultDateFormatter: DateFormatter = {
+    public static let defaultDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.autoupdatingCurrent
         formatter.dateStyle = .medium
@@ -39,7 +39,7 @@ struct Formatters {
     }()
 
     // "createdAtRendered" : "09.08.2017 14:12"
-    static let apiRenderedFormatter: DateFormatter = {
+    public static let apiRenderedFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy HH:mm"
         return formatter

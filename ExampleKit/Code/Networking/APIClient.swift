@@ -5,7 +5,7 @@ import ReactiveMoya
 import ReactiveSwift
 import Result
 
-final class APIClient {
+public final class APIClient {
     fileprivate static var currentTokenRefresh: Signal<Moya.Response, MoyaError>?
 
     fileprivate static var _receivedBadCredentialsSignalObserver = Signal<Void, NoError>.pipe()
@@ -47,14 +47,14 @@ final class APIClient {
     // MARK: Request
 
     /// Performs the request on the given `target`
-    static func request(_ target: API) -> SignalProducer<Moya.Response, APIError> {
+    public static func request(_ target: API) -> SignalProducer<Moya.Response, APIError> {
         return request(target, authenticated: true)
             .filterSuccessfulStatusAndRedirectCodes()
             .mapError { APIError.moya($0, target) }
     }
 
     /// Performs the request on the given `target` and maps the respsonse to the specific type (using Decodable).
-    static func request<T: Decodable>(_ target: API, type: T.Type, keyPath: String? = nil, decoder: JSONDecoder = Decoders.standardJSON) -> SignalProducer<T, APIError> {
+    public static func request<T: Decodable>(_ target: API, type: T.Type, keyPath: String? = nil, decoder: JSONDecoder = Decoders.standardJSON) -> SignalProducer<T, APIError> {
         return request(target, authenticated: true)
             .filterSuccessfulStatusAndRedirectCodes()
             .map(type, atKeyPath: keyPath, using: decoder)

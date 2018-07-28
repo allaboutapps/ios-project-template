@@ -1,6 +1,7 @@
 import ReactiveSwift
 import Result
 import UIKit
+import ExampleKit
 
 struct Foo: Decodable {
     let foo: String

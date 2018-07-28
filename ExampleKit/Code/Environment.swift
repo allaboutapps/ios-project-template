@@ -5,7 +5,7 @@ import Foundation
 /// You may want to add additional environments.
 ///
 /// Make sure to add the "_Configuration" key with a value of "$(CONFIGURATION)" to your Info.plist file.
-enum Environment: String {
+public enum Environment: String {
     case debug = "Debug"
     case release = "Release"
 
@@ -36,6 +36,6 @@ enum Environment: String {
 
 extension Environment: Equatable {}
 
-func == (lhs: Environment, rhs: Environment) -> Bool {
+public func == (lhs: Environment, rhs: Environment) -> Bool {
     return lhs.rawValue == rhs.rawValue
 }

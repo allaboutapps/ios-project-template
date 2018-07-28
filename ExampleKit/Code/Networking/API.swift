@@ -1,29 +1,29 @@
 import Foundation
 import Moya
 
-enum API {
+public enum API {
     // Login
     case postLogin(username: String, password: String)
     case postRefreshToken(refreshToken: String)
 }
 
 extension API: TargetType {
-    var headers: [String: String]? {
+    public var headers: [String: String]? {
         return nil
     }
 
-    var baseURL: URL {
+    public var baseURL: URL {
         return Config.API.BaseURL
     }
 
-    var path: String {
+    public var path: String {
         switch self {
         case .postLogin: return "api/v1/auth/token"
         case .postRefreshToken: return "api/v1/auth/token"
         }
     }
 
-    var method: Moya.Method {
+    public var method: Moya.Method {
         switch self {
         case .postLogin,
              .postRefreshToken:
@@ -33,7 +33,7 @@ extension API: TargetType {
         }
     }
 
-    var task: Moya.Task {
+    public var task: Moya.Task {
         switch self {
         case let .postLogin(username, password):
             let parameters = [
@@ -58,14 +58,14 @@ extension API: TargetType {
         }
     }
 
-    var shouldStub: Bool {
+    public var shouldStub: Bool {
         switch self {
         default:
             return Config.API.StubRequests
         }
     }
 
-    var sampleData: Data {
+    public var sampleData: Data {
         switch self {
         case .postLogin:
             return stub("test")

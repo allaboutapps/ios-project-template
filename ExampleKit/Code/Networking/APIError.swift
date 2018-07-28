@@ -1,14 +1,14 @@
 import Foundation
 import Moya
 
-enum APIError: Swift.Error, LocalizedError {
+public enum APIError: Swift.Error, LocalizedError {
     
     case moya(MoyaError, API)
     case underlying(Swift.Error)
     case invalidCredentials
     case other
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case let .moya(error, target):
             return localizedMoyaError(error: error, target: target)
@@ -19,7 +19,7 @@ enum APIError: Swift.Error, LocalizedError {
         }
     }
 
-    var statusCode: Int? {
+    public var statusCode: Int? {
         switch self {
         case let .moya(error, _):
             switch error {
