@@ -13,9 +13,9 @@ disabled_rules:
     - redundant_optional_initialization
     - force_cast
     - superfluous_disable_command
+    - variable_name
     #- operator_whitespace
     #- vertical_whitespace
-    #- variable_name
     #- function_parameter_count
     #- cyclomatic_complexity
     #- type_body_length

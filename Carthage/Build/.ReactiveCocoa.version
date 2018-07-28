@@ -1,13 +1,13 @@
 {
-  "commitish" : "7.1.0",
+  "commitish" : "7.2.0",
   "iOS" : [
     {
       "name" : "ReactiveMapKit",
-      "hash" : "b271dee20f0ccbd76dd0a0052dc4ba59f111b9f8ffcfc190f7d3a4e78a6cbc76"
+      "hash" : "dc2aa12d1a88c2d18f61cce1bcfa16f4a62879db8e9d61770a4e735eae90df6e"
     },
     {
       "name" : "ReactiveCocoa",
-      "hash" : "d053b020cc651cc776bf04556d8ff0075f8aa288f623ab185359092a3da29bf4"
+      "hash" : "cee4c3db7985feb9a8ec5411583b9b87c4ecea67ae7eaf05518e01e844493402"
     }
   ]
 }

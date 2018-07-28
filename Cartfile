@@ -2,5 +2,5 @@ github "ReactiveCocoa/ReactiveCocoa" ~> 7.1
 github "moya/Moya" ~> 11.0
 github "aloco/SimpleButton" ~> 3.0
 github "Alamofire/AlamofireImage" ~> 3.1
-github "mbuchetics/DataSource" ~> 5.1
+github "mbuchetics/DataSource" ~> 5.2
 github "kishikawakatsumi/KeychainAccess" ~> 3.1
