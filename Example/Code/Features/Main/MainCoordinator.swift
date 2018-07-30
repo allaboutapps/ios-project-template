@@ -32,7 +32,7 @@ class MainCoordinator: NavigationCoordinator {
         }
         
         viewController.onMore = { [unowned self] in
-            self.showMoreModal()
+            self.showMore()
         }
         
         return viewController
