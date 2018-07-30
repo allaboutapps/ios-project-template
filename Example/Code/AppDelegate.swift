@@ -9,11 +9,19 @@ struct Foo: Decodable {
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
     var window: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Appearance.setup()
-
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        AppCoordinator.shared.start(window: window!)
+        
+        return true
+    }
+    
+    func testRequest() {
         APIClient.request(.postLogin(username: "max", password: "test"), type: Foo.self)
             .startWithResult { result in
                 if let error = result.error {
@@ -21,9 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 } else if let foo = result.value {
                     print("value: \(foo)")
                 }
-            }
-
-        return true
+        }
     }
 
     func applicationWillResignActive(_: UIApplication) {

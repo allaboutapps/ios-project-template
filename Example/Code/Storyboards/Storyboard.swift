@@ -4,7 +4,9 @@ import UIKit
 
 enum Storyboard: String {
     case launchScreen = "LaunchScreen"
+    case auth = "Auth"
     case main = "Main"
+    case more = "More"
     /// ... your storyboard names
 }
 
@@ -15,6 +17,7 @@ protocol StoryboardIdentifiable {
 }
 
 extension UIViewController: StoryboardIdentifiable {}
+
 extension StoryboardIdentifiable where Self: UIViewController {
     static var storyboardIdentifier: String {
         return String(describing: self)
@@ -38,6 +41,18 @@ extension UIStoryboard {
             fatalError("Couldn't instantiate view controller with identifier \(T.storyboardIdentifier) in storyboard \(self)")
         }
 
+        return viewController
+    }
+    
+    /// Instantiates a typed view controller:
+    /// ```
+    /// let vc = UIStoryboard(.Misc).instantiateViewController(SplashViewController)
+    /// ```
+    func instantiateViewController<T: UIViewController>(_ type: T.Type) -> T {
+        guard let viewController = self.instantiateViewController(withIdentifier: type.storyboardIdentifier) as? T else {
+            fatalError("Couldn't instantiate view controller with identifier \(type.storyboardIdentifier) in storyboard \(self)")
+        }
+        
         return viewController
     }
 }
