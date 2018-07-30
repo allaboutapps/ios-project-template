@@ -1,3 +1,6 @@
+binary "https://building42.github.io/Specs/Carthage/iOS/Crashlytics.json" "3.10.5"
+binary "https://building42.github.io/Specs/Carthage/iOS/Fabric.json" "1.7.9"
+binary "https://dl.google.com/dl/firebase/ios/carthage/FirebaseAnalyticsBinary.json" "5.4.0"
 github "Alamofire/Alamofire" "4.7.3"
 github "Alamofire/AlamofireImage" "3.3.1"
 github "ReactiveCocoa/ReactiveCocoa" "7.2.0"

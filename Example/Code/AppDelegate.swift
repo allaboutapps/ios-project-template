@@ -2,6 +2,8 @@ import ReactiveSwift
 import Result
 import UIKit
 import ExampleKit
+import Firebase
+import Crashlytics
 
 struct Foo: Decodable {
     let foo: String
@@ -14,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Appearance.setup()
+        
+        // TODO: setup new Firebase project and replace GoogleService-Info.plist
+        FirebaseApp.configure()
         
         window = UIWindow(frame: UIScreen.main.bounds)
         AppCoordinator.shared.start(window: window!)

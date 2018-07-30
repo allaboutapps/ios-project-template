@@ -4,3 +4,7 @@ github "aloco/SimpleButton" ~> 3.0
 github "Alamofire/AlamofireImage" ~> 3.1
 github "mbuchetics/DataSource" ~> 5.2
 github "kishikawakatsumi/KeychainAccess" ~> 3.1
+
+binary "https://dl.google.com/dl/firebase/ios/carthage/FirebaseAnalyticsBinary.json"
+binary "https://building42.github.io/Specs/Carthage/iOS/Crashlytics.json"
+binary "https://building42.github.io/Specs/Carthage/iOS/Fabric.json"

@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3904A09D210F174000689265 /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A093210F173E00689265 /* GoogleToolboxForMac.framework */; };
+		3904A09E210F174000689265 /* FirebaseNanoPB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A094210F173E00689265 /* FirebaseNanoPB.framework */; };
+		3904A0A0210F174000689265 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A096210F173E00689265 /* Crashlytics.framework */; };
+		3904A0A1210F174000689265 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A097210F173E00689265 /* FirebaseAnalytics.framework */; };
+		3904A0A2210F174000689265 /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A098210F173F00689265 /* FirebaseCore.framework */; };
+		3904A0A3210F174000689265 /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A099210F173F00689265 /* FirebaseInstanceID.framework */; };
+		3904A0A4210F174000689265 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A09A210F173F00689265 /* Fabric.framework */; };
+		3904A0A5210F174000689265 /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A09B210F173F00689265 /* nanopb.framework */; };
+		3904A0A6210F174000689265 /* FirebaseCoreDiagnostics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A09C210F173F00689265 /* FirebaseCoreDiagnostics.framework */; };
+		3904A0B6210F1CB600689265 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3904A0B5210F1CB600689265 /* GoogleService-Info.plist */; };
+		3904A0B7210F1CB600689265 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3904A0B5210F1CB600689265 /* GoogleService-Info.plist */; };
+		3904A0C3210F212D00689265 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A0BA210F202600689265 /* libc++.tbd */; };
+		3904A0C4210F213200689265 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A0B8210F201F00689265 /* libsqlite3.tbd */; };
+		3904A0C5210F213900689265 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A0BC210F204000689265 /* libicucore.tbd */; };
+		3904A0C6210F213D00689265 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A0BE210F207700689265 /* StoreKit.framework */; };
+		3904A0C7210F214B00689265 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A0C0210F209B00689265 /* SystemConfiguration.framework */; };
 		3908FAEE210CD30D00A2D2A2 /* ExampleKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3908FADE210CD30D00A2D2A2 /* ExampleKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3908FAF1210CD30D00A2D2A2 /* ExampleKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3908FADC210CD30D00A2D2A2 /* ExampleKit.framework */; };
 		3908FAF2210CD30D00A2D2A2 /* ExampleKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3908FADC210CD30D00A2D2A2 /* ExampleKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -87,6 +103,22 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3904A093210F173E00689265 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = Carthage/Build/iOS/GoogleToolboxForMac.framework; sourceTree = "<group>"; };
+		3904A094210F173E00689265 /* FirebaseNanoPB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseNanoPB.framework; path = Carthage/Build/iOS/FirebaseNanoPB.framework; sourceTree = "<group>"; };
+		3904A095210F173E00689265 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = Carthage/Build/iOS/Firebase.framework; sourceTree = "<group>"; };
+		3904A096210F173E00689265 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Carthage/Build/iOS/Crashlytics.framework; sourceTree = "<group>"; };
+		3904A097210F173E00689265 /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Carthage/Build/iOS/FirebaseAnalytics.framework; sourceTree = "<group>"; };
+		3904A098210F173F00689265 /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCore.framework; path = Carthage/Build/iOS/FirebaseCore.framework; sourceTree = "<group>"; };
+		3904A099210F173F00689265 /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Carthage/Build/iOS/FirebaseInstanceID.framework; sourceTree = "<group>"; };
+		3904A09A210F173F00689265 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Carthage/Build/iOS/Fabric.framework; sourceTree = "<group>"; };
+		3904A09B210F173F00689265 /* nanopb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = nanopb.framework; path = Carthage/Build/iOS/nanopb.framework; sourceTree = "<group>"; };
+		3904A09C210F173F00689265 /* FirebaseCoreDiagnostics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCoreDiagnostics.framework; path = Carthage/Build/iOS/FirebaseCoreDiagnostics.framework; sourceTree = "<group>"; };
+		3904A0B5210F1CB600689265 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3904A0B8210F201F00689265 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		3904A0BA210F202600689265 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		3904A0BC210F204000689265 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		3904A0BE210F207700689265 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		3904A0C0210F209B00689265 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3908FADC210CD30D00A2D2A2 /* ExampleKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ExampleKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3908FADE210CD30D00A2D2A2 /* ExampleKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExampleKit.h; sourceTree = "<group>"; };
 		3908FADF210CD30D00A2D2A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -161,14 +193,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3904A0C7210F214B00689265 /* SystemConfiguration.framework in Frameworks */,
+				3904A0C6210F213D00689265 /* StoreKit.framework in Frameworks */,
+				3904A0C5210F213900689265 /* libicucore.tbd in Frameworks */,
+				3904A0C4210F213200689265 /* libsqlite3.tbd in Frameworks */,
+				3904A0C3210F212D00689265 /* libc++.tbd in Frameworks */,
+				3904A09D210F174000689265 /* GoogleToolboxForMac.framework in Frameworks */,
 				BCA896EF1F5D8A630099B3D1 /* Alamofire.framework in Frameworks */,
+				3904A0A2210F174000689265 /* FirebaseCore.framework in Frameworks */,
+				3904A0A3210F174000689265 /* FirebaseInstanceID.framework in Frameworks */,
 				BCA896F91F5D8A630099B3D1 /* Result.framework in Frameworks */,
 				BCA896F11F5D8A630099B3D1 /* DataSource.framework in Frameworks */,
 				3908FB05210CD4A800A2D2A2 /* AlamofireImage.framework in Frameworks */,
+				3904A0A6210F174000689265 /* FirebaseCoreDiagnostics.framework in Frameworks */,
+				3904A09E210F174000689265 /* FirebaseNanoPB.framework in Frameworks */,
 				BCA896FA1F5D8A630099B3D1 /* SimpleButton.framework in Frameworks */,
+				3904A0A1210F174000689265 /* FirebaseAnalytics.framework in Frameworks */,
+				3904A0A5210F174000689265 /* nanopb.framework in Frameworks */,
 				BCA896F21F5D8A630099B3D1 /* Diff.framework in Frameworks */,
+				3904A0A4210F174000689265 /* Fabric.framework in Frameworks */,
 				BCA896F71F5D8A630099B3D1 /* ReactiveMoya.framework in Frameworks */,
 				BCA896F51F5D8A630099B3D1 /* ReactiveCocoa.framework in Frameworks */,
+				3904A0A0210F174000689265 /* Crashlytics.framework in Frameworks */,
 				BCA896F81F5D8A630099B3D1 /* ReactiveSwift.framework in Frameworks */,
 				BCA896F41F5D8A630099B3D1 /* Moya.framework in Frameworks */,
 				BCA896F31F5D8A630099B3D1 /* KeychainAccess.framework in Frameworks */,
@@ -179,6 +225,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3904A0B1210F177700689265 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				3904A096210F173E00689265 /* Crashlytics.framework */,
+				3904A09A210F173F00689265 /* Fabric.framework */,
+				3904A095210F173E00689265 /* Firebase.framework */,
+				3904A097210F173E00689265 /* FirebaseAnalytics.framework */,
+				3904A098210F173F00689265 /* FirebaseCore.framework */,
+				3904A09C210F173F00689265 /* FirebaseCoreDiagnostics.framework */,
+				3904A099210F173F00689265 /* FirebaseInstanceID.framework */,
+				3904A094210F173E00689265 /* FirebaseNanoPB.framework */,
+				3904A093210F173E00689265 /* GoogleToolboxForMac.framework */,
+				3904A09B210F173F00689265 /* nanopb.framework */,
+			);
+			name = Firebase;
+			sourceTree = "<group>";
+		};
 		3908FADD210CD30D00A2D2A2 /* ExampleKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +277,11 @@
 		3908FAFC210CD3EF00A2D2A2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3904A0C0210F209B00689265 /* SystemConfiguration.framework */,
+				3904A0BE210F207700689265 /* StoreKit.framework */,
+				3904A0BC210F204000689265 /* libicucore.tbd */,
+				3904A0BA210F202600689265 /* libc++.tbd */,
+				3904A0B8210F201F00689265 /* libsqlite3.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -285,9 +353,9 @@
 		4DE97DAE1C7AFE3800393489 = {
 			isa = PBXGroup;
 			children = (
+				3904A0B5210F1CB600689265 /* GoogleService-Info.plist */,
 				39B96DA71F0B7A2300B8F3DF /* .gitignore */,
 				39B96DA51F0B7A1B00B8F3DF /* .swiftlint.yml */,
-				4DE97E1E1C7AFF5100393489 /* Cartfile */,
 				4DE97DB91C7AFE3800393489 /* Example */,
 				3908FADD210CD30D00A2D2A2 /* ExampleKit */,
 				4DE97E401C7B0E2C00393489 /* Carthage */,
@@ -408,8 +476,10 @@
 		4DE97E401C7B0E2C00393489 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
-				3908FB04210CD4A800A2D2A2 /* AlamofireImage.framework */,
+				4DE97E1E1C7AFF5100393489 /* Cartfile */,
+				3904A0B1210F177700689265 /* Firebase */,
 				BCA896EC1F5D8A5E0099B3D1 /* Alamofire.framework */,
+				3908FB04210CD4A800A2D2A2 /* AlamofireImage.framework */,
 				BCA896E31F5D8A5D0099B3D1 /* DataSource.framework */,
 				BCA896ED1F5D8A5E0099B3D1 /* Diff.framework */,
 				BCA896E41F5D8A5D0099B3D1 /* KeychainAccess.framework */,
@@ -473,6 +543,7 @@
 				4DE97E411C7B0E4D00393489 /* Carthage */,
 				39B96DA91F0B839300B8F3DF /* SwiftLint */,
 				3908FAF6210CD30D00A2D2A2 /* Embed Frameworks */,
+				3904A0B2210F192A00689265 /* Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -532,6 +603,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3908FB0A210CD52800A2D2A2 /* test.json in Resources */,
+				3904A0B7210F1CB600689265 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,6 +612,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				39B96DA61F0B7A1B00B8F3DF /* .swiftlint.yml in Resources */,
+				3904A0B6210F1CB600689265 /* GoogleService-Info.plist in Resources */,
 				4DE97E151C7AFF1D00393489 /* LaunchScreen.storyboard in Resources */,
 				3908FB2B210DFD1F00A2D2A2 /* More.storyboard in Resources */,
 				4DE97E161C7AFF1D00393489 /* Main.storyboard in Resources */,
@@ -552,6 +625,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3904A0B2210F192A00689265 /* Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Crashlytics;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PROJECT_DIR}/Carthage/Build/iOS/Fabric.framework/run\"";
+		};
 		39B96DA91F0B839300B8F3DF /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -715,6 +802,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/ExampleKit/SupportingFiles/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = at.allaboutapps.ExampleKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -752,6 +840,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/ExampleKit/SupportingFiles/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = at.allaboutapps.ExampleKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -872,6 +961,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = M8F9QH57A6;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -879,6 +969,7 @@
 				);
 				INFOPLIST_FILE = Example/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = at.allaboutapps.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -901,6 +992,7 @@
 				);
 				INFOPLIST_FILE = Example/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = at.allaboutapps.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
