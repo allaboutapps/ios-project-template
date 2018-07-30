@@ -36,17 +36,14 @@ class Coordinator: NSObject {
     
     @discardableResult func removeChild(for viewController: UIViewController) -> Bool {
         for coordinator in childCoordinators {
-            if coordinator.rootViewController == viewController {
-                removeChild(coordinator)
-                return true
-            } else if let navigationCoordinator = coordinator as? NavigationCoordinator, navigationCoordinator.pushedViewControllers.first == viewController {
-                removeChild(coordinator)
+            if coordinator.removeChild(for: viewController) {
                 return true
             }
         }
         
-        for coordinator in childCoordinators {
-            if coordinator.removeChild(for: viewController) {
+        for coordinator in childCoordinators.reversed() {
+            if let navigationCoordinator = coordinator as? NavigationCoordinator, navigationCoordinator.pushedViewControllers.first == viewController {
+                removeChild(coordinator)
                 return true
             }
         }
