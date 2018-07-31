@@ -14,7 +14,7 @@ class MoreCoordinator: NavigationCoordinator {
     
     func start() {
         let viewController = MoreViewController.createWith(storyboard: .more)
-        viewController.onLogout = showLogin
+        viewController.onLogout = AppCoordinator.shared.showLogin
         
         if onDone != nil {
             viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
@@ -27,16 +27,14 @@ class MoreCoordinator: NavigationCoordinator {
         onDone?()
     }
     
-    private func showLogin() {
-        let coordinator = AuthCoordinator()
-        
-        coordinator.didLogin = { [unowned self] in
-            self.removeChild(coordinator)
-            AppCoordinator.shared.reset(animated: true)
-        }
-        
-        coordinator.start()
-        
-        present(coordinator, animated: true, completion: nil)
-    }
+//    private func showLogin() {
+//        let coordinator = AuthCoordinator()
+//        
+//        coordinator.didLogin = {
+//            AppCoordinator.shared.reset(animated: true)
+//        }
+//        
+//        coordinator.start()
+//        present(coordinator, animated: true, completion: nil)
+//    }
 }

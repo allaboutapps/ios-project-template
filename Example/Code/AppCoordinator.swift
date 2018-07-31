@@ -12,11 +12,15 @@ class AppCoordinator: NavigationCoordinator {
     
     static let shared = AppCoordinator()
     
+    var window: UIWindow!
+    
     init() {
         super.init(navigationController: UINavigationController())
     }
     
     func start(window: UIWindow) {
+        self.window = window
+        
         let coordinator = MainCoordinator(navigationController: navigationController)
         coordinator.start()
         
@@ -45,6 +49,12 @@ class AppCoordinator: NavigationCoordinator {
         
         navigationController.dismiss(animated: animated, completion: nil)
         navigationController.popToRootViewController(animated: false)
+    }
+    
+    func showLogin() {
+        if let viewController = window.topViewController() {
+            print("hello")
+        }
     }
     
     private func presentLogin(animated: Bool) {

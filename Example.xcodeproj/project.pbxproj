@@ -23,6 +23,7 @@
 		3904A0C5210F213900689265 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A0BC210F204000689265 /* libicucore.tbd */; };
 		3904A0C6210F213D00689265 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A0BE210F207700689265 /* StoreKit.framework */; };
 		3904A0C7210F214B00689265 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A0C0210F209B00689265 /* SystemConfiguration.framework */; };
+		3904A0C9210F628400689265 /* UIWindow+TopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3904A0C8210F628400689265 /* UIWindow+TopViewController.swift */; };
 		3908FAEE210CD30D00A2D2A2 /* ExampleKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3908FADE210CD30D00A2D2A2 /* ExampleKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3908FAF1210CD30D00A2D2A2 /* ExampleKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3908FADC210CD30D00A2D2A2 /* ExampleKit.framework */; };
 		3908FAF2210CD30D00A2D2A2 /* ExampleKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3908FADC210CD30D00A2D2A2 /* ExampleKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -119,6 +120,7 @@
 		3904A0BC210F204000689265 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		3904A0BE210F207700689265 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		3904A0C0210F209B00689265 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		3904A0C8210F628400689265 /* UIWindow+TopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+TopViewController.swift"; sourceTree = "<group>"; };
 		3908FADC210CD30D00A2D2A2 /* ExampleKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ExampleKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3908FADE210CD30D00A2D2A2 /* ExampleKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExampleKit.h; sourceTree = "<group>"; };
 		3908FADF210CD30D00A2D2A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -145,7 +147,6 @@
 		4DE97DED1C7AFF1D00393489 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4DE97DEE1C7AFF1D00393489 /* Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		4DE97DEF1C7AFF1D00393489 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		4DE97DF11C7AFF1D00393489 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		4DE97DFB1C7AFF1D00393489 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4DE97DFD1C7AFF1D00393489 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4DE97E021C7AFF1D00393489 /* ExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
@@ -410,7 +411,7 @@
 		4DE97DF01C7AFF1D00393489 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				4DE97DF11C7AFF1D00393489 /* .gitkeep */,
+				3904A0C8210F628400689265 /* UIWindow+TopViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -715,6 +716,7 @@
 			files = (
 				3908FB2F210DFD7500A2D2A2 /* MoreViewController.swift in Sources */,
 				3908FB21210D169F00A2D2A2 /* LoginViewController.swift in Sources */,
+				3904A0C9210F628400689265 /* UIWindow+TopViewController.swift in Sources */,
 				3908FB23210D173200A2D2A2 /* AuthCoordinator.swift in Sources */,
 				3908FB43210EF93D00A2D2A2 /* NavigationCoordinator.swift in Sources */,
 				3908FB3C210E164A00A2D2A2 /* Coordinator.swift in Sources */,
