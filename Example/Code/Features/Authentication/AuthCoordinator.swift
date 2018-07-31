@@ -10,11 +10,11 @@ import UIKit
 
 class AuthCoordinator: NavigationCoordinator {
     
-    var didLogin: (() -> Void)?
+    var onLogin: (() -> Void)?
     
     func start() {
-        let viewController = LoginViewController.createWith(storyboard: .auth)
-        viewController.onLogin = didLogin
+        let viewController = LoginViewController.create()
+        viewController.onLogin = onLogin
 
         push(viewController, animated: true)
     }

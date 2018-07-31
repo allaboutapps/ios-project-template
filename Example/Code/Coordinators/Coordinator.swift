@@ -14,7 +14,11 @@ class Coordinator: NSObject {
     
     weak var parentCoordinator: Coordinator?
     var childCoordinators = [Coordinator]()
-    var rootViewController: UIViewController? { return nil }
+    let rootViewController: UIViewController
+    
+    init(rootViewController: UIViewController = UIViewController()) {
+        self.rootViewController = rootViewController
+    }
     
     func addChild(_ coordinator: Coordinator) {
         print("add child: \(String(describing: coordinator.self))")
@@ -34,6 +38,27 @@ class Coordinator: NSObject {
         for coordinator in childCoordinators {
             removeChild(coordinator)
         }
+    }
+    
+    // MARK: - Present
+    
+    func present(_ coordinator: Coordinator, animated: Bool, completion: (() -> Void)? = nil) {
+        let viewController = coordinator.rootViewController
+        
+        addChild(coordinator)
+        rootViewController.present(viewController, animated: animated, completion: completion)
+    }
+    
+    func dismissChildCoordinator(animated: Bool, completion: (() -> Void)? = nil) {
+        guard let coordinator = childCoordinators.first else { return }
+        let viewController = coordinator.rootViewController
+        
+        print("dismiss coordinator")
+        
+        viewController.presentingViewController?.dismiss(animated: animated, completion: { [weak self] in
+            self?.removeChild(coordinator)
+            completion?()
+        })
     }
     
     // MARK: - Debug

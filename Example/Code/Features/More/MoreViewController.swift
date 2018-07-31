@@ -7,15 +7,14 @@
 //
 
 import UIKit
+import ExampleKit
 
 class MoreViewController: UIViewController {
     
-    var onLogout: (() -> Void)?
-    
     // MARK: Setup
     
-    static func createWith(storyboard: Storyboard) -> Self {
-        return UIStoryboard(storyboard).instantiateViewController(self)
+    static func create() -> Self {
+        return UIStoryboard(.more).instantiateViewController(self)
     }
     
     // MARK: UIViewController
@@ -29,7 +28,11 @@ class MoreViewController: UIViewController {
     // MARK: Actions
     
     @IBAction func logout(_ sender: Any) {
-        UserDefaults.standard.set(false, forKey: "authenticated")
-        self.onLogout?()
+        Credentials.currentCredentials = nil
     }
+    
+    deinit {
+        print("deinit view controller: \(self)")
+    }
+    
 }

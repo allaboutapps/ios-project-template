@@ -45,5 +45,9 @@ class ExampleViewController: UIViewController {
     @IBAction func debug(_ sender: Any) {
         self.onDebug?()
     }
+
+    deinit {
+        print("deinit view controller: \(self)")
+    }
     
 }

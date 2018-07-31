@@ -16,6 +16,7 @@ class DebugViewController: UIViewController {
     var onDismiss: (() -> Void)?
     var onDebug: (() -> Void)?
     var onPushCoordinator: (() -> Void)?
+    var onLogout: (() -> Void)?
     
     var viewModel: DebugViewModel!
     
@@ -60,7 +61,7 @@ class DebugViewController: UIViewController {
     }
     
     @IBAction func logout(_ sender: Any) {
-        self.onPushCoordinator?()
+        self.onLogout?()
     }
     
     deinit {

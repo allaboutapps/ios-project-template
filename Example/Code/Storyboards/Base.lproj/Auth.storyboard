@@ -32,6 +32,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="svh-0t-cbd"/>
                     </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kR5-4j-9wF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

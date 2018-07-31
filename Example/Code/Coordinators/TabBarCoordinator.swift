@@ -12,11 +12,9 @@ class TabBarCoordinator: Coordinator {
     
     let tabBarController: UITabBarController
     
-    override var rootViewController: UIViewController {
-        return tabBarController
-    }
-    
     init(tabBarController: UITabBarController) {
         self.tabBarController = tabBarController
+        super.init(rootViewController: tabBarController)
     }
+    
 }

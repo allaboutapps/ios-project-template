@@ -12,11 +12,11 @@ public class Credentials: NSObject, NSCoding, Codable {
     fileprivate static var cachedCredentials: Credentials?
 
     fileprivate static var currentCredentialsChangedSignalObserver = Signal<(), NoError>.pipe()
-    static var currentCredentialsChangedSignal: Signal<(), NoError> {
+    public static var currentCredentialsChangedSignal: Signal<(), NoError> {
         return currentCredentialsChangedSignalObserver.output
     }
 
-    static var currentCredentials: Credentials? {
+    public static var currentCredentials: Credentials? {
         get {
             if let credentialsData = keychain[data: credentialStorageKey],
                 let credentials = NSKeyedUnarchiver.unarchiveObject(with: credentialsData) as? Credentials, cachedCredentials == nil {
@@ -46,7 +46,7 @@ public class Credentials: NSObject, NSCoding, Codable {
 
     // MARK: Initializers
 
-    init(accessToken: String, refreshToken: String?, expiresIn: TimeInterval?) {
+    public init(accessToken: String, refreshToken: String?, expiresIn: TimeInterval?) {
         self.refreshToken = refreshToken ?? ""
         self.accessToken = accessToken
         self.expiresIn = expiresIn ?? NSDate.distantFuture.timeIntervalSinceReferenceDate

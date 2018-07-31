@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ExampleKit
 
 class DebugCoordinator: NavigationCoordinator {
     
@@ -65,6 +66,10 @@ class DebugCoordinator: NavigationCoordinator {
         
         viewController.onDebug = { [unowned self] in
             self.printRootDebugStructure()
+        }
+        
+        viewController.onLogout = {
+            Credentials.currentCredentials = nil
         }
         
         return viewController

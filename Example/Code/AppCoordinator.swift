@@ -7,66 +7,58 @@
 //
 
 import UIKit
+import ExampleKit
+import ReactiveSwift
 
-class AppCoordinator: NavigationCoordinator {
+class AppCoordinator: Coordinator {
     
     static let shared = AppCoordinator()
     
     var window: UIWindow!
-    
-    init() {
-        super.init(navigationController: UINavigationController())
-    }
+    let mainCoordinator = MainCoordinator()
     
     func start(window: UIWindow) {
         self.window = window
         
-        let coordinator = MainCoordinator(navigationController: navigationController)
-        coordinator.start()
-        
-        coordinator.parentCoordinator = self
-        childCoordinators.append(coordinator)
-        
-        window.rootViewController = navigationController
+        mainCoordinator.start()
+        addChild(mainCoordinator)
+       
+        window.rootViewController = mainCoordinator.rootViewController
         window.makeKeyAndVisible()
         
-        if UserDefaults.standard.bool(forKey: "authenticated") == false {
-            DispatchQueue.main.async {
-                self.presentLogin(animated: false)
+        printRootDebugStructure()
+        
+        Credentials.currentCredentialsChangedSignal.observeValues {
+            if Credentials.currentCredentials == nil { // not logged in
+                DispatchQueue.main.async {
+                    self.presentLogin(animated: true)
+                }
             }
         }
+        
     }
     
     func reset(animated: Bool) {
-        // remove all child coordinators besides the first one
-        for coordinator in childCoordinators.dropFirst() {
-            removeChild(coordinator)
-        }
-        
-        // remove all children of the first coordinator as well
-        if let firstCoordinator = childCoordinators.first {
-            firstCoordinator.removeAllChildren()
-        }
-        
-        navigationController.dismiss(animated: animated, completion: nil)
-        navigationController.popToRootViewController(animated: false)
-    }
-    
-    func showLogin() {
-        if let viewController = window.topViewController() {
-            print("hello")
-        }
+        childCoordinators
+            .filter { $0 !== mainCoordinator }
+            .forEach { removeChild($0) }
+        mainCoordinator.removeAllChildren()
+        mainCoordinator.navigationController.dismiss(animated: animated, completion: nil)
+        mainCoordinator.navigationController.popToRootViewController(animated: false)
+        printRootDebugStructure()
     }
     
     private func presentLogin(animated: Bool) {
         let coordinator = AuthCoordinator()
         
-        coordinator.didLogin = { [unowned self] in
-            self.dismissChildCoordinator(animated: true)
+        coordinator.onLogin = { [unowned self] in
+            self.reset(animated: true)
         }
         
         coordinator.start()
-        
-        present(coordinator, animated: animated, completion: nil)
+
+        addChild(coordinator)
+        window.topViewController()?.present(coordinator.rootViewController, animated: animated, completion: nil)
     }
+    
 }

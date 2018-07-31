@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ExampleKit
 
 class LoginViewController: UIViewController {
     
@@ -14,8 +15,8 @@ class LoginViewController: UIViewController {
     
     // MARK: Setup
     
-    static func createWith(storyboard: Storyboard) -> Self {
-        return UIStoryboard(storyboard).instantiateViewController(self)
+    static func create() -> Self {
+        return UIStoryboard(.auth).instantiateViewController(self)
     }
     
     // MARK: UIViewController
@@ -29,7 +30,12 @@ class LoginViewController: UIViewController {
     // MARK: Actions
     
     @IBAction func login(_ sender: Any) {
-        UserDefaults.standard.set(true, forKey: "authenticated")
+        Credentials.currentCredentials = Credentials(accessToken: "testToken", refreshToken: nil, expiresIn: nil)
         self.onLogin?()
     }
+    
+    deinit {
+        print("deinit view controller: \(self)")
+    }
+    
 }

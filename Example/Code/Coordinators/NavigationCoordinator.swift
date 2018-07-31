@@ -19,15 +19,11 @@ class NavigationCoordinator: Coordinator {
         return childCoordinators.first
     }
     
-    override var rootViewController: UIViewController {
-        return navigationController
-    }
-    
     init(navigationController: UINavigationController = UINavigationController()) {
         self.pushedViewControllers = WeakArray([])
         self.navigationController = navigationController
         
-        super.init()
+        super.init(rootViewController: navigationController)
         
         if self.navigationController.delegate == nil {
             self.navigationController.delegate = self
@@ -43,11 +39,6 @@ class NavigationCoordinator: Coordinator {
                 navigationController.delegate = parentCoordinator
             }
         }
-    }
-    
-    override func removeAllChildren() {
-        super.removeAllChildren()
-        pushedViewControllers.removeAll()
     }
     
     // MARK: ViewController
@@ -91,27 +82,9 @@ class NavigationCoordinator: Coordinator {
         }
         navigationController.delegate = self
     }
-    
-    func present(_ coordinator: Coordinator, animated: Bool, completion: (() -> Void)? = nil) {
-        guard let viewController = coordinator.rootViewController else { return }
-        
-        addChild(coordinator)
-        navigationController.present(viewController, animated: animated, completion: completion)
-    }
-    
-    func dismissChildCoordinator(animated: Bool, completion: (() -> Void)? = nil) {
-        guard let coordinator = childCoordinator,
-            let viewController = coordinator.rootViewController else { return }
-        
-        print("dismiss coordinator")
-        
-        viewController.presentingViewController?.dismiss(animated: animated, completion: { [weak self] in
-            self?.removeChild(coordinator)
-            completion?()
-        })
-    }
 
     // MARK: - Debug
+    
     override func debugInfo(level: Int = 0) -> String {
         var output = ""
         let tabs = String(repeating: "\t", count: level + 1)
