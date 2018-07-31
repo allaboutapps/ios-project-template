@@ -24,6 +24,7 @@ class AppCoordinator: NavigationCoordinator {
         let coordinator = MainCoordinator(navigationController: navigationController)
         coordinator.start()
         
+        coordinator.parentCoordinator = self
         childCoordinators.append(coordinator)
         
         window.rootViewController = navigationController
@@ -61,7 +62,7 @@ class AppCoordinator: NavigationCoordinator {
         let coordinator = AuthCoordinator()
         
         coordinator.didLogin = { [unowned self] in
-            self.dismiss(coordinator, animated: true)
+            self.dismissChildCoordinator(animated: true)
         }
         
         coordinator.start()

@@ -12,42 +12,72 @@ import UIKit
 
 class Coordinator: NSObject {
     
+    weak var parentCoordinator: Coordinator?
     var childCoordinators = [Coordinator]()
     var rootViewController: UIViewController? { return nil }
     
     func addChild(_ coordinator: Coordinator) {
         print("add child: \(String(describing: coordinator.self))")
         childCoordinators.append(coordinator)
+        coordinator.parentCoordinator = self
     }
     
     func removeChild(_ coordinator: Coordinator) {
         if let index = childCoordinators.index(of: coordinator) {
             print("remove child: \(String(describing: coordinator.self))")
-            childCoordinators.remove(at: index)
+            let removedCoordinator = childCoordinators.remove(at: index)
+            removedCoordinator.parentCoordinator = nil
         }
     }
     
     func removeAllChildren() {
         for coordinator in childCoordinators {
-            print("remove child: \(String(describing: coordinator.self))")
+            removeChild(coordinator)
         }
-        childCoordinators.removeAll()
     }
     
-    @discardableResult func removeChild(for viewController: UIViewController) -> Bool {
-        for coordinator in childCoordinators {
-            if coordinator.removeChild(for: viewController) {
-                return true
-            }
+    // MARK: - Debug
+    
+    func debugStructure(level: Int = 0) -> String {
+        let tabsRoot = String(repeating: "\t", count: level)
+        let tabs = String(repeating: "\t", count: level + 1)
+        
+        var output = tabsRoot + "{\n"
+        
+        output += debugInfo(level: level)
+        
+        if let parentCoordinator = parentCoordinator {
+            output += tabs + "- parent: \(parentCoordinator)\n"
         }
         
-        for coordinator in childCoordinators.reversed() {
-            if let navigationCoordinator = coordinator as? NavigationCoordinator, navigationCoordinator.pushedViewControllers.first == viewController {
-                removeChild(coordinator)
-                return true
-            }
+        if !childCoordinators.isEmpty {
+            output += tabs + "- childs:\n"
+            output += tabs + "[\n"
+            output += childCoordinators
+                .map { $0.debugStructure(level: level + 2) }
+                .joined(separator: ",\n")
+            output += "\n\(tabs)]\n"
         }
-        
-        return false
+        output += tabsRoot + "}"
+        return output
+    }
+    
+    func debugInfo(level: Int) -> String {
+        var output = ""
+        let tabs = String(repeating: "\t", count: level + 1)
+        output += tabs + "* \(self)\n"
+        return output
+    }
+    
+    func printRootDebugStructure() {
+        if let parentCoordinator = parentCoordinator {
+            parentCoordinator.printRootDebugStructure()
+        } else {
+            print(debugStructure())
+        }
+    }
+    
+    deinit {
+        print("deinit coordinator: \(String(describing: self))")
     }
 }

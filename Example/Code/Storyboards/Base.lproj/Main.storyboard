@@ -27,6 +27,14 @@
                                     <action selector="next:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7Zt-yf-Xiu"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lX9-lf-3Gu">
+                                <rect key="frame" x="164" y="465" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Debug"/>
+                                <connections>
+                                    <action selector="debug:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1hz-Sh-TUy"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>

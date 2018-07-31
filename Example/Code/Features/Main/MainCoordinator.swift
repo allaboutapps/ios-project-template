@@ -35,6 +35,10 @@ class MainCoordinator: NavigationCoordinator {
             self.showMoreModal()
         }
         
+        viewController.onDebug = { [unowned self] in
+            self.showDebug()
+        }
+        
         return viewController
     }
     
@@ -45,11 +49,20 @@ class MainCoordinator: NavigationCoordinator {
         push(coordinator, animated: true)
     }
     
+    private func showDebug() {
+        let coordinator = DebugCoordinator()
+        coordinator.onDismiss = { [unowned self] in
+            self.dismissChildCoordinator(animated: true)
+        }
+        coordinator.start()
+        present(coordinator, animated: true)
+    }
+    
     private func showMoreModal() {
         let coordinator = MoreCoordinator()
         
         coordinator.onDone = { [unowned self] in
-            self.dismiss(coordinator, animated: true)
+            self.dismissChildCoordinator(animated: true)
         }
         
         coordinator.start()
