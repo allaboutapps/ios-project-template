@@ -24,7 +24,11 @@ class TabBarCoordinator: Coordinator {
         var output = ""
         let tabs = String(repeating: "\t", count: level + 1)
         output += tabs + "* \(self)\n"
-        output += tabs + "- selected coordinator: \(childCoordinators[tabBarController.selectedIndex])\n"
+        if tabBarController.selectedIndex < childCoordinators.count {
+            output += tabs + "- selected coordinator: \(childCoordinators[tabBarController.selectedIndex])\n"
+        } else {
+            output += tabs + "- selected index: \(tabBarController.selectedIndex)\n"
+        }
         return output
     }
     
