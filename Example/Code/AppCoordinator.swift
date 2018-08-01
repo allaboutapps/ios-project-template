@@ -28,14 +28,17 @@ class AppCoordinator: Coordinator {
         
         printRootDebugStructure()
         
-        Credentials.currentCredentialsChangedSignal.observeValues {
-            if Credentials.currentCredentials == nil { // not logged in
-                DispatchQueue.main.async {
-                    self.presentLogin(animated: true)
-                }
-            }
+        checkCredentials(animated: false)
+        Credentials.currentCredentialsChangedSignal.observeValues { [weak self] in
+            self?.checkCredentials()
         }
         
+    }
+    
+    func checkCredentials(animated: Bool = true) {
+        if Credentials.currentCredentials == nil { // not logged in
+            presentLogin(animated: animated)
+        }
     }
     
     func reset(animated: Bool) {
@@ -43,6 +46,9 @@ class AppCoordinator: Coordinator {
             .filter { $0 !== mainCoordinator }
             .forEach { removeChild($0) }
         mainCoordinator.removeAllChildren()
+        if let first = mainCoordinator.pushedViewControllers[0] {
+            mainCoordinator.pushedViewControllers = WeakArray([first])
+        }
         mainCoordinator.navigationController.dismiss(animated: animated, completion: nil)
         mainCoordinator.navigationController.popToRootViewController(animated: false)
         printRootDebugStructure()
