@@ -39,6 +39,10 @@ class MainCoordinator: NavigationCoordinator {
             self.showDebug()
         }
         
+        viewController.onTabBar = { [unowned self] in
+            self.showTabBar()
+        }
+        
         return viewController
     }
     
@@ -69,4 +73,11 @@ class MainCoordinator: NavigationCoordinator {
         
         present(coordinator, animated: true)
     }
+    
+    private func showTabBar() {
+        let tabBarCoordinator = ExampleTabBarCoordinator()
+        tabBarCoordinator.start()
+        present(tabBarCoordinator, animated: true)
+    }
+    
 }

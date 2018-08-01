@@ -12,9 +12,24 @@ class TabBarCoordinator: Coordinator {
     
     let tabBarController: UITabBarController
     
-    init(tabBarController: UITabBarController) {
+    init(tabBarController: UITabBarController = UITabBarController()) {
         self.tabBarController = tabBarController
         super.init(rootViewController: tabBarController)
+        self.tabBarController.delegate = self
     }
+    
+    // MARK: - Debug
+    
+    override func debugInfo(level: Int = 0) -> String {
+        var output = ""
+        let tabs = String(repeating: "\t", count: level + 1)
+        output += tabs + "* \(self)\n"
+        output += tabs + "- selected coordinator: \(childCoordinators[tabBarController.selectedIndex])\n"
+        return output
+    }
+    
+}
+
+extension TabBarCoordinator: UITabBarControllerDelegate {
     
 }

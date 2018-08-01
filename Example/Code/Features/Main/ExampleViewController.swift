@@ -13,6 +13,7 @@ class ExampleViewController: UIViewController {
     var onMore: (() -> Void)?
     var onNext: (() -> Void)?
     var onDebug: (() -> Void)?
+    var onTabBar: (() -> Void)?
     
     var viewModel: ExampleViewModel!
     
@@ -44,6 +45,10 @@ class ExampleViewController: UIViewController {
     
     @IBAction func debug(_ sender: Any) {
         self.onDebug?()
+    }
+    
+    @IBAction func tabBar(_ sender: Any) {
+        self.onTabBar?()
     }
 
     deinit {
