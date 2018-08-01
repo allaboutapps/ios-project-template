@@ -89,7 +89,9 @@ class NavigationCoordinator: Coordinator {
         var output = ""
         let tabs = String(repeating: "\t", count: level + 1)
         output += tabs + "* \(self)\n"
-        
+        if navigationController.delegate === self {
+            output += tabs + "- is delegate\n"
+        }
         let viewControllers = pushedViewControllers
             .compactMap { $0 }
             .map { String(describing: $0) }
