@@ -86,6 +86,8 @@ class NavigationCoordinator: Coordinator {
     // MARK: Reset
     
     func popToRoot(animated: Bool) {
+        removeAllChildren()
+        
         if let first = pushedViewControllers[0] {
             pushedViewControllers = WeakArray([first])
         }
