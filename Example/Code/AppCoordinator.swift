@@ -45,12 +45,10 @@ class AppCoordinator: Coordinator {
         childCoordinators
             .filter { $0 !== mainCoordinator }
             .forEach { removeChild($0) }
+        
         mainCoordinator.removeAllChildren()
-        if let first = mainCoordinator.pushedViewControllers[0] {
-            mainCoordinator.pushedViewControllers = WeakArray([first])
-        }
-        mainCoordinator.navigationController.dismiss(animated: animated, completion: nil)
-        mainCoordinator.navigationController.popToRootViewController(animated: false)
+        mainCoordinator.popToRoot(animated: animated)
+        
         printRootDebugStructure()
     }
     

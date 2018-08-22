@@ -82,6 +82,17 @@ class NavigationCoordinator: Coordinator {
         }
         navigationController.delegate = self
     }
+    
+    // MARK: Reset
+    
+    func popToRoot(animated: Bool) {
+        if let first = pushedViewControllers[0] {
+            pushedViewControllers = WeakArray([first])
+        }
+        
+        navigationController.dismiss(animated: animated, completion: nil)
+        navigationController.popToRootViewController(animated: false)
+    }
 
     // MARK: - Debug
     
