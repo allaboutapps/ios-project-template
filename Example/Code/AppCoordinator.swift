@@ -46,7 +46,6 @@ class AppCoordinator: Coordinator {
             .filter { $0 !== mainCoordinator }
             .forEach { removeChild($0) }
         
-        mainCoordinator.removeAllChildren()
         mainCoordinator.popToRoot(animated: animated)
         
         printRootDebugStructure()
