@@ -146,6 +146,11 @@ extension TargetType {
             if let data = try? JSONSerialization.data(withJSONObject: parameters), let string = String(data: data, encoding: String.Encoding.utf8) {
                 hashString += "\(string.hashValue)"
             }
+        case let .requestJSONEncodable(encodable), let .requestCustomJSONEncodable(encodable, _):
+            let anyEncodable = AnyEncodable(encodable)
+            if let data = try? JSONEncoder().encode(anyEncodable), let string = String(data: data, encoding: .utf8) {
+                hashString += "\(string.hashValue)"
+            }
         default:
             break
         }

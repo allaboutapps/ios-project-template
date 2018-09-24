@@ -6,23 +6,23 @@
 	<dict>
 		<key>Headers/RxTest-Swift.h</key>
 		<data>
-		EAo+q0Z8xDhuBz99GiOzyWy968A=
+		V/UepMothSoVrSuikbJJI1zqZcc=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		+j+W554e+HFFr4Kgu/d99tn9hGY=
+		goa+gY9Y1rT5xO530VZ+40HLVRA=
 		</data>
 		<key>Modules/RxTest.swiftmodule/x86_64.swiftdoc</key>
 		<data>
-		FqrCWv9Rs2sT/fTcbOkXPQfUUNc=
+		lbU4ognT/EcDU9Y7nWhlIMxZsKE=
 		</data>
 		<key>Modules/RxTest.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		jcjhEhWfO8w92v2sH3xjoZYMNwc=
+		U2wr4e/6WwrpGUjyCWb3tmsUHd8=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
-		tWbWt10D2vgAL3xgN2Jl0X+xpFU=
+		BpWguHpbpl/9YSRzp7amigXDu5I=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -31,44 +31,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			EAo+q0Z8xDhuBz99GiOzyWy968A=
+			V/UepMothSoVrSuikbJJI1zqZcc=
 			</data>
 			<key>hash2</key>
 			<data>
-			DCMuqf9Kqz06KOzaqSUAVqWyODoJ4KM1yGAUIRqhFs4=
+			HxpVhZ0X3lhGjtRy4x1oSSgoi/x3rUMCJKhqZrV8678=
 			</data>
 		</dict>
 		<key>Modules/RxTest.swiftmodule/x86_64.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			FqrCWv9Rs2sT/fTcbOkXPQfUUNc=
+			lbU4ognT/EcDU9Y7nWhlIMxZsKE=
 			</data>
 			<key>hash2</key>
 			<data>
-			/7edbTkV+aMy1JL2hJdtwjmZAyPG5jPUd6vLQSldydc=
+			edFBUG/dbe389tcO532QqugzrQX+pc/fLYcPlrnVy0o=
 			</data>
 		</dict>
 		<key>Modules/RxTest.swiftmodule/x86_64.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			jcjhEhWfO8w92v2sH3xjoZYMNwc=
+			U2wr4e/6WwrpGUjyCWb3tmsUHd8=
 			</data>
 			<key>hash2</key>
 			<data>
-			9QpfoAXwdKdLiNEniZggeUAmpw7maVF7zRoLfCqKTSQ=
+			5aEOXQqjV4ms9n0qXKhqQoOOAuthw7wynz1AMjzIgdM=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			tWbWt10D2vgAL3xgN2Jl0X+xpFU=
+			BpWguHpbpl/9YSRzp7amigXDu5I=
 			</data>
 			<key>hash2</key>
 			<data>
-			GEzxzz91RPxtvVWZQcWeP9EA5P4HdqUKBw+MGF6ahN0=
+			elDaTM1FElNV/QC/6hlfs2Oj2ViqLea3n+rHkz0o8CM=
 			</data>
 		</dict>
 	</dict>

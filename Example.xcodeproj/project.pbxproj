@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3904A09D210F174000689265 /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A093210F173E00689265 /* GoogleToolboxForMac.framework */; };
 		3904A09E210F174000689265 /* FirebaseNanoPB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A094210F173E00689265 /* FirebaseNanoPB.framework */; };
 		3904A0A0210F174000689265 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A096210F173E00689265 /* Crashlytics.framework */; };
 		3904A0A1210F174000689265 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3904A097210F173E00689265 /* FirebaseAnalytics.framework */; };
@@ -60,6 +59,10 @@
 		3908FB48210EFA2E00A2D2A2 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3908FB47210EFA2E00A2D2A2 /* Weak.swift */; };
 		39B96DA61F0B7A1B00B8F3DF /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 39B96DA51F0B7A1B00B8F3DF /* .swiftlint.yml */; };
 		39B96DA81F0B7A2300B8F3DF /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 39B96DA71F0B7A2300B8F3DF /* .gitignore */; };
+		39DD39B9215915C2003F4D9A /* AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39DD39B8215915C2003F4D9A /* AnyEncodable.swift */; };
+		39DD39BE21591A30003F4D9A /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DD39BB21591A2F003F4D9A /* GoogleUtilities.framework */; };
+		39DD39BF21591A30003F4D9A /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DD39BC21591A30003F4D9A /* GoogleToolboxForMac.framework */; };
+		39DD39C021591A30003F4D9A /* GoogleAppMeasurement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DD39BD21591A30003F4D9A /* GoogleAppMeasurement.framework */; };
 		4C5D993E21104BA300B3319A /* Debug.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C5D993C21104BA300B3319A /* Debug.storyboard */; };
 		4C5D994121104C4600B3319A /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5D994021104C4600B3319A /* DebugViewController.swift */; };
 		4C5D994321104DEE00B3319A /* DebugViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5D994221104DEE00B3319A /* DebugViewModel.swift */; };
@@ -109,7 +112,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3904A093210F173E00689265 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = Carthage/Build/iOS/GoogleToolboxForMac.framework; sourceTree = "<group>"; };
 		3904A094210F173E00689265 /* FirebaseNanoPB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseNanoPB.framework; path = Carthage/Build/iOS/FirebaseNanoPB.framework; sourceTree = "<group>"; };
 		3904A095210F173E00689265 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = Carthage/Build/iOS/Firebase.framework; sourceTree = "<group>"; };
 		3904A096210F173E00689265 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Carthage/Build/iOS/Crashlytics.framework; sourceTree = "<group>"; };
@@ -147,6 +149,10 @@
 		3908FB47210EFA2E00A2D2A2 /* Weak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
 		39B96DA51F0B7A1B00B8F3DF /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
 		39B96DA71F0B7A2300B8F3DF /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		39DD39B8215915C2003F4D9A /* AnyEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodable.swift; sourceTree = "<group>"; };
+		39DD39BB21591A2F003F4D9A /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleUtilities.framework; path = Carthage/Build/iOS/GoogleUtilities.framework; sourceTree = "<group>"; };
+		39DD39BC21591A30003F4D9A /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = Carthage/Build/iOS/GoogleToolboxForMac.framework; sourceTree = "<group>"; };
+		39DD39BD21591A30003F4D9A /* GoogleAppMeasurement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAppMeasurement.framework; path = Carthage/Build/iOS/GoogleAppMeasurement.framework; sourceTree = "<group>"; };
 		4C5D993D21104BA300B3319A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Debug.storyboard; sourceTree = "<group>"; };
 		4C5D994021104C4600B3319A /* DebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
 		4C5D994221104DEE00B3319A /* DebugViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewModel.swift; sourceTree = "<group>"; };
@@ -209,7 +215,6 @@
 				3904A0C5210F213900689265 /* libicucore.tbd in Frameworks */,
 				3904A0C4210F213200689265 /* libsqlite3.tbd in Frameworks */,
 				3904A0C3210F212D00689265 /* libc++.tbd in Frameworks */,
-				3904A09D210F174000689265 /* GoogleToolboxForMac.framework in Frameworks */,
 				BCA896EF1F5D8A630099B3D1 /* Alamofire.framework in Frameworks */,
 				3904A0A2210F174000689265 /* FirebaseCore.framework in Frameworks */,
 				3904A0A3210F174000689265 /* FirebaseInstanceID.framework in Frameworks */,
@@ -222,11 +227,14 @@
 				3904A0A1210F174000689265 /* FirebaseAnalytics.framework in Frameworks */,
 				3904A0A5210F174000689265 /* nanopb.framework in Frameworks */,
 				BCA896F21F5D8A630099B3D1 /* Diff.framework in Frameworks */,
+				39DD39BE21591A30003F4D9A /* GoogleUtilities.framework in Frameworks */,
 				3904A0A4210F174000689265 /* Fabric.framework in Frameworks */,
 				BCA896F71F5D8A630099B3D1 /* ReactiveMoya.framework in Frameworks */,
+				39DD39BF21591A30003F4D9A /* GoogleToolboxForMac.framework in Frameworks */,
 				BCA896F51F5D8A630099B3D1 /* ReactiveCocoa.framework in Frameworks */,
 				3904A0A0210F174000689265 /* Crashlytics.framework in Frameworks */,
 				BCA896F81F5D8A630099B3D1 /* ReactiveSwift.framework in Frameworks */,
+				39DD39C021591A30003F4D9A /* GoogleAppMeasurement.framework in Frameworks */,
 				BCA896F41F5D8A630099B3D1 /* Moya.framework in Frameworks */,
 				BCA896F31F5D8A630099B3D1 /* KeychainAccess.framework in Frameworks */,
 				3908FAF1210CD30D00A2D2A2 /* ExampleKit.framework in Frameworks */,
@@ -247,7 +255,9 @@
 				3904A09C210F173F00689265 /* FirebaseCoreDiagnostics.framework */,
 				3904A099210F173F00689265 /* FirebaseInstanceID.framework */,
 				3904A094210F173E00689265 /* FirebaseNanoPB.framework */,
-				3904A093210F173E00689265 /* GoogleToolboxForMac.framework */,
+				39DD39BD21591A30003F4D9A /* GoogleAppMeasurement.framework */,
+				39DD39BC21591A30003F4D9A /* GoogleToolboxForMac.framework */,
+				39DD39BB21591A2F003F4D9A /* GoogleUtilities.framework */,
 				3904A09B210F173F00689265 /* nanopb.framework */,
 			);
 			name = Firebase;
@@ -301,6 +311,7 @@
 			isa = PBXGroup;
 			children = (
 				3908FB11210CD56E00A2D2A2 /* Credentials.swift */,
+				39DD39B8215915C2003F4D9A /* AnyEncodable.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -594,18 +605,19 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "aaa - all about apps GmbH";
 				TargetAttributes = {
 					3908FADB210CD30D00A2D2A2 = {
 						CreatedOnToolsVersion = 9.4.1;
 						DevelopmentTeam = M8F9QH57A6;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					4DE97DB61C7AFE3800393489 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = M8F9QH57A6;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -738,6 +750,7 @@
 				3908FB07210CD52800A2D2A2 /* APIClient.swift in Sources */,
 				3908FB0E210CD55400A2D2A2 /* Config.swift in Sources */,
 				3908FB0B210CD52C00A2D2A2 /* Decoders.swift in Sources */,
+				39DD39B9215915C2003F4D9A /* AnyEncodable.swift in Sources */,
 				3908FB08210CD52800A2D2A2 /* APIError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -832,7 +845,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -853,7 +866,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -870,7 +883,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -890,7 +903,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = at.allaboutapps.ExampleKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1019,7 +1032,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = at.allaboutapps.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1042,7 +1055,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = at.allaboutapps.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

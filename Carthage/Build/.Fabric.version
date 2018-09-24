@@ -8,11 +8,11 @@
   "tvOS" : [
 
   ],
-  "commitish" : "1.7.9",
+  "commitish" : "1.7.11",
   "iOS" : [
     {
       "name" : "Fabric",
-      "hash" : "ebdcb84da5780320690b4b798008424eafffb779d507b441dce69a046caf7fe3"
+      "hash" : "b7a690bbad9b4d3c7370e798280e35eb18457f0d84ff35abfb0c68d2797ab0ca"
     }
   ]
 }
