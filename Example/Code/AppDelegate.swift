@@ -15,10 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        Appearance.setup()
-        
         // TODO: setup new Firebase project and replace GoogleService-Info.plist
         FirebaseApp.configure()
+        
+        Appearance.setup()
+        Credentials.resetOnNewInstallations()
         
         window = UIWindow(frame: UIScreen.main.bounds)
         AppCoordinator.shared.start(window: window!)

@@ -37,6 +37,16 @@ public class Credentials: NSObject, NSCoding, Codable {
             currentCredentialsChangedSignalObserver.input.send(value: ())
         }
     }
+    
+    static func resetOnNewInstallations() {
+        if let installationDate = UserDefaults.standard.value(forKey: "installationDate") as? Date {
+            print("existing installation, app installed: \(installationDate)")
+        } else {
+            print("new installation, resetting credentials in keychain")
+            currentCredentials = nil
+            UserDefaults.standard.set(Date(), forKey: "installationDate")
+        }
+    }
 
     // MARK: Variables
 
