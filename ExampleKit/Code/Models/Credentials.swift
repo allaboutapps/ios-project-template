@@ -38,7 +38,7 @@ public class Credentials: NSObject, NSCoding, Codable {
         }
     }
     
-    static func resetOnNewInstallations() {
+    public static func resetOnNewInstallations() {
         if let installationDate = UserDefaults.standard.value(forKey: "installationDate") as? Date {
             print("existing installation, app installed: \(installationDate)")
         } else {
