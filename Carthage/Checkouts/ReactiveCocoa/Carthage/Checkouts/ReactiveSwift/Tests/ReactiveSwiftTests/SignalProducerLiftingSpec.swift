@@ -36,6 +36,25 @@ class SignalProducerLiftingSpec: QuickSpec {
 				observer.send(value: 1)
 				expect(lastValue) == "2"
 			}
+			
+			it("should raplace the values of the signal to constant new value") {
+				let (producer, observer) = SignalProducer<String, NoError>.pipe()
+				let mappedProducer = producer.map(value: 1)
+				
+				var lastValue: Int?
+				
+				mappedProducer.startWithValues {
+					lastValue = $0
+				}
+				
+				expect(lastValue).to(beNil())
+				
+				observer.send(value: "foo")
+				expect(lastValue) == 1
+				
+				observer.send(value: "foobar")
+				expect(lastValue) == 1
+			}
 		}
 
 		describe("mapError") {
@@ -588,7 +607,7 @@ class SignalProducerLiftingSpec: QuickSpec {
 
 			it("should skip values according to a predicate") {
 				let (baseProducer, observer) = SignalProducer<String, NoError>.pipe()
-				let producer = baseProducer.skipRepeats { $0.characters.count == $1.characters.count }
+				let producer = baseProducer.skipRepeats { $0.count == $1.count }
 
 				var values: [String] = []
 				producer.startWithValues { values.append($0) }
@@ -702,6 +721,11 @@ class SignalProducerLiftingSpec: QuickSpec {
 				triggerObserver.sendCompleted()
 				observer.send(value: 0)
 				expect(lastValue) == 0
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.skip(until: .init(value: ()))
 			}
 		}
 
@@ -998,6 +1022,11 @@ class SignalProducerLiftingSpec: QuickSpec {
 				expect(completed) == true
 				expect(lastValue).to(beNil())
 			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.take(until: .init(value: ()))
+			}
 		}
 
 		describe("takeUntilReplacement") {
@@ -1057,6 +1086,11 @@ class SignalProducerLiftingSpec: QuickSpec {
 				expect(completed) == false
 				replacementObserver.sendCompleted()
 				expect(completed) == true
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.take(untilReplacement: .init(value: 0))
 			}
 		}
 
@@ -1320,11 +1354,19 @@ class SignalProducerLiftingSpec: QuickSpec {
 
 		describe("debounce") {
 			it("should interrupt ASAP and discard outstanding events") {
-				testAsyncASAPInterruption(op: "debounce") { $0.debounce(10.0, on: $1) }
+				testAsyncASAPInterruption(op: "debounce") { $0.debounce(10.0, on: $1, discardWhenCompleted: true) }
+			}
+			
+			it("should interrupt ASAP and discard outstanding events") {
+				testAsyncASAPInterruption(op: "debounce") { $0.debounce(10.0, on: $1, discardWhenCompleted: false) }
 			}
 
 			it("should interrupt on the given scheduler") {
-				testAsyncInterruptionScheduler(op: "debounce") { $0.debounce(10.0, on: $1) }
+				testAsyncInterruptionScheduler(op: "debounce") { $0.debounce(10.0, on: $1, discardWhenCompleted: true) }
+			}
+			
+			it("should interrupt on the given scheduler") {
+				testAsyncInterruptionScheduler(op: "debounce") { $0.debounce(10.0, on: $1, discardWhenCompleted: false) }
 			}
 		}
 
@@ -1390,6 +1432,11 @@ class SignalProducerLiftingSpec: QuickSpec {
 				result.startWithValues { valueReceived = "\($0.0)\($0.1)" }
 
 				expect(valueReceived) == "1a"
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.sample(with: .init(value: 0))
 			}
 		}
 
@@ -1498,6 +1545,11 @@ class SignalProducerLiftingSpec: QuickSpec {
 					disposable.dispose()
 					expect(payloadFreed) == true
 				}
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.sample(on: .init(value: ()))
 			}
 		}
 
@@ -1631,6 +1683,11 @@ class SignalProducerLiftingSpec: QuickSpec {
 				sampleeObserver.sendInterrupted()
 				expect(event).to(beNil())
 			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.withLatest(from: .init(value: 0))
+			}
 		}
 
 		describe("combineLatestWith") {
@@ -1672,6 +1729,11 @@ class SignalProducerLiftingSpec: QuickSpec {
 
 				otherObserver.sendCompleted()
 				expect(completed) == true
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.combineLatest(with: .init(value: 0))
 			}
 		}
 
@@ -1739,6 +1801,11 @@ class SignalProducerLiftingSpec: QuickSpec {
 				rightObserver.send(value: "foo")
 				expect(completed) == true
 				expect(result) == [ "0foo" ]
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.zip(with: .init(value: 0))
 			}
 		}
 

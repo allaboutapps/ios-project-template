@@ -6,7 +6,7 @@
 //  Copyright © 2017 aaa - all about apps GmbH. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Diff
 
 public class DataSource: NSObject {
@@ -21,7 +21,7 @@ public class DataSource: NSObject {
     public var canMove: ((RowType, IndexPath) -> Bool)? = nil
     public var sectionIndexTitles: (() -> [String]?)? = nil
     public var sectionForSectionIndex: ((String, Int) -> Int)? = nil
-    public var commitEditing: ((RowType, UITableViewCellEditingStyle, IndexPath) -> Void)? = nil
+    public var commitEditing: ((RowType, UITableViewCell.EditingStyle, IndexPath) -> Void)? = nil
     public var moveRow: ((RowType, (IndexPath, IndexPath)) -> Void)? = nil
     
     public var fallbackDataSource: UITableViewDataSource? = nil
@@ -46,7 +46,7 @@ public class DataSource: NSObject {
     public var willDisplay: ((RowType, UITableViewCell, IndexPath) -> Void)? = nil
     public var didEndDisplaying: ((UITableViewCell, IndexPath) -> Void)? = nil
     
-    public var editingStyle: ((RowType, IndexPath) -> UITableViewCellEditingStyle)? = nil
+    public var editingStyle: ((RowType, IndexPath) -> UITableViewCell.EditingStyle)? = nil
     public var titleForDeleteConfirmationButton: ((RowType, IndexPath) -> String?)? = nil
     public var editActions: ((RowType, IndexPath) -> [UITableViewRowAction]?)? = nil
     public var shouldIndentWhileEditing: ((RowType, IndexPath) -> Bool)? = nil
@@ -72,6 +72,10 @@ public class DataSource: NSObject {
     public var performAction: ((RowType, Selector, Any?, IndexPath) -> Void)? = nil
     public var canFocus: ((RowType, IndexPath) -> Bool)? = nil
     
+    // MARK: Swipe Actions (iOS 11+ only)
+    private var _leadingSwipeActions: ((RowType, IndexPath) -> Any?)? = nil
+    private var _trailingSwipeActions: ((RowType, IndexPath) -> Any?)? = nil
+    
     // MARK: UITableViewDataSourcePrefetching
     
     public var prefetchRows: (([IndexPath]) -> Void)? = nil
@@ -91,10 +95,48 @@ public class DataSource: NSObject {
     
     public override func responds(to aSelector: Selector!) -> Bool {
         if super.responds(to: aSelector) {
-            return true
-        } else {
-            return fallbackDelegate?.responds(to: aSelector) ?? false
+            if #available(iOS 11.0, *) {
+                switch aSelector {
+                case #selector(UITableViewDelegate.tableView(_:leadingSwipeActionsConfigurationForRowAt:)):
+                    return isLeadingSwipeActionsImplemented ? true : fallbackDelegateResponds(to: aSelector)
+                case #selector(UITableViewDelegate.tableView(_:trailingSwipeActionsConfigurationForRowAt:)):
+                    return isTrailingSwipeActionsImplemented ? true : fallbackDelegateResponds(to: aSelector)
+                default:
+                    return true
+                }
+            } else {
+                return true
+            }
         }
+        
+        return fallbackDelegateResponds(to: aSelector)
+    }
+    
+    private func fallbackDelegateResponds(to aSelector: Selector!) -> Bool {
+        let result = fallbackDelegate?.responds(to: aSelector) ?? false
+        
+        print(aSelector)
+        print(result)
+        
+        return result
+    }
+    
+    @available(iOS 11.0, *)
+    private var isLeadingSwipeActionsImplemented: Bool {
+        if _leadingSwipeActions != nil {
+            return true
+        }
+        
+        return cellDescriptors.values.contains(where: { ($0 as? CellDescriptorTypeiOS11)?.leadingSwipeActionsClosure != nil })
+    }
+    
+    @available(iOS 11.0, *)
+    private var isTrailingSwipeActionsImplemented: Bool {
+        if _trailingSwipeActions != nil {
+            return true
+        }
+        
+        return cellDescriptors.values.contains(where: { ($0 as? CellDescriptorTypeiOS11)?.trailingSwipeActionsClosure != nil })
     }
     
     // MARK: Additional
@@ -118,6 +160,11 @@ public class DataSource: NSObject {
         
         for d in cellDescriptors {
             self.cellDescriptors[d.rowIdentifier] = d
+        }
+        
+        let separator = SeparatorLineCell.descriptor
+        if self.cellDescriptors[separator.rowIdentifier] == nil {
+            self.cellDescriptors[separator.rowIdentifier] = separator
         }
         
         let defaultSectionDescriptors: [SectionDescriptorType] = [
@@ -249,11 +296,11 @@ public class DataSource: NSObject {
     
     public func reloadDataAnimated(
         _ tableView: UITableView,
-        rowDeletionAnimation: UITableViewRowAnimation = .fade,
-        rowInsertionAnimation: UITableViewRowAnimation = .fade,
-        rowReloadAnimation: UITableViewRowAnimation = .none,
-        sectionDeletionAnimation: UITableViewRowAnimation = .fade,
-        sectionInsertionAnimation: UITableViewRowAnimation = .fade
+        rowDeletionAnimation: UITableView.RowAnimation = .fade,
+        rowInsertionAnimation: UITableView.RowAnimation = .fade,
+        rowReloadAnimation: UITableView.RowAnimation = .none,
+        sectionDeletionAnimation: UITableView.RowAnimation = .fade,
+        sectionInsertionAnimation: UITableView.RowAnimation = .fade
         ) {
         
         let oldSections = visibleSections.map { $0.diffableSection }
@@ -294,3 +341,38 @@ public class DataSource: NSObject {
         }
     }
 }
+
+@available(iOS 11,*)
+extension DataSource {
+    public var leadingSwipeActions: ((RowType, IndexPath) -> UISwipeActionsConfiguration?)? {
+        get {
+            if _leadingSwipeActions == nil {
+                return nil
+            }
+            
+            return { [weak self] (rowType, indexPath) in
+                return self?._leadingSwipeActions?(rowType, indexPath) as? UISwipeActionsConfiguration
+            }
+        }
+        set {
+            _leadingSwipeActions = newValue
+        }
+    }
+    
+    public var trailingSwipeActions: ((RowType, IndexPath) -> UISwipeActionsConfiguration?)? {
+        get {
+            if _trailingSwipeActions == nil {
+                return nil
+            }
+            
+            return { [weak self] (rowType, indexPath) in
+                return self?._trailingSwipeActions?(rowType, indexPath) as? UISwipeActionsConfiguration
+            }
+        }
+        set {
+            _trailingSwipeActions = newValue
+        }
+    }
+    
+}
+

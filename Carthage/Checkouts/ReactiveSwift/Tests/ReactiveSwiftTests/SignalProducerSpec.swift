@@ -484,6 +484,50 @@ class SignalProducerSpec: QuickSpec {
 				expect(error) == operationError
 			}
 		}
+		
+		describe("Result.producer") {
+			it("should send a successful value then complete") {
+				let operationReturnValue = "OperationValue"
+				
+				let signalProducer = SignalProducer<String, AnyError>(Result.success(operationReturnValue))
+				
+				var value: String?
+				var error: Error?
+				var completed = false
+				signalProducer
+					.on(failed: {
+						error = $0
+					}, completed: {
+						completed = true
+					}, value: {
+						value = $0
+					})
+					.start()
+				
+				expect(value) == operationReturnValue
+				expect(error).to(beNil())
+				expect(completed).to(beTrue())
+			}
+			
+			it("should send the error") {
+				let operationError = TestError.default
+				
+				let signalProducer = SignalProducer<String, TestError>(Result.failure(operationError))
+				
+				var value: String?
+				var error: TestError?
+				signalProducer
+					.on(failed: {
+						error = $0
+					}, value: {
+						value = $0
+					})
+					.start()
+				
+				expect(value).to(beNil())
+				expect(error) == operationError
+			}
+		}
 
 		describe("startWithSignal") {
 			it("should invoke the closure before any effects or events") {
@@ -1265,6 +1309,11 @@ class SignalProducerSpec: QuickSpec {
 
 				expect(interrupted) == true
 				expect(disposed) == true
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, TestError>.empty
+					.flatMapError { _ in .init(value: 0) }
 			}
 		}
 
@@ -2267,6 +2316,36 @@ class SignalProducerSpec: QuickSpec {
 				let h = SignalProducer<Int, TestError>.empty.then(SignalProducer<Double, NoError>.empty)
 				expect(type(of: h)) == SignalProducer<Double, TestError>.self
 			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups without explicit value and error type parameters, given an upstream of arbitrary error type") {
+				_ = SignalProducer<Int, TestError>.empty
+					.then(.empty)
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with explicit value and error type parameters, given an upstream of arbitary error type") {
+				_ = SignalProducer<Int, TestError>.empty
+					.then(.init(result: Result<String, TestError>(value: "")))
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups without explicit error type parameter") {
+				_ = SignalProducer<Int, TestError>.empty
+					.then(.init(value: ""))
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups without explicit value and error type parameters, given a NoError upstream") {
+				_ = SignalProducer<Int, NoError>.empty
+					.then(.empty)
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups without explicit error type parameter") {
+				_ = SignalProducer<Int, NoError>.empty
+					.then(.init(value: ""))
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with explicit value and error type parameters, given a NoError upstream") {
+				_ = SignalProducer<Int, NoError>.empty
+					.then(.init(result: Result<String, TestError>(value: "")))
+			}
 		}
 
 		describe("first") {
@@ -2712,7 +2791,7 @@ class SignalProducerSpec: QuickSpec {
 					let producer = SignalProducer<Int, NoError>.never
 						.on(disposed: { disposed = true })
 
-					var replayedProducer = ImplicitlyUnwrappedOptional(producer.replayLazily(upTo: 1))
+					var replayedProducer = Optional(producer.replayLazily(upTo: 1))
 
 					expect(disposed) == false
 					let disposable1 = replayedProducer?.start()
@@ -2735,7 +2814,7 @@ class SignalProducerSpec: QuickSpec {
 					let producer = SignalProducer<Int, NoError>.never
 						.on(disposed: { disposed = true })
 
-					var replayedProducer = ImplicitlyUnwrappedOptional(producer.replayLazily(upTo: 1))
+					var replayedProducer = Optional(producer.replayLazily(upTo: 1))
 
 					expect(disposed) == false
 					let disposable = replayedProducer?.start()
@@ -2788,12 +2867,12 @@ class SignalProducerSpec: QuickSpec {
 			describe("log events") {
 				it("should output the correct event") {
 					let expectations: [(String) -> Void] = [
-						{ event in expect(event) == "[] starting" },
-						{ event in expect(event) == "[] started" },
-						{ event in expect(event) == "[] value 1" },
-						{ event in expect(event) == "[] completed" },
-						{ event in expect(event) == "[] terminated" },
-						{ event in expect(event) == "[] disposed" },
+						{ event in expect(event).to(equal("[] starting")) },
+						{ event in expect(event).to(equal("[] started")) },
+						{ event in expect(event).to(equal("[] value 1")) },
+						{ event in expect(event).to(equal("[] completed")) },
+						{ event in expect(event).to(equal("[] terminated")) },
+						{ event in expect(event).to(equal("[] disposed")) },
 					]
 
 					let logger = TestLogger(expectations: expectations)
@@ -2811,8 +2890,8 @@ class SignalProducerSpec: QuickSpec {
 			describe("init(values) ambiguity") {
 				it("should not be a SignalProducer<SignalProducer<Int, NoError>, NoError>") {
 
-					let producer1: SignalProducer<Int, NoError> = SignalProducer.empty
-					let producer2: SignalProducer<Int, NoError> = SignalProducer.empty
+					let producer1 = SignalProducer<Int, NoError>.empty
+					let producer2 = SignalProducer<Int, NoError>.empty
 
 					// This expression verifies at compile time that the type is as expected.
 					let _: SignalProducer<Int, NoError> = SignalProducer([producer1, producer2])
@@ -2914,6 +2993,11 @@ class SignalProducerSpec: QuickSpec {
 
 				observer2.sendCompleted()
 			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Bool, NoError>.empty
+					.and(.init(value: true))
+			}
 		}
 
 		describe("or attribute") {
@@ -2960,6 +3044,11 @@ class SignalProducerSpec: QuickSpec {
 
 				observer2.sendCompleted()
 			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Bool, NoError>.empty
+					.or(.init(value: true))
+			}
 		}
 
 		describe("promoteError") {
@@ -2993,7 +3082,7 @@ extension SignalProducer {
 
 	/// Creates a producer that can be started as many times as elements in `results`.
 	/// Each signal will immediately send either a value or an error.
-	fileprivate static func attemptWithResults<C: Collection>(_ results: C) -> SignalProducer<Value, Error> where C.Iterator.Element == Result<Value, Error>, C.IndexDistance == C.Index, C.Index == Int {
+	fileprivate static func attemptWithResults<C: Collection>(_ results: C) -> SignalProducer<Value, Error> where C.Iterator.Element == Result<Value, Error> {
 		let resultCount = results.count
 		var operationIndex = 0
 

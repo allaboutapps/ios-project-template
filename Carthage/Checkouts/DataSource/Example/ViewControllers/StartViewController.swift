@@ -33,14 +33,21 @@ class StartViewController: UITableViewController {
         
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
+        var items = [
+            Example(title: "Random Persons", segue: "showRandomPersons"),
+            Example(title: "Form", segue: "showForm"),
+            Example(title: "Lazy Rows", segue: "showLazyRows"),
+            Example(title: "Diff & Update", segue: "showDiff"),
+            Example(title: "Swipe To Delete", segue: "showSwipeToDelete"),
+            Example(title: "Custom separators", segue: "showSeparatedSection"),
+        ]
+        
+        if #available(iOS 11, *) {
+            items.append(Example(title: "Swipe Actions", segue: "showSwipeExample"))
+        }
         
         dataSource.sections = [
-            Section(items: [
-                Example(title: "Random Persons", segue: "showRandomPersons"),
-                Example(title: "Form", segue: "showForm"),
-                Example(title: "Lazy Rows", segue: "showLazyRows"),
-                Example(title: "Diff & Update", segue: "showDiff"),
-            ])
+            Section(items: items)
         ]
         
         dataSource.reloadData(tableView, animated: false)

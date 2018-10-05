@@ -180,7 +180,7 @@ extension DataSource: UITableViewDelegate {
             return tableView.estimatedRowHeight
         }
         
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -199,12 +199,12 @@ extension DataSource: UITableViewDelegate {
             
             switch header {
             case .title:
-                return UITableViewAutomaticDimension
+                return UITableView.automaticDimension
             case .view(let view):
                 let height = view.bounds.height
                 
                 if height == 0 {
-                    return tableView.sectionHeaderHeight > 0 ? tableView.sectionHeaderHeight : UITableViewAutomaticDimension
+                    return tableView.sectionHeaderHeight > 0 ? tableView.sectionHeaderHeight : UITableView.automaticDimension
                 } else {
                     return height
                 }
@@ -232,12 +232,12 @@ extension DataSource: UITableViewDelegate {
             
             switch footer {
             case .title:
-                return UITableViewAutomaticDimension
+                return UITableView.automaticDimension
             case .view(let view):
                 let height = view.bounds.height
                 
                 if height == 0 {
-                    return tableView.sectionFooterHeight > 0 ? tableView.sectionFooterHeight : UITableViewAutomaticDimension
+                    return tableView.sectionFooterHeight > 0 ? tableView.sectionFooterHeight : UITableView.automaticDimension
                 } else {
                     return height
                 }
@@ -316,7 +316,7 @@ extension DataSource: UITableViewDelegate {
     
     // MARK: Editing
     
-    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let cellDescriptor = self.cellDescriptor(at: indexPath)
         
         if let closure = cellDescriptor.editingStyleClosure ?? editingStyle {
@@ -467,4 +467,25 @@ extension DataSource: UITableViewDelegate {
         return fallbackDelegate?.indexPathForPreferredFocusedView?(in: tableView)
     }
 
+}
+
+@available(iOS 11,*)
+extension DataSource {
+    public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let cellDescriptor = self.cellDescriptor(at: indexPath) as? CellDescriptorTypeiOS11
+        if let closure = cellDescriptor?.trailingSwipeActionsClosure {
+            return closure(row(at: indexPath), indexPath)
+        } else {
+            return fallbackDelegate?.tableView?(tableView, trailingSwipeActionsConfigurationForRowAt: indexPath)
+        }
+    }
+    
+    public func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let cellDescriptor = self.cellDescriptor(at: indexPath) as? CellDescriptorTypeiOS11
+        if let closure = cellDescriptor?.leadingSwipeActionsClosure {
+            return closure(row(at: indexPath), indexPath)
+        } else {
+            return fallbackDelegate?.tableView?(tableView, leadingSwipeActionsConfigurationForRowAt: indexPath)
+        }
+    }
 }

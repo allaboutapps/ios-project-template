@@ -644,6 +644,38 @@ class FlattenSpec: QuickSpec {
 				_ = Signal<Int, NoError>.empty
 					.flatMap(.latest) { _ in Property(value: 0) }
 			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with explicit inner value and error type parameters, given an upstream of arbitrary error type") {
+				_ = Signal<Int, TestError>.empty
+					.flatMap(.latest) { _ in .init(result: Result<Int, TestError>(error: .default)) }
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with implicit error type parameter") {
+				_ = Signal<Int, NoError>.empty
+					.flatMap(.latest) { _ in .init(value: 0) }
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with implicit error type parameter") {
+				_ = Signal<Int, TestError>.empty
+					.flatMap(.latest) { _ in .init(value: 0) }
+			}
+
+// NOTE: These test cases were disabled as the Swift 4.2 type checker apparently
+// cannot infer the type paramaters when both are absent.
+//			it("should be able to fallback to SignalProducer for contextual lookups without explicit inner value and error type parameters") {
+//				_ = Signal<Int, NoError>.empty
+//					.flatMap(.latest) { _ in .empty }
+//			}
+//
+//			it("should be able to fallback to SignalProducer for contextual lookups without explicit inner value and error type parameters") {
+//				_ = Signal<Int, TestError>.empty
+//					.flatMap(.latest) { _ in .empty }
+//			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with explicit inner and error type parameters, given a NoError upstream") {
+				_ = Signal<Int, NoError>.empty
+					.flatMap(.latest) { _ in .init(result: Result<Int, TestError>(error: .default)) }
+			}
 		}
 
 		describe("SignalProducer.flatMap()") {
@@ -814,14 +846,47 @@ class FlattenSpec: QuickSpec {
 				_ = SignalProducer<Int, NoError>.empty
 					.flatMap(.latest) { _ in Property(value: 0) }
 			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with explicit inner value and error type parameters, given an upstream of arbitrary error type") {
+				_ = SignalProducer<Int, TestError>.empty
+					.flatMap(.latest) { _ in .init(error: .default) } as SignalProducer<Int, TestError>
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with implicit inner error type parameter") {
+				_ = SignalProducer<Int, NoError>.empty
+					.flatMap(.latest) { _ in .init(value: 0) }
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with implicit inner error type parameter") {
+				_ = SignalProducer<Int, TestError>.empty
+					.flatMap(.latest) { _ in .init(value: 0) }
+			}
+
+// NOTE: These test cases were disabled as the Swift 4.2 type checker apparently
+// cannot infer the type paramaters when both are absent.
+//			it("should be able to fallback to SignalProducer for contextual lookups without explicit inner value and error type parameters") {
+//				_ = SignalProducer<Int, NoError>.empty
+//					.flatMap(.latest) { _ in .empty }
+//			}
+//
+//			it("should be able to fallback to SignalProducer for contextual lookups without explicit inner value and error type parameters") {
+//				_ = SignalProducer<Int, TestError>.empty
+//					.flatMap(.latest) { _ in .empty }
+//			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups with explicit inner and error type parameters, given a NoError upstream.") {
+				_ = SignalProducer<Int, NoError>.empty
+					.flatMap(.latest) { _ in .init(error: .default) } as SignalProducer<Int, TestError>
+			}
 		}
 
 		describe("Signal.merge()") {
 			it("should emit values from all signals") {
 				let (signal1, observer1) = Signal<Int, NoError>.pipe()
 				let (signal2, observer2) = Signal<Int, NoError>.pipe()
+				let (signal3, observer3) = Signal<Int, NoError>.pipe()
 
-				let mergedSignals = Signal.merge([signal1, signal2])
+				let mergedSignals = Signal.merge([signal1, signal2, signal3])
 
 				var lastValue: Int?
 				mergedSignals.observeValues { lastValue = $0 }
@@ -834,15 +899,19 @@ class FlattenSpec: QuickSpec {
 				observer2.send(value: 2)
 				expect(lastValue) == 2
 
-				observer1.send(value: 3)
+				observer3.send(value: 3)
 				expect(lastValue) == 3
+				
+				observer1.send(value: 4)
+				expect(lastValue) == 4
 			}
 
 			it("should not stop when one signal completes") {
 				let (signal1, observer1) = Signal<Int, NoError>.pipe()
 				let (signal2, observer2) = Signal<Int, NoError>.pipe()
+				let (signal3, observer3) = Signal<Int, NoError>.pipe()
 
-				let mergedSignals = Signal.merge([signal1, signal2])
+				let mergedSignals = Signal.merge([signal1, signal2, signal3])
 
 				var lastValue: Int?
 				mergedSignals.observeValues { lastValue = $0 }
@@ -857,13 +926,17 @@ class FlattenSpec: QuickSpec {
 
 				observer2.send(value: 2)
 				expect(lastValue) == 2
+				
+				observer3.send(value: 3)
+				expect(lastValue) == 3
 			}
 
 			it("should complete when all signals complete") {
 				let (signal1, observer1) = Signal<Int, NoError>.pipe()
 				let (signal2, observer2) = Signal<Int, NoError>.pipe()
+				let (signal3, observer3) = Signal<Int, NoError>.pipe()
 
-				let mergedSignals = Signal.merge([signal1, signal2])
+				let mergedSignals = Signal.merge([signal1, signal2, signal3])
 
 				var completed = false
 				mergedSignals.observeCompleted { completed = true }
@@ -877,72 +950,222 @@ class FlattenSpec: QuickSpec {
 				expect(completed) == false
 
 				observer2.sendCompleted()
+				expect(completed) == false
+				
+				observer3.sendCompleted()
+				expect(completed) == true
+			}
+		}
+		
+		describe("Signal.merge(with:)") {
+			it("should emit values from both signals") {
+				let (signal1, observer1) = Signal<Int, NoError>.pipe()
+				let (signal2, observer2) = Signal<Int, NoError>.pipe()
+				
+				let mergedSignals = signal1.merge(with: signal2)
+				
+				var lastValue: Int?
+				mergedSignals.observeValues { lastValue = $0 }
+				
+				expect(lastValue).to(beNil())
+				
+				observer1.send(value: 1)
+				expect(lastValue) == 1
+				
+				observer2.send(value: 2)
+				expect(lastValue) == 2
+				
+				observer1.send(value: 3)
+				expect(lastValue) == 3
+			}
+			
+			it("should not stop when one signal completes") {
+				let (signal1, observer1) = Signal<Int, NoError>.pipe()
+				let (signal2, observer2) = Signal<Int, NoError>.pipe()
+				
+				let mergedSignals = signal1.merge(with: signal2)
+				
+				var lastValue: Int?
+				mergedSignals.observeValues { lastValue = $0 }
+				
+				expect(lastValue).to(beNil())
+				
+				observer1.send(value: 1)
+				expect(lastValue) == 1
+				
+				observer1.sendCompleted()
+				expect(lastValue) == 1
+				
+				observer2.send(value: 2)
+				expect(lastValue) == 2
+			}
+			
+			it("should complete when both signals complete") {
+				let (signal1, observer1) = Signal<Int, NoError>.pipe()
+				let (signal2, observer2) = Signal<Int, NoError>.pipe()
+				
+				let mergedSignals = signal1.merge(with: signal2)
+				
+				var completed = false
+				mergedSignals.observeCompleted { completed = true }
+				
+				expect(completed) == false
+				
+				observer1.send(value: 1)
+				expect(completed) == false
+				
+				observer1.sendCompleted()
+				expect(completed) == false
+				
+				observer2.sendCompleted()
 				expect(completed) == true
 			}
 		}
 
 		describe("SignalProducer.merge()") {
 			it("should emit values from all producers") {
-				let (signal1, observer1) = SignalProducer<Int, NoError>.pipe()
-				let (signal2, observer2) = SignalProducer<Int, NoError>.pipe()
+				let (producer1, observer1) = SignalProducer<Int, NoError>.pipe()
+				let (producer2, observer2) = SignalProducer<Int, NoError>.pipe()
+				let (producer3, observer3) = SignalProducer<Int, NoError>.pipe()
 
-				let mergedSignals = SignalProducer.merge([signal1, signal2])
+				let mergedProducer = SignalProducer.merge([producer1, producer2, producer3])
 
 				var lastValue: Int?
-				mergedSignals.startWithValues { lastValue = $0 }
+				mergedProducer.startWithValues { lastValue = $0 }
 
 				expect(lastValue).to(beNil())
 
 				observer1.send(value: 1)
 				expect(lastValue) == 1
-
+				
 				observer2.send(value: 2)
 				expect(lastValue) == 2
-
-				observer1.send(value: 3)
+				
+				observer3.send(value: 3)
 				expect(lastValue) == 3
+				
+				observer1.send(value: 4)
+				expect(lastValue) == 4
 			}
 
 			it("should not stop when one producer completes") {
-				let (signal1, observer1) = SignalProducer<Int, NoError>.pipe()
-				let (signal2, observer2) = SignalProducer<Int, NoError>.pipe()
+				let (producer1, observer1) = SignalProducer<Int, NoError>.pipe()
+				let (producer2, observer2) = SignalProducer<Int, NoError>.pipe()
+				let (producer3, observer3) = SignalProducer<Int, NoError>.pipe()
 
-				let mergedSignals = SignalProducer.merge([signal1, signal2])
+				let mergedProducer = SignalProducer.merge([producer1, producer2, producer3])
 
 				var lastValue: Int?
-				mergedSignals.startWithValues { lastValue = $0 }
+				mergedProducer.startWithValues { lastValue = $0 }
 
 				expect(lastValue).to(beNil())
 
 				observer1.send(value: 1)
 				expect(lastValue) == 1
-
+				
 				observer1.sendCompleted()
 				expect(lastValue) == 1
-
+				
 				observer2.send(value: 2)
 				expect(lastValue) == 2
+				
+				observer3.send(value: 3)
+				expect(lastValue) == 3
 			}
 
 			it("should complete when all producers complete") {
-				let (signal1, observer1) = SignalProducer<Int, NoError>.pipe()
-				let (signal2, observer2) = SignalProducer<Int, NoError>.pipe()
+				let (producer1, observer1) = SignalProducer<Int, NoError>.pipe()
+				let (producer2, observer2) = SignalProducer<Int, NoError>.pipe()
+				let (producer3, observer3) = SignalProducer<Int, NoError>.pipe()
 
-				let mergedSignals = SignalProducer.merge([signal1, signal2])
+				let mergedProducer = SignalProducer.merge([producer1, producer2, producer3])
 
 				var completed = false
-				mergedSignals.startWithCompleted { completed = true }
+				mergedProducer.startWithCompleted { completed = true }
 
 				expect(completed) == false
-
+				
 				observer1.send(value: 1)
 				expect(completed) == false
-
+				
 				observer1.sendCompleted()
 				expect(completed) == false
-
+				
+				observer2.sendCompleted()
+				expect(completed) == false
+				
+				observer3.sendCompleted()
+				expect(completed) == true
+			}
+		}
+		
+		describe("SignalProducer.merge(with:)") {
+			it("should emit values from both producers") {
+				let (producer1, observer1) = SignalProducer<Int, NoError>.pipe()
+				let (producer2, observer2) = SignalProducer<Int, NoError>.pipe()
+				
+				let mergedProducer = producer1.merge(with: producer2)
+				
+				var lastValue: Int?
+				mergedProducer.startWithValues { lastValue = $0 }
+				
+				expect(lastValue).to(beNil())
+				
+				observer1.send(value: 1)
+				expect(lastValue) == 1
+				
+				observer2.send(value: 2)
+				expect(lastValue) == 2
+				
+				observer1.send(value: 3)
+				expect(lastValue) == 3
+			}
+			
+			it("should not stop when one producer completes") {
+				let (producer1, observer1) = SignalProducer<Int, NoError>.pipe()
+				let (producer2, observer2) = SignalProducer<Int, NoError>.pipe()
+				
+				let mergedProducer = producer1.merge(with: producer2)
+				
+				var lastValue: Int?
+				mergedProducer.startWithValues { lastValue = $0 }
+				
+				expect(lastValue).to(beNil())
+				
+				observer1.send(value: 1)
+				expect(lastValue) == 1
+				
+				observer1.sendCompleted()
+				expect(lastValue) == 1
+				
+				observer2.send(value: 2)
+				expect(lastValue) == 2
+			}
+			
+			it("should complete when both producers complete") {
+				let (producer1, observer1) = SignalProducer<Int, NoError>.pipe()
+				let (producer2, observer2) = SignalProducer<Int, NoError>.pipe()
+				
+				let mergedProducer = producer1.merge(with: producer2)
+				
+				var completed = false
+				mergedProducer.startWithCompleted { completed = true }
+				
+				expect(completed) == false
+				
+				observer1.send(value: 1)
+				expect(completed) == false
+				
+				observer1.sendCompleted()
+				expect(completed) == false
+				
 				observer2.sendCompleted()
 				expect(completed) == true
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.merge(with: .init(value: 0))
 			}
 		}
 
@@ -986,9 +1209,34 @@ class FlattenSpec: QuickSpec {
 				observer.send(value: 3)
 				expect(lastValue) == 3
 			}
+
+			it("should accept SignalProducerConvertible conforming type") {
+				let (signal, observer) = SignalProducer<Int, NoError>.pipe()
+
+				let mergedSignals = signal.prefix(Property(value: 0))
+
+				var lastValue: Int?
+				mergedSignals.startWithValues { lastValue = $0 }
+
+				expect(lastValue) == 0
+
+				observer.send(value: 1)
+				expect(lastValue) == 1
+
+				observer.send(value: 2)
+				expect(lastValue) == 2
+
+				observer.send(value: 3)
+				expect(lastValue) == 3
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.prefix(.init(value: 0))
+			}
 		}
 
-		describe("SignalProducer.concat(value:)") {
+		describe("SignalProducer.concat()") {
 			it("should emit final value") {
 				let (signal, observer) = SignalProducer<Int, NoError>.pipe()
 
@@ -1009,9 +1257,49 @@ class FlattenSpec: QuickSpec {
 				observer.sendCompleted()
 				expect(lastValue) == 4
 			}
-		}
 
-		describe("SignalProducer.concat(error:)") {
+			it("should emit final value") {
+				let (signal, observer) = SignalProducer<Int, NoError>.pipe()
+
+				let mergedSignals = signal.concat(SignalProducer(value: 4))
+
+				var lastValue: Int?
+				mergedSignals.startWithValues { lastValue = $0 }
+
+				observer.send(value: 1)
+				expect(lastValue) == 1
+
+				observer.send(value: 2)
+				expect(lastValue) == 2
+
+				observer.send(value: 3)
+				expect(lastValue) == 3
+
+				observer.sendCompleted()
+				expect(lastValue) == 4
+			}
+
+			it("should accept SignalProducerConvertible conforming type") {
+				let (signal, observer) = SignalProducer<Int, NoError>.pipe()
+
+				let mergedSignals = signal.concat(Property(value: 4))
+
+				var lastValue: Int?
+				mergedSignals.startWithValues { lastValue = $0 }
+
+				observer.send(value: 1)
+				expect(lastValue) == 1
+
+				observer.send(value: 2)
+				expect(lastValue) == 2
+
+				observer.send(value: 3)
+				expect(lastValue) == 3
+
+				observer.sendCompleted()
+				expect(lastValue) == 4
+			}
+
 			it("should emit concatenated error") {
 				let (signal, observer) = SignalProducer<Int, TestError>.pipe()
 
@@ -1044,6 +1332,11 @@ class FlattenSpec: QuickSpec {
 
 				expect(results).to(haveCount(1))
 				expect(results[0].error) == .error1
+			}
+
+			it("should be able to fallback to SignalProducer for contextual lookups") {
+				_ = SignalProducer<Int, NoError>.empty
+					.concat(.init(value: 0))
 			}
 		}
 

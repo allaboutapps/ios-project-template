@@ -29,7 +29,7 @@ public protocol CellDescriptorType {
 
     var canEditClosure: ((RowType, IndexPath) -> Bool)? { get }
     var canMoveClosure: ((RowType, IndexPath) -> Bool)? { get }
-    var commitEditingClosure: ((RowType, UITableViewCellEditingStyle, IndexPath) -> Void)? { get }
+    var commitEditingClosure: ((RowType, UITableViewCell.EditingStyle, IndexPath) -> Void)? { get }
     var moveRowClosure: ((RowType, (IndexPath, IndexPath)) -> Void)? { get }
     
     // UITableViewDelegate
@@ -48,7 +48,7 @@ public protocol CellDescriptorType {
     
     var willDisplayClosure: ((RowType, UITableViewCell, IndexPath) -> Void)? { get }
     
-    var editingStyleClosure: ((RowType, IndexPath) -> UITableViewCellEditingStyle)? { get }
+    var editingStyleClosure: ((RowType, IndexPath) -> UITableViewCell.EditingStyle)? { get }
     var titleForDeleteConfirmationButtonClosure: ((RowType, IndexPath) -> String?)? { get }
     var editActionsClosure: ((RowType, IndexPath) -> [UITableViewRowAction]?)? { get }
     var shouldIndentWhileEditingClosure: ((RowType, IndexPath) -> Bool)? { get }
@@ -65,6 +65,12 @@ public protocol CellDescriptorType {
     
     var isHiddenClosure: ((RowType, IndexPath) -> Bool)? { get }
     var updateClosure: ((RowType, UITableViewCell, IndexPath) -> Void)? { get }
+}
+
+@available(iOS 11, *)
+public protocol CellDescriptorTypeiOS11: CellDescriptorType {
+    var leadingSwipeActionsClosure: ((RowType, IndexPath) -> UISwipeActionsConfiguration?)? { get }
+    var trailingSwipeActionsClosure: ((RowType, IndexPath) -> UISwipeActionsConfiguration?)? { get }
 }
 
 // MARK - CellDescriptor
@@ -186,9 +192,9 @@ public class CellDescriptor<Item, Cell: UITableViewCell>: CellDescriptorType {
     
     // MARK: commitEditingStyle
     
-    public private(set) var commitEditingClosure: ((RowType, UITableViewCellEditingStyle, IndexPath) -> Void)?
+    public private(set) var commitEditingClosure: ((RowType, UITableViewCell.EditingStyle, IndexPath) -> Void)?
     
-    public func commitEditing(_ closure: @escaping (Item, UITableViewCellEditingStyle, IndexPath) -> Void) -> CellDescriptor {
+    public func commitEditing(_ closure: @escaping (Item, UITableViewCell.EditingStyle, IndexPath) -> Void) -> CellDescriptor {
         commitEditingClosure = { [unowned self] (row, editingStyle, indexPath) in
             return closure(self.typedItem(row), editingStyle, indexPath)
         }
@@ -347,16 +353,16 @@ public class CellDescriptor<Item, Cell: UITableViewCell>: CellDescriptorType {
     
     // MARK: editingStyle
     
-    public private(set) var editingStyleClosure: ((RowType, IndexPath) -> UITableViewCellEditingStyle)?
+    public private(set) var editingStyleClosure: ((RowType, IndexPath) -> UITableViewCell.EditingStyle)?
     
-    public func editingStyle(_ closure: @escaping (Item, IndexPath) -> UITableViewCellEditingStyle) -> CellDescriptor {
+    public func editingStyle(_ closure: @escaping (Item, IndexPath) -> UITableViewCell.EditingStyle) -> CellDescriptor {
         editingStyleClosure = { [unowned self] (row, indexPath) in
             return closure(self.typedItem(row), indexPath)
         }
         return self
     }
     
-    public func editingStyle(_ closure: @escaping () -> UITableViewCellEditingStyle) -> CellDescriptor {
+    public func editingStyle(_ closure: @escaping () -> UITableViewCell.EditingStyle) -> CellDescriptor {
         editingStyleClosure = { (_, _) in
             return closure()
         }
@@ -380,6 +386,11 @@ public class CellDescriptor<Item, Cell: UITableViewCell>: CellDescriptorType {
         }
         return self
     }
+    
+    // MARK: swipeActions
+    
+    private var _leadingSwipeActionsClosure: ((RowType, IndexPath) -> Any?)?
+    private var _trailingSwipeActionsClosure: ((RowType, IndexPath) -> Any?)?
     
     // MARK: editActions
     
@@ -565,5 +576,51 @@ public class CellDescriptor<Item, Cell: UITableViewCell>: CellDescriptorType {
             closure(self.typedItem(row), self.typedCell(cell), indexPath)
         }
         return self
+    }
+}
+
+@available(iOS 11, *)
+extension CellDescriptor: CellDescriptorTypeiOS11 {
+    
+    public var leadingSwipeActionsClosure: ((RowType, IndexPath) -> UISwipeActionsConfiguration?)? {
+        get {
+            if _leadingSwipeActionsClosure == nil {
+                return nil
+            }
+            
+            return { [weak self] (rowType, indexPath) in
+                return self?._leadingSwipeActionsClosure?(rowType, indexPath) as? UISwipeActionsConfiguration
+            }
+        }
+    }
+    
+    public var trailingSwipeActionsClosure: ((RowType, IndexPath) -> UISwipeActionsConfiguration?)? {
+        get {
+            if _trailingSwipeActionsClosure == nil {
+                return nil
+            }
+            
+            return { [weak self] (rowType, indexPath) in
+                return self?._trailingSwipeActionsClosure?(rowType, indexPath) as? UISwipeActionsConfiguration
+            }
+        }
+    }
+    
+    public func leadingSwipeAction(_ closure: @escaping ((RowType, IndexPath) -> UISwipeActionsConfiguration?)) -> CellDescriptor {
+        _leadingSwipeActionsClosure = closure
+        return self
+    }
+    
+    public func trailingSwipeAction(_ closure: @escaping ((RowType, IndexPath) -> UISwipeActionsConfiguration?)) -> CellDescriptor {
+        _trailingSwipeActionsClosure = closure
+        return self
+    }
+    
+    public var hasLeadingSwipeAction: Bool {
+        return _leadingSwipeActionsClosure != nil
+    }
+    
+    public var hasTrailingSwipeAction: Bool {
+        return _trailingSwipeActionsClosure != nil
     }
 }
