@@ -8,6 +8,7 @@ import Foundation
 public enum Environment: String {
     case debug = "Debug"
     case release = "Release"
+    case staging = "Staging"
 
     /// Returns the current enviroment the app is currently running.
     static func current() -> Environment {

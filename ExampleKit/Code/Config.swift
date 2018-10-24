@@ -7,12 +7,20 @@ public struct Config {
     // MARK: API
 
     public struct API {
+        
         static var BaseURL: URL {
+            
+            let devURL = URL(string: "https://dev.allaboutapps.at")!
+            let stagingURL = URL(string: "https://dev.allaboutapps.at")!
+            let liveURL = URL(string: "https://dev.allaboutapps.at")!
+            
             switch Environment.current() {
             case .debug:
-                return URL(string: "https://dev.allaboutapps.at")!
+                return devURL
+            case .staging:
+                return stagingURL
             case .release:
-                return URL(string: "https://dev.allaboutapps.at")!
+                return liveURL
             }
         }
 
@@ -22,7 +30,7 @@ public struct Config {
 
         static var NetworkLoggingEnabled: Bool {
             switch Environment.current() {
-            case .debug:
+            case .debug, .staging:
                 return true
             case .release:
                 return false
@@ -31,7 +39,7 @@ public struct Config {
 
         static var VerboseNetworkLogging: Bool {
             switch Environment.current() {
-            case .debug:
+            case .debug, .staging:
                 return true
             case .release:
                 return false

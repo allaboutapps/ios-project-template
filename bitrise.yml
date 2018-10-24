@@ -16,13 +16,30 @@ workflows:
     - ios-auto-provision:
         inputs:
         - team_id: "$AAA_DEV_TEAM_ID"
+        - scheme: "$BITRISE_SCHEME_STAGING"
         - generate_profiles: 'yes'
+        title: iOS Auto Provision - Staging
+    - xcode-archive:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - export_method: development
+        - scheme: "$BITRISE_SCHEME_STAGING"
+        title: Xcode Archive & Export - Staging
+    - deploy-to-bitrise-io:
+        title: Deploy to Bitrise.io - Staging
+    - ios-auto-provision:
+        inputs:
+        - team_id: "$AAA_DEV_TEAM_ID"
+        - generate_profiles: 'yes'
+        title: iOS Auto Provision - Release
     - xcode-archive:
         inputs:
         - project_path: "$BITRISE_PROJECT_PATH"
         - export_method: development
         - scheme: "$BITRISE_SCHEME"
-    - deploy-to-bitrise-io: {}
+        title: Xcode Archive & Export - Release
+    - deploy-to-bitrise-io:
+        title: Deploy to Bitrise.io - Release
     before_run:
     - _kickstart
     after_run:
@@ -74,12 +91,9 @@ workflows:
         is_always_run: true
 app:
   envs:
-  - opts:
-      is_expand: false
-    BITRISE_PROJECT_PATH: Example.xcodeproj
-  - opts:
-      is_expand: false
-    BITRISE_SCHEME: Example
+  - BITRISE_PROJECT_PATH: Example.xcodeproj
+  - BITRISE_SCHEME: Example
+  - BITRISE_SCHEME_STAGING: Example - Staging
   - AAA_INFO_PLIST_PATH: "$BITRISE_SOURCE_DIR/Example/SupportingFiles/Info.plist"
   - AAA_APP_BUNDLE_ID: at.allaboutapps.example
   - AAA_ITUNES_TEAM: aaa - all about apps Gmbh
