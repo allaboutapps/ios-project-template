@@ -1,0 +1,6 @@
+github "ReactiveCocoa/ReactiveCocoa" ~> 8.0
+github "moya/Moya" "12.0.0-beta.1"
+github "aloco/SimpleButton" ~> 3.0
+github "Alamofire/AlamofireImage" ~> 3.1
+github "mbuchetics/DataSource" ~> 6.1
+github "kishikawakatsumi/KeychainAccess" ~> 3.1

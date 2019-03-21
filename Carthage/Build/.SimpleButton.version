@@ -1,9 +1,0 @@
-{
-  "commitish" : "3.0.1",
-  "iOS" : [
-    {
-      "name" : "SimpleButton",
-      "hash" : "c9357970248d05a1dd25f6bd0eedc0cd6f2687abf79aadb0d25b265ecc8e0078"
-    }
-  ]
-}

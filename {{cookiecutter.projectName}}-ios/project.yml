@@ -1,0 +1,71 @@
+name: {{cookiecutter.projectName}}
+settings:
+  base:
+    DEVELOPMENT_TEAM: {{cookiecutter.team}}
+  configs:
+    Release:
+      SWIFT_COMPILATION_MODE: wholemodule
+options:
+  bundleIdPrefix: {{cookiecutter.bundleIdentifierPrefix}}
+attributes:
+  ORGANIZATIONNAME: aaa - all about apps GmbH
+targets:
+  {{cookiecutter.projectName}}:
+    type: application
+    platform: iOS
+    deploymentTarget: "{{cookiecutter.deploymentTarget}}"
+    settings:
+    #   OTHER_LDFLAGS: [-ObjC]
+    #   ENABLE_BITCODE: YES
+    info:
+      path: TemplateApp/SupportingFiles/Info.plist
+      properties:
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIRequiresFullScreen: YES
+        UILaunchStoryboardName: LaunchScreen
+        UIRequiredDeviceCapabilities: [armv7]
+        ITSAppUsesNonExemptEncryption: NO
+        LSRequiresIPhoneOS: YES
+        _Configuration: $(CONFIGURATION)
+    sources: [TemplateApp]
+    dependencies:
+      - target: {{cookiecutter.projectName}}Kit
+      - carthage: Alamofire
+      - carthage: AlamofireImage
+      - carthage: DataSource
+      - carthage: Differ
+      - carthage: KeychainAccess
+      - carthage: Moya
+      - carthage: ReactiveCocoa
+      - carthage: ReactiveMoya
+      - carthage: ReactiveSwift
+      - carthage: Result
+      - carthage: SimpleButton
+    postCompileScripts:
+      - script: |
+                if which swiftlint >/dev/null; then
+                  swiftlint
+                else
+                  echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+                fi
+        name: SwiftLint
+  {{cookiecutter.projectName}}Kit:
+    type: framework
+    platform: iOS
+    deploymentTarget: "{{cookiecutter.deploymentTarget}}"
+    info:
+      path: TemplateFramework/SupportingFiles/Info.plist
+      properties:
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+    sources: [TemplateFramework]
+    dependencies:
+      - carthage: AlamofireImage
+      - carthage: KeychainAccess
+      - carthage: Moya
+      - carthage: Alamofire
+      - carthage: ReactiveMoya
+      - carthage: Result
+      - carthage: ReactiveSwift
