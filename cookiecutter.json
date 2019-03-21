@@ -1,6 +1,7 @@
 {
   "projectName": "Example",
   "team": "M8F9QH57A6",
+  "itunesTeam": "aaa - all about apps Gmbh",
   "bundleIdentifierPrefix": "at.allaboutapps",
   "deploymentTarget": "12.0"
 }
