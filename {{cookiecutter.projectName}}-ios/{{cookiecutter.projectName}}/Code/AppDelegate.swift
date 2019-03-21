@@ -1,7 +1,7 @@
 import ReactiveSwift
 import Result
 import UIKit
-import {{cookiecutter.projectName}}eKit
+import {{cookiecutter.projectName}}Kit
 
 struct Foo: Decodable {
     let foo: String
