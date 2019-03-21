@@ -18,7 +18,7 @@ targets:
     #   OTHER_LDFLAGS: [-ObjC]
     #   ENABLE_BITCODE: YES
     info:
-      path: TemplateApp/SupportingFiles/Info.plist
+      path: {{cookiecutter.projectName}}/SupportingFiles/Info.plist
       properties:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
@@ -30,7 +30,7 @@ targets:
         ITSAppUsesNonExemptEncryption: NO
         LSRequiresIPhoneOS: YES
         _Configuration: $(CONFIGURATION)
-    sources: [TemplateApp]
+    sources: [{{cookiecutter.projectName}}]
     dependencies:
       - target: {{cookiecutter.projectName}}Kit
       - carthage: Alamofire
@@ -57,10 +57,10 @@ targets:
     platform: iOS
     deploymentTarget: "{{cookiecutter.deploymentTarget}}"
     info:
-      path: TemplateFramework/SupportingFiles/Info.plist
+      path: {{cookiecutter.projectName}}Kit/SupportingFiles/Info.plist
       properties:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-    sources: [TemplateFramework]
+    sources: [{{cookiecutter.projectName}}Kit]
     dependencies:
       - carthage: AlamofireImage
       - carthage: KeychainAccess
