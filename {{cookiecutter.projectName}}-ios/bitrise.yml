@@ -101,6 +101,6 @@ app:
   - BITRISE_SCHEME: {{cookiecutter.projectName}}
   - BITRISE_SCHEME_STAGING: {{cookiecutter.projectName}} - Staging
   - AAA_INFO_PLIST_PATH: "$BITRISE_SOURCE_DIR/{{cookiecutter.projectName}}/SupportingFiles/Info.plist"
-  - AAA_APP_BUNDLE_ID: {{cookiecutter.bundleIdentifierPrefix}}.{{cookiecutter.projectName}}
+  - AAA_APP_BUNDLE_ID: {{cookiecutter.bundleIdentifierPrefix}}.{{cookiecutter.bundleIdentifier}}
   - AAA_ITUNES_TEAM: {{cookiecutter.itunesTeam}}
   - AAA_DEV_TEAM_ID: {{cookiecutter.team}}

@@ -15,6 +15,7 @@ targets:
     platform: iOS
     deploymentTarget: "{{cookiecutter.deploymentTarget}}"
     settings:
+      PRODUCT_BUNDLE_IDENTIFIER: {{cookiecutter.bundleIdentifierPrefix}}.{{cookiecutter.bundleIdentifier}}
     #   OTHER_LDFLAGS: [-ObjC]
     #   ENABLE_BITCODE: YES
     info:
@@ -56,6 +57,8 @@ targets:
     type: framework
     platform: iOS
     deploymentTarget: "{{cookiecutter.deploymentTarget}}"
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: {{cookiecutter.bundleIdentifierPrefix}}.{{cookiecutter.bundleIdentifier}}Kit
     info:
       path: {{cookiecutter.projectName}}Kit/SupportingFiles/Info.plist
       properties:

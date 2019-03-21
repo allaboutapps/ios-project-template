@@ -2,6 +2,7 @@
   "projectName": "Example",
   "team": "M8F9QH57A6",
   "itunesTeam": "aaa - all about apps Gmbh",
+  "bundleIdentifier": "{{cookiecutter.projectName|lower|replace(' ', '-')}}",
   "bundleIdentifierPrefix": "at.allaboutapps",
   "deploymentTarget": "12.0"
 }
