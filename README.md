@@ -1,5 +1,7 @@
 # iOS Project Template 📱
 
+Deprecated! Please use our new template: https://github.com/allaboutapps/ios-starter
+
 ## Setup
 
 1. Open Xcode -> Create a new Xcode Project
