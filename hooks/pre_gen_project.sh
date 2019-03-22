@@ -1,3 +1,3 @@
 #! /bin/bash
 
-print("hello from all about apps ❤️")
+printf 'hello from all about apps \U12764\n'

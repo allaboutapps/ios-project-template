@@ -3,4 +3,4 @@
 xcodegen
 carthage update --platform ios --cache-build
 
-print("all done - enjoy 🚀")
+printf 'all done - enjoy \U1F680\n'
